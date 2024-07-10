@@ -3,11 +3,11 @@ StoreWindowWidget
   size: 278 207
   visible: false
   @onEscape: transferCancel()
-  !text: tr('Gift Retronia Coins')
+  !text: tr('Gift Ravenor Coins')
   
   Label
     id: descriptionText
-    !text: tr('Please select the amount of Retronia Coins you like to gift and enter the name of the character that should receive the Retronia Coins.')
+    !text: tr('Please select the amount of Ravenor Coins you like to gift and enter the name of the character that should receive the Ravenor Coins.')
     text-wrap: true
     text-vertical-auto-resize: true
     anchors.top: parent.top
@@ -55,7 +55,7 @@ StoreWindowWidget
 
   Label
     id: transferableAmount
-    !text: tr('Transferable Retronia Coins:')
+    !text: tr('Transferable Ravenor Coins:')
     anchors.top: recipient.bottom
     anchors.left: parent.left
     anchors.right: parent.right

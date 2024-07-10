@@ -36,7 +36,7 @@ StoreWindowWidget
 
   Label
     id: transferableAmount
-    !text: tr('Transferable Retronia Coins:')
+    !text: tr('Transferable Ravenor Coins:')
     anchors.top: descriptionText.bottom
     anchors.left: parent.left
     anchors.right: parent.right

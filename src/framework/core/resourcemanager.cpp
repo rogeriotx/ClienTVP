@@ -308,7 +308,7 @@ std::string ResourceManager::getCompactName() {
             return regex_match[1].str();
         }
     }
-    return "retronia";
+    return "ravenor";
 }
 
 bool ResourceManager::loadDataFromSelf(bool unmountIfMounted) {

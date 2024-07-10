@@ -269,7 +269,7 @@ function tryLogout(prompt)
       end
     end
   else
-    msg = 'Are you sure you want to leave Retronia?'
+    msg = 'Are you sure you want to leave Ravenor?'
 
     yesCallback = function()
       g_game.safeLogout()

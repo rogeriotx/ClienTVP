@@ -6,10 +6,10 @@ local infoTexts = {
 	[1] = ""..APP_NAME.." Client",
 	[2] = "Version " .. g_app.getVersion(),
 	[3] = "Copyright (C) 2020",
-	[4] = "Retronia",
+	[4] = "Ravenor",
 	[5] = "All rights reserved.",
 	[6] = "Official Website",
-	[7] = "retronia.online",
+	[7] = "ravenor.online",
 }
 
 -- public functions

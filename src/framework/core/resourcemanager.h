@@ -67,7 +67,7 @@ public:
     std::string getWorkDir() { return "/"; }
 #ifdef ANDROID
     std::string getWriteDir() { return "/"; }
-    std::string getBinaryName() { return "retronia.apk"; }
+    std::string getBinaryName() { return "ravenor.apk"; }
 #else
     std::string getWriteDir() { return m_writeDir.string(); }
     std::string getBinaryName() { return m_binaryPath.filename().string(); }

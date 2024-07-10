@@ -2,7 +2,7 @@ Modal = {}
 
 Messages = {
 	[1] = {"Read with attention!\n\n", "#fe7e7e",
-		"Dear player,\nYou are about to receive special and unique content from our Retronia Online's Inauguration Founder Packs.\nSome contents such as: Outfits and Dummy Skin, will only be attributed to this character who is opening the trophy and the process is IRREVERSIBLE, not being up to Retronia Team, the reimbursement in case your character suffers in the future any punishment of exclusion, or regret for choosing the wrong character to be assigned with Retronia Online's Inauguration Founder Packs content.\n\nEnjoy it!\n\nKind regards,\nRetronia Online", "white"
+		"Dear player,\nYou are about to receive special and unique content from our Ravenor Online's Inauguration Founder Packs.\nSome contents such as: Outfits and Dummy Skin, will only be attributed to this character who is opening the trophy and the process is IRREVERSIBLE, not being up to Ravenor Team, the reimbursement in case your character suffers in the future any punishment of exclusion, or regret for choosing the wrong character to be assigned with Ravenor Online's Inauguration Founder Packs content.\n\nEnjoy it!\n\nKind regards,\nRavenor Online", "white"
 	}
 }
 

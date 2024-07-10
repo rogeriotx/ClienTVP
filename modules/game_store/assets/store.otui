@@ -172,7 +172,7 @@ MenuCategoryStore < UIWidget
 
 StoreWindowWidget
   size: 780 537
-  !text: tr('Retronia Store')
+  !text: tr('Ravenor Store')
   color: #909090
   visible: false
   @onEscape: modules.game_store.onCloseStore()

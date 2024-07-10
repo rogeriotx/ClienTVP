@@ -1,5 +1,5 @@
 -- CONFIG
-APP_NAME = "Retronia Online"  -- important, change it, it's name for config dir and files in appdata
+APP_NAME = "Ravenor Online"  -- important, change it, it's name for config dir and files in appdata
 APP_VERSION = 1       -- client version for updater and login to identify outdated client
 DEFAULT_LAYOUT = "retro" -- on android it's forced to "mobile", check code bellow
 DEVLOPMENT_MODE = not g_resources.isEncrypted()--true
@@ -11,29 +11,29 @@ BAD_DLLS = {"intruder.dll", "d3dx8d.dll", "d3dwrap.dll"}
 
 -- If you don't use updater or other service, set it to updater = ""
 Services = {
-  website = "https://retronia.online", -- currently not used
-  -- updater = "https://patch.retronia.online/api/updater.php", -- Comentado: EMAC / Descomentado: Versão antiga
+  website = "https://ravenor.online", -- currently not used
+  -- updater = "https://patch.ravenor.online/api/updater.php", -- Comentado: EMAC / Descomentado: Versão antiga
 --   stats = "",
 --   crash = "http://otclient.ovh/api/crash.php",
 --   feedback = "http://otclient.ovh/api/feedback.php",
 --   status = "http://otclient.ovh/api/status.php"
-  accessAccountWebsite = "https://retronia.online/account/login"
+  accessAccountWebsite = "https://ravenor.online/account/login"
 }
 
 discordInviteLink = "https://discord.gg/unTqBsa"
 
 
---g_proxy.addProxy("proxy-us01.retronia.online", 7162, 0)
---g_proxy.addProxy("proxy-us02.retronia.online", 7162, 0)
---g_proxy.addProxy("proxy-us03.retronia.online", 7162, 0)
---g_proxy.addProxy("proxy-uk01.retronia.online", 7162, 0)
---g_proxy.addProxy("proxy-br01.retronia.online", 7162, 0)
---g_proxy.addProxy("proxy-br02.retronia.online", 7162, 0)
+--g_proxy.addProxy("proxy-us01.ravenor.online", 7162, 0)
+--g_proxy.addProxy("proxy-us02.ravenor.online", 7162, 0)
+--g_proxy.addProxy("proxy-us03.ravenor.online", 7162, 0)
+--g_proxy.addProxy("proxy-uk01.ravenor.online", 7162, 0)
+--g_proxy.addProxy("proxy-br01.ravenor.online", 7162, 0)
+--g_proxy.addProxy("proxy-br02.ravenor.online", 7162, 0)
 
 -- Servers accept http login url, websocket login url or ip:port:version
 Servers = {
   TS = "131.196.198.162:7171:772" --TesteServer
-  -- Retronia = "127.0.0.1:7171:772" --Oficial
+  -- Ravenor = "127.0.0.1:7171:772" --Oficial
 }
 
 --Server = "ws://otclient.ovh:3000/"
@@ -41,7 +41,7 @@ Servers = {
 --USE_NEW_ENERGAME = true -- uses entergamev2 based on websockets instead of entergame
 ALLOW_CUSTOM_SERVERS = false -- if true it shows option ANOTHER on server list
 
-g_app.setName("Retronia Online")
+g_app.setName("Ravenor Online")
 g_app.setVersion("4.1")
 -- CONFIG END
 
@@ -108,7 +108,7 @@ if type(Services.updater) == "string" and Services.updater:len() > 4 and (g_reso
   --   local client_path = string.split(paths[1], "--client=")[2]:trim()
   
   --   g_app.setLauncherPath(launcher_path)
-  --   launcher_arguments = "--game=retronia --client=" .. client_path .. ""
+  --   launcher_arguments = "--game=ravenor --client=" .. client_path .. ""
   --   g_app.restartArgs({ launcher_arguments })
   -- end
   -- modules.updater.setRestartArgs(launcher_arguments)

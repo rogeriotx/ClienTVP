@@ -1,10 +1,10 @@
 COMMAND_BUYITEM = '!shop'
-WEBSITE_GETCOINS = 'https://retronia.online/account/store'
+WEBSITE_GETCOINS = 'https://ravenor.online/account/store'
 COINS_OPCODE = 52
 
 local window, listCategory, listProduct, coinBalance, acceptWindow, transferPointsWindow, withdrawWindow, changeNamePrice
 local CS_SHOP_CLIENTSIDE, CS_SHOP_SERVERSIDE = 202, 203
-local WEBSITE_GETCOINS = "https://retronia.online/account/store"
+local WEBSITE_GETCOINS = "https://ravenor.online/account/store"
 local PLAYER_GENDER = 0
 
 -- Reddington special check

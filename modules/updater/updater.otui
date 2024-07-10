@@ -15,7 +15,7 @@ StaticMainWindow
 
   Label
     id: title
-    !text: tr('Welcome to Retronia client update\nDownloading new features...')
+    !text: tr('Welcome to Ravenor client update\nDownloading new features...')
     anchors.top: parent.top
     anchors.horizontalCenter: parent.horizontalCenter
     text-align: center

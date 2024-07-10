@@ -161,7 +161,7 @@ int main(int argc, const char* argv[]) {
     g_logger.setLogFile(compactName + ".log");
 
     // setup application name and version
-    g_app.setName("Retronia Online");
+    g_app.setName("Ravenor Online");
     g_app.setCompactName(compactName);
     g_app.setVersion("3.2");
 
@@ -289,7 +289,7 @@ void android_main(struct android_app* state)
     while(!g_window.isVisible() && !terminated)
         g_window.poll(); // init window
     // run app
-    const char* args[] = { "retronia Online.apk" };
+    const char* args[] = { "ravenor Online.apk" };
     main(1, args);
     std::exit(0); // required!
 }
