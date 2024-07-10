@@ -1,0 +1,116 @@
+ScrollBarSlider < UIButton
+  id: sliderButton
+  anchors.centerIn: parent
+  size: 12 12
+  image-source: /images/ui/scrollbar2
+  image-clip: 0 0 12 37
+  image-border-top: 5
+  image-border-bottom: 7
+  resizer: true
+  
+  
+  $!disabled:
+    visible: true
+
+  $disabled:
+    visible: false
+
+HorizontalScrollBarSlider < UIButton
+  id: sliderButton
+  anchors.centerIn: parent
+  size: 12 12
+  image-source: /images/ui/scrollbar2
+  image-clip: 0 38 44 12
+  image-border-left: 6
+  image-border-right: 6
+  resizer: true
+
+ScrollBarValueLabel < Label
+  id: valueLabel
+  anchors.fill: parent
+  color: white
+  text-align: center
+
+VerticalScrollBar < UIScrollBar
+  orientation: vertical
+  width: 12
+  height: 39
+  image-source: /images/ui/scrollbar
+  image-clip: 39 0 12 65
+  image-border: 1
+
+  UIButton
+    id: decrementButton
+    anchors.top: parent.top
+    anchors.left: parent.left
+    image-source: /images/ui/scrollbar2
+    image-color: #ffffffff
+    size: 12 12
+
+    $!pressed:
+      image-clip: 44 26 12 12
+    
+    $pressed:
+      image-clip: 44 1 12 12
+
+  UIButton
+    id: incrementButton
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    image-source: /images/ui/scrollbar2
+    image-color: #ffffffff
+    size: 12 12
+
+    $!pressed:
+      image-clip: 56 26 12 12
+    
+    $pressed:
+      image-clip: 56 1 12 12
+
+  ScrollBarSlider
+
+  ScrollBarValueLabel
+
+HorizontalScrollBar < UIScrollBar
+  orientation: horizontal
+  height: 12
+  width: 39
+  image-source: /images/ui/scrollbar
+  image-clip: 0 65 52 12
+  image-border: 1
+  padding: 0
+
+  $disabled:
+    color: #bbbbbb88
+
+  UIButton
+    id: decrementButton
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    image-source: /images/ui/scrollbar2
+    size: 12 12
+    image-color: #ffffffff
+
+    $!pressed:
+      image-clip: 44 38 12 12
+
+    $pressed:
+      image-clip: 44 13 12 12
+
+  UIButton
+    id: incrementButton
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    image-source: /images/ui/scrollbar2
+    image-color: #ffffffff
+    size: 12 12
+
+    $!pressed:
+      image-clip: 56 38 12 12
+
+    $pressed:
+      image-clip: 56 13 12 12
+
+  HorizontalScrollBarSlider
+
+  ScrollBarValueLabel

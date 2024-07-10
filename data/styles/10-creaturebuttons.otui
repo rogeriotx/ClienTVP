@@ -1,0 +1,71 @@
+CreatureButton < UICreatureButton
+  height: 20
+  margin-bottom: 2
+
+  UICreature
+    id: creature
+    size: 20 20
+    scale: 0.9
+    padding: 1
+    anchors.left: parent.left
+    anchors.top: parent.top
+    phantom: true
+    old-scaling: true
+
+  UIWidget
+    id: spacer
+    width: 2
+    anchors.left: creature.right
+    anchors.top: creature.top
+    phantom: true
+
+  UIWidget
+    id: stars
+    height: 10
+    width: 0
+    anchors.left: prev.right
+    anchors.top: creature.top
+    phantom: true
+    margin-left: -1
+
+  UIWidget
+    id: shield
+    height: 9
+    anchors.left: prev.right
+    anchors.top: creature.top
+    margin-top: 1
+    phantom: true
+
+  UIWidget
+    id: skull
+    height: 9
+    anchors.left: prev.right
+    anchors.top: creature.top
+    margin-top: 1
+    phantom: true
+  
+  UIWidget
+    id: emblem
+    height: 11
+    anchors.left: prev.right
+    anchors.top: creature.top
+    phantom: true
+
+  Label
+    id: label
+    anchors.left: prev.right
+    margin-left: 5
+    anchors.right: parent.right
+    anchors.bottom: creature.bottom
+    color: #afafaf
+    margin-bottom: 8
+    phantom: true
+
+  LifeProgressBar
+    id: lifeBar
+    height: 5
+    anchors.left: spacer.right
+    anchors.right: parent.right
+    anchors.bottom: creature.bottom
+    margin-bottom: 2
+    phantom: true

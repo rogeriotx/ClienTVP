@@ -1,0 +1,356 @@
+IgnoreWhiteListLabel < UITextEdit
+  text-offset: 3 0
+  height: 16
+  padding: 0 3 0 3
+  font: verdana-11px-monochrome
+  background-color: alpha
+  opacity: 1
+  selection-color: #dfdfdf
+  selection-background-color: #808080
+  change-cursor-image: true
+  editable: true
+  phantom: false
+  focusable: true
+  
+  $focus:
+    background-color: #ffffff22
+    color: #ffffff
+
+MainWindow
+  id: communicationWindow
+  !text: tr('Edit Ignore List and White List')
+  size: 534 364
+  padding: 32 18 10 18
+  @onEscape: self:destroy()
+
+  UIWidget
+    text-offset: 0 0
+    image-source: /images/ui/button
+    image-border: 3
+    image-clip: 0 46 22 23
+    text-offset: 1 1
+    anchors.left: parent.left
+    anchors.top: parent.top
+    height: 22
+    padding: 5
+    image-smooth: true
+    width: 242
+
+    CheckBox
+      id: checkboxUseIgnoreList
+      !text: tr('Activate Ignore List')
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 1
+
+  Label
+    !text: tr('Characters you wish to ignore:')
+    anchors.left: parent.left
+    anchors.top: prev.bottom
+    margin-top: 10
+
+  TextList
+    id: ignoreList
+    vertical-scrollbar: ignoreListScrollBar
+    anchors.left: parent.left
+    anchors.top: prev.bottom
+    height: 103
+    width: 242
+    margin-bottom: 10
+    margin-top: 3
+    padding: 1
+    color: #484444
+    text-offset: 0 4
+    opacity: 1
+    image-source: /images/ui/windowsolid
+    image-border: 1
+    padding: 1 14 1 2
+
+    $disabled:
+      color: #27272788
+      opacity: 0.5
+    
+  VerticalScrollBar
+    id: ignoreListScrollBar
+    anchors.top: prev.top
+    anchors.bottom: prev.bottom
+    margin: 1
+    step: 12
+    anchors.right: prev.right
+    pixels-scroll: true
+
+  TextEdit
+    id: ignoreNameEdit
+    anchors.top: ignoreList.bottom
+    anchors.left: parent.left
+    width: 110
+    margin-top: 8
+    text-offset: 3 0
+    height: 16
+    padding: 0 3 0 3
+    visible: false
+
+  UIWidget
+    text-offset: 0 0
+    image-source: /images/ui/button
+    image-border: 3
+    image-clip: 0 46 22 23
+    text-offset: 1 1
+    anchors.left: ignoreList.left
+    width: 146
+    anchors.verticalCenter: next.verticalCenter
+    height: 22
+    padding: 5
+    image-smooth: true
+
+    CheckBox
+      id: checkboxIgnorePermanently
+      !text: tr('Ignore Permanently')
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 1
+  
+  Button
+    id: buttonIgnoreAdd
+    !text: tr('Add')
+    width: 34
+    height: 20
+    anchors.top: next.top
+    anchors.right: next.left
+    margin-right: 13
+    $pressed:
+      text-offset: 3 3
+
+  Button
+    id: buttonIgnoreRemove
+    !text: tr('Delete')
+    width: 34
+    height: 20
+    anchors.top: ignoreList.bottom
+    margin-top: 5
+    anchors.right: ignoreList.right
+    $pressed:
+      text-offset: 3 3
+
+  Label
+    !text: tr('Global settings for ignoring messages:')
+    anchors.left: parent.left
+    anchors.top: prev.bottom
+    margin-top: 20
+  
+  UIWidget
+    text-offset: 0 0
+    image-source: /images/ui/button
+    image-border: 3
+    image-clip: 0 46 22 23
+    text-offset: 1 1
+    anchors.left: parent.left
+    anchors.top: prev.bottom
+    margin-top: 5
+    height: 22
+    padding: 5
+    image-smooth: true
+    width: 242
+
+    CheckBox
+      id: checkboxIgnoreYelling
+      !text: tr('Ignore Yelling')
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 1
+  
+  UIWidget
+    text-offset: 0 0
+    image-source: /images/ui/button
+    image-border: 3
+    image-clip: 0 46 22 23
+    text-offset: 1 1
+    anchors.left: parent.left
+    anchors.top: prev.bottom
+    margin-top: 10
+    height: 22
+    padding: 5
+    image-smooth: true
+    width: 242
+
+    CheckBox
+      id: checkboxIgnorePrivateMessages
+      !text: tr('Ignore Private Messages')
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 1
+  
+  UIWidget
+    text-offset: 0 0
+    image-source: /images/ui/button
+    image-border: 3
+    image-clip: 0 46 22 23
+    text-offset: 1 1
+    anchors.top: parent.top
+    anchors.left: ignoreList.right
+    margin-left: 15
+    height: 22
+    padding: 5
+    image-smooth: true
+    width: 242
+
+    CheckBox
+      id: checkboxUseWhiteList
+      !text: tr('Activate White List')
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 1
+
+  Label
+    !text: tr('Characters you allow to message you:')
+    anchors.top: prev.bottom
+    anchors.left: prev.left
+    margin-top: 10
+
+  TextList
+    id: whiteList
+    vertical-scrollbar: whiteListScrollBar
+    anchors.left: prev.left
+    anchors.top: prev.bottom
+    height: 103
+    width: 242
+    margin-bottom: 10
+    margin-top: 3
+    padding: 1
+    color: #484444
+    text-offset: 0 4
+    opacity: 1
+    image-source: /images/ui/windowsolid
+    image-border: 1
+    padding: 1 14 1 2
+
+    $disabled:
+      color: #27272788
+      opacity: 0.5
+
+  VerticalScrollBar
+    id: whiteListScrollBar
+    anchors.top: prev.top
+    anchors.bottom: prev.bottom
+    margin: 1
+    step: 12
+    anchors.right: prev.right
+    pixels-scroll: true
+
+  TextEdit
+    id: whitelistNameEdit
+    anchors.top: whiteList.bottom
+    anchors.left: whiteList.left
+    width: 110
+    margin-top: 8
+    text-offset: 3 0
+    height: 16
+    padding: 0 3 0 3
+    visible: false
+
+  UIWidget
+    text-offset: 0 0
+    image-source: /images/ui/button
+    image-border: 3
+    image-clip: 0 46 22 23
+    text-offset: 1 1
+    anchors.left: whiteList.left
+    width: 146
+    anchors.verticalCenter: next.verticalCenter
+    height: 22
+    padding: 5
+    image-smooth: true
+
+    CheckBox
+      id: checkboxAllowPermanently
+      !text: tr('Allow Permanently')
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 1
+  
+  Button
+    id: buttonWhitelistAdd
+    !text: tr('Add')
+    width: 34
+    height: 20
+    anchors.top: next.top
+    anchors.right: next.left
+    margin-right: 13
+    $pressed:
+      text-offset: 3 3
+
+  Button
+    id: buttonWhitelistRemove
+    !text: tr('Delete')
+    width: 34
+    height: 20
+    anchors.top: whiteList.bottom
+    margin-top: 5
+    anchors.right: whiteList.right
+    $pressed:
+      text-offset: 3 3
+
+  Label
+    !text: tr('Global settings for allowing messages:')
+    anchors.left: whiteList.left
+    anchors.top: prev.bottom
+    margin-top: 20
+  
+  UIWidget
+    text-offset: 0 0
+    image-source: /images/ui/button
+    image-border: 3
+    image-clip: 0 46 22 23
+    text-offset: 1 1
+    anchors.left: prev.left
+    anchors.top: prev.bottom
+    margin-top: 5
+    height: 22
+    padding: 5
+    image-smooth: true
+    width: 242
+
+    CheckBox
+      id: checkboxAllowVIPs
+      !text: tr('Allow VIPs to message you')
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 1
+
+  HorizontalSeparator
+    id: separator2
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 13
+    margin-left: -5
+    margin-right: -5
+
+  Button
+    id: buttonSave
+    !text: tr('Ok')
+    width: 43
+    anchors.right: next.left
+    anchors.bottom: parent.bottom
+    @onClick: modules.game_hotkeys.ok()
+    margin-right: 10
+    $pressed:
+      text-offset: 3 3
+
+  Button
+    id: buttonCancel
+    !text: tr('Cancel')
+    width: 43
+    anchors.right: parent.right
+    margin-right: -5
+    anchors.bottom: parent.bottom
+    @onClick: modules.game_hotkeys.cancel()
+    $pressed:
+      text-offset: 3 3

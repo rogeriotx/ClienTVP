@@ -1,0 +1,101 @@
+OptionPanel
+  size: 236 379
+  text: Graphics Options
+  
+  OptionCheckBoxBackground
+
+    OptionCheckBox
+      id: fullscreen
+      !text: tr('Fullscreen')
+      tooltip: Ctrl+Shift+F
+  
+  OptionCheckBoxBackground
+
+    OptionCheckBox
+      id: vsync
+      !text: tr('Enable VSync')
+      !tooltip: tr('Limits FPS (usually to 60)')
+  
+  OptionCheckBoxBackground
+
+    OptionCheckBox
+      id: dontStretchShrink
+      !text: tr('Don\'t stretch/shrink the Map')
+  
+  OptionCheckBoxBackground
+
+    OptionCheckBox
+      id: hdmodeBox
+      !text: tr('Enable HD Graphics')
+  
+  OptionCheckBoxBackground
+
+    OptionCheckBox
+      id: floorFading
+      !text: tr('Enable floor fading')
+  
+  OptionCheckBoxBackground
+
+    OptionCheckBox
+      id: antialiasing
+      !text: tr('Enable Antialiasing')
+  
+  OptionCheckBoxBackground
+
+    OptionCheckBox
+      id: showFps
+      !text: tr('Display Framerate')
+
+  OptionsLabel
+    id: backgroundFrameRateLabel
+    !text: tr('Adjust Framerate Limit: %s', 'max')
+    margin-top: 21
+    @onSetup: |
+      local value = modules.client_options.getOption('backgroundFrameRate')
+      local text = value
+      if value <= 0 or value >= 201 then
+        text = 'max'
+      end
+      self:setText(tr('Adjust Framerate Limit: %s', text))
+
+  OptionScrollbar
+    id: backgroundFrameRate
+    margin-top: 5
+    minimum: 10
+    maximum: 201
+  
+  OptionsLabel
+    id: currentFrameRateLabel
+    margin-top: 4
+    !text: tr('Current Framerate: %s', 'max')
+
+  padding: 0
+
+  @onEnter: modules.client_options.okEdits(self)
+  @onEscape: modules.client_options.cancelEdits(self)
+
+  HorizontalSeparator
+    id: separator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 9
+    margin-left: 13
+    margin-right: 13
+
+  Button
+    !text: tr('Ok')
+    size: 43 20
+    anchors.right: next.left
+    anchors.bottom: next.bottom
+    margin-right: 11
+    @onClick: modules.client_options.okEdits(self:getParent())
+  
+  Button
+    !text: tr('Cancel')
+    size: 43 20
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: 13
+    margin-bottom: 10
+    @onClick: modules.client_options.cancelEdits(self:getParent())

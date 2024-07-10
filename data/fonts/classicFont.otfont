@@ -1,0 +1,7 @@
+Font
+  name: classicFont
+  texture: classicFont_cp1252
+  height: 12
+  glyph-size: 14 14
+  space-width: 2
+  spacing: 0 0

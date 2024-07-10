@@ -1,0 +1,84 @@
+UpdaterProgressBar < UIProgressBar
+  height: 12
+  width: 180
+  border-color: black
+  background-color: #75bfff
+  border-width: 1
+
+  font: verdana-11px-rounded
+  text-offset: 0 2
+
+StaticMainWindow
+  id: updaterWindow
+  !text: tr('Patch Updater')
+  size: 360 215
+
+  Label
+    id: title
+    !text: tr('Welcome to Retronia client update\nDownloading new features...')
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    text-align: center
+    text-auto-resize: true
+      
+  Label
+    id: title2
+    !text: tr('Status: Checking for updates')
+    text-align: center
+    anchors.top: prev.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 15
+    color: #909090
+  
+  Label
+    id: status
+    !text: tr('Updating 619 files')
+    text-align: center
+    anchors.top: prev.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 15
+    color: #909090
+    text-auto-resize: true
+
+  UpdaterProgressBar
+    id: mainProgress
+    anchors.top: prev.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 5
+
+  UpdaterProgressBar
+    id: downloadProgress
+    visible: false
+    anchors.top: prev.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 5
+
+  Label
+    id: downloadStatus
+    text-align: center
+    text-auto-resize: true
+    text-wrap: true
+    visible: false
+    anchors.top: prev.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 5
+    color: #909090
+
+  Button
+    id: changeUrlButton
+    margin-left: 50
+    margin-right: 50
+    margin-top: 5
+    margin-bottom: 10
+    !text: tr('Change updater URL')
+    @onClick: Updater.changeUrl()
+    $!mobile:
+      visible: false
+
+  Button
+    margin-left: 90
+    margin-right: 90
+    !text: tr('Cancel')
+    @onClick: Updater.abort()
+    visible: false
+

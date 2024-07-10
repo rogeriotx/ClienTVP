@@ -1,0 +1,216 @@
+SkillFirstWidget < UIWidget
+
+SkillButton < UIButton
+  margin-bottom: 0
+  @onClick: onSkillButtonClick()
+  &skillButton: true
+  height: 14
+  phantom: true
+
+SmallSkillButton < SkillButton
+  height: 14
+
+SkillNameLabel < GameLabel
+  id: skillNameWidget
+  font: verdana-11px-antialised
+  color: #AFAFAF
+  anchors.left: parent.left
+  anchors.top: parent.top
+  margin-left: -1
+
+SkillValueLabel < GameLabel
+  id: value
+  font: verdana-11px-antialised
+  color: #AFAFAF
+  text-align: topright
+  anchors.right: parent.right
+  anchors.left: prev.left
+  anchors.top: parent.top
+
+SkillPercentPanel < ProgressBar
+  id: percent
+  image-source: /images/ui/progressbarskills
+  background-color: #00C000
+  height: 5
+  border: 1 black
+  margin-top: 2
+  anchors.left: parent.left
+  anchors.right: parent.right
+  anchors.top: prev.bottom
+  phantom: false
+  visible: false
+
+MiniWindow
+  id: skillWindow
+  !text: tr('Skills')
+  color: #8F8F8F
+  height: 245
+  icon: /images/topbuttons/skills
+  @onClose: modules.game_skills.onMiniWindowClose()
+  &save: true
+  padding: 0
+
+  MiniWindowContents
+    margin: 0
+    margin-top: 0
+    padding-top: 15
+    padding-left: 14
+    padding-right: 22
+    margin-bottom: 3
+    layout: verticalBox
+    anchors.right: miniwindowScrollBar.right
+
+    SkillButton
+      id: experience
+      margin-top: 7
+      SkillNameLabel
+        !text: tr('Experience')
+      SkillValueLabel
+
+    SkillButton
+      id: level
+      SkillNameLabel
+        !text: tr('Level')
+      SkillValueLabel
+      SkillPercentPanel
+        background-color: #C00000
+
+    SkillButton
+      id: health
+      SkillNameLabel
+        !text: tr('Hitpoints')
+      SkillValueLabel
+
+    SkillButton
+      id: mana
+      SkillNameLabel
+        !text: tr('Mana')
+      SkillValueLabel
+
+    SkillButton
+      id: speed
+      SkillNameLabel
+        !text: tr('Speed')
+      SkillValueLabel
+
+    SkillButton
+      id: capacity
+      SkillNameLabel
+        !text: tr('Capacity')
+      SkillValueLabel
+
+    SkillButton
+      id: regenerationTime
+      SkillNameLabel
+        !text: tr('Regeneration Time')
+      SkillValueLabel
+
+    //SkillButton
+    //  id: offlineTraining
+    //  visible: false
+    //  SkillNameLabel
+    //    !text: tr('Offline Training')
+    //  SkillValueLabel
+    //  SkillPercentPanel
+
+    SkillButton
+      id: magiclevel
+      SkillNameLabel
+        !text: tr('Magic Level')
+      SkillValueLabel
+      SkillPercentPanel
+        background-color: #C00000
+    
+    HorizontalSeparator
+      margin: 6 0
+
+    SkillButton
+      id: skillId0
+      SkillNameLabel
+        !text: tr('Fist Fighting')
+      SkillValueLabel
+      SkillPercentPanel
+
+    SkillButton
+      id: skillId1
+      SkillNameLabel
+        !text: tr('Club Fighting')
+      SkillValueLabel
+      SkillPercentPanel
+
+    SkillButton
+      id: skillId2
+      SkillNameLabel
+        !text: tr('Sword Fighting')
+      SkillValueLabel
+      SkillPercentPanel
+
+    SkillButton
+      id: skillId3
+      SkillNameLabel
+        !text: tr('Axe Fighting')
+      SkillValueLabel
+      SkillPercentPanel
+
+    SkillButton
+      id: skillId4
+      SkillNameLabel
+        !text: tr('Distance Fighting')
+      SkillValueLabel
+      SkillPercentPanel
+
+    SkillButton
+      id: skillId5
+      SkillNameLabel
+        !text: tr('Shielding')
+      SkillValueLabel
+      SkillPercentPanel
+
+    SkillButton
+      id: skillId6
+      SkillNameLabel
+        !text: tr('Fishing')
+      SkillValueLabel
+      SkillPercentPanel
+
+    SmallSkillButton
+      id: skillId7
+      SkillNameLabel
+        !text: tr('Critical Hit Chance')
+      SkillValueLabel
+
+    SmallSkillButton
+      id: skillId8
+      SkillNameLabel
+        !text: tr('Critical Hit Damage')
+      SkillValueLabel
+
+    SmallSkillButton
+      id: skillId9
+      SkillNameLabel
+        !text: tr('Life Leech Chance')
+      SkillValueLabel
+
+    SmallSkillButton
+      id: skillId10
+      SkillNameLabel
+        !text: tr('Life Leech Amount')
+      SkillValueLabel
+
+    SmallSkillButton
+      id: skillId11
+      SkillNameLabel
+        !text: tr('Mana Leech Chance')
+      SkillValueLabel
+
+    SmallSkillButton
+      id: skillId12
+      SkillNameLabel
+        !text: tr('Mana Leech Amount')
+      SkillValueLabel
+  
+  MiniBroder
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-bottom: 2
+    margin-left: 2

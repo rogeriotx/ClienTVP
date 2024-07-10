@@ -1,0 +1,21 @@
+UIWidget
+  id: client_cam
+  anchors.bottom: parent.bottom
+  anchors.left: parent.left
+  margin-left: 3
+  size: 160 30
+  visible: true
+  layout:
+    type: verticalBox  
+
+  Label
+    id: camPause
+    font: verdana-11px-rounded
+
+  Label
+    id: camSpeed
+    font: verdana-11px-rounded
+
+  Label
+    id: camTime
+    font: verdana-11px-rounded

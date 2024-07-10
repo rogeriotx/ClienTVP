@@ -1,0 +1,97 @@
+ChannelListLabel < Label
+  font: verdana-11px-monochrome
+  background-color: alpha
+  text-offset: 2 0
+  focusable: true
+
+  $focus:
+    background-color: #ffffff22
+    color: #ffffff
+
+MainWindow
+  id: channelsWindow
+  !text: tr('New channel')
+  size: 236 255
+  padding-left: 18
+  padding-right: 18
+  padding-bottom: 10
+  padding-top: 32
+  @onEscape: self:destroy()
+
+  Label
+    !text: tr('Select a channel:')
+    anchors.left: parent.left
+    anchors.top: parent.top
+    text-auto-resize: true
+
+  TextList
+    id: channelList
+    vertical-scrollbar: channelsScrollBar
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 5
+    height: 102
+    focusable: false
+    color: #484444
+    text-offset: 0 4
+    opacity: 1
+    image-source: /images/ui/windowsolid
+    image-border: 1
+    padding: 1 14 1 1
+  
+  VerticalScrollBar
+    id: channelsScrollBar
+    anchors.top: prev.top
+    anchors.bottom: prev.bottom
+    margin: 1
+    step: 12
+    anchors.right: prev.right
+    pixels-scroll: true
+
+  Label
+    id: openPrivateChannelWithLabel
+    !text: tr('Open a private message channel:')
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: prev.bottom
+    text-align: left
+    text-auto-resize: true
+    margin-top: 15
+
+  TextEdit
+    id: openPrivateChannelWith
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: prev.bottom
+    text-offset: 3 0
+    margin-top: 3
+    height: 16
+    padding: 0 3 0 3
+  
+  HorizontalSeparator
+    id: separator2
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 8
+    margin-left: -5
+    margin-right: -5
+
+  Button
+    id: buttonOpen
+    !text: tr('Open')
+    width: 43
+    anchors.right: next.left
+    anchors.bottom: parent.bottom
+    @onClick: self:getParent():onEnter()
+    margin-right: 10
+
+  Button
+    id: cancelButton
+    !text: tr('Cancel')
+    width: 43
+    anchors.right: parent.right
+    margin-right: -5
+    anchors.bottom: parent.bottom
+    @onClick: self:getParent():destroy()

@@ -1,0 +1,70 @@
+OptionCheckBoxBackground2 < OptionCheckBoxBackground
+
+  $!first:
+    margin-top: 14
+
+
+OptionPanel
+  size: 296 289
+  text: Console Options
+
+  OptionCheckBoxBackground2
+    OptionCheckBox
+      id: showInfoMessagesInConsole
+      !text: tr('Show Info Messages in Console')
+
+  OptionCheckBoxBackground2
+    OptionCheckBox
+      id: showEventMessagesInConsole
+      !text: tr('Show Event Messages in Console')
+
+  OptionCheckBoxBackground2
+    OptionCheckBox
+      id: showStatusMessagesInConsole
+      !text: tr('Show Status Messages in Console')
+
+  OptionCheckBoxBackground2
+    OptionCheckBox
+      id: showTimestampsInConsole
+      !text: tr('Show Timestamps in Console')
+
+  OptionCheckBoxBackground2
+    OptionCheckBox
+      id: showPrivateMessagesOnScreen
+      !text: tr('Show Private Messages in Game Screen')
+
+  OptionCheckBoxBackground2
+    OptionCheckBox
+      id: automaticallyOpenPMs
+      !text: tr('Automatically Open Private Messages')
+  
+  padding: 0
+
+  @onEnter: modules.client_options.okEdits(self)
+  @onEscape: modules.client_options.cancelEdits(self)
+
+  HorizontalSeparator
+    id: separator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 9
+    margin-left: 13
+    margin-right: 13
+
+  Button
+    !text: tr('Ok')
+    size: 43 20
+    anchors.right: next.left
+    anchors.bottom: next.bottom
+    margin-right: 11
+    @onClick: modules.client_options.okEdits(self:getParent())
+  
+  Button
+    !text: tr('Cancel')
+    size: 43 20
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: 13
+    margin-bottom: 10
+    @onClick: modules.client_options.cancelEdits(self:getParent())

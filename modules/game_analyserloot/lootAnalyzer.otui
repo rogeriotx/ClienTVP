@@ -1,0 +1,187 @@
+ItemWidget < UIWidget
+  id: itemWidget
+  layout:
+    type: verticalBox
+    flow: true
+    cell-width: 160
+    cell-height: 40
+
+ItemEntry < UIWidget
+  id: itemEntry
+  size: 150 40
+  margin-top: 2
+
+  Item
+    id: itemImage
+    virtual: true
+    anchors.top: parent.top
+    anchors.left: parent.left
+    image-source: /images/ui/item
+    font: verdana-11px-antialised
+    size: 34 34
+
+  Label
+    id: itemAmount
+    anchors.left: itemImage.right
+    anchors.top: itemImage.top
+    color: #feffa9
+    margin-top: -3
+    margin-left: 4
+
+  Label
+    id: itemPrice
+    anchors.right: parent.right
+    anchors.top: itemImage.top
+    color: #A8A8A8
+    margin-top: -3
+
+  Label
+    id: itemName
+    anchors.left: itemImage.right
+    anchors.top: itemAmount.bottom
+    color: #A8A8A8
+    margin-left: 4
+
+  Label
+    id: itemCost
+    anchors.right: parent.right
+    anchors.top: itemName.bottom
+    color: #ffd08d
+    text-align: right
+
+  HorizontalSeparator
+    id: horizonalSep
+    image-source: /images/ui/separator_horizontal
+    image-border: 1
+    height: 2
+    phantom: true
+    focusable: false
+    anchors.top: itemImage.bottom
+    margin-top: 3
+
+LootedItems < Label
+  !text: tr('Looted Items')
+  color: #00a504
+  text-align: center
+
+LootLabel < GameLabel
+  margin-top: 2
+  text-offset: 0 0
+  font: verdana-11px-antialised
+  phantom: false
+  
+SkillFirstWidget < UIWidget
+LootIcon < GameLabel
+  size: 32 32
+  image-color: white
+  image-rect: 0 0 32 32
+
+lootAnalyzer < UIButton
+  height: 21
+  margin-bottom: 2
+  &onClick: onlootButtonClick
+
+SkillNameLabel < GameLabel
+  font: verdana-11px-antialised
+  color: #AFAFAF
+  anchors.left: parent.left
+  anchors.top: parent.top
+  anchors.bottom: parent.bottom
+
+SkillValueLabel < GameLabel
+  id: value
+  font: verdana-11px-antialised
+  color: #AFAFAF
+  text-align: topright
+  anchors.right: parent.right
+  anchors.top: parent.top
+  anchors.bottom: parent.bottom
+  anchors.left: prev.left
+
+SkillPercentPanel < ProgressBar
+  id: percent
+  image-source: /images/ui/progressbarloot
+  background-color: #00C000
+  border: 1 black
+  height: 5
+  margin-top: 15
+  anchors.left: parent.left
+  anchors.right: parent.right
+  anchors.top: parent.top
+  phantom: false
+
+MiniWindow
+  id: lootWindow
+  !text: tr('Loot Analyzer')
+  color: #8F8F8F
+  icon: /images/topbuttons/lootanalyzer
+  icon-rect: 4 2 12 12
+  icon-clip: 0 0 12 12
+  height: 250
+  &save: true
+
+  MiniWindowContents
+    padding-left: 10
+    padding-right: 10
+    margin-top: 24
+    layout: verticalBox
+
+    Button
+      id: button_reset
+      text: Reset Statistics
+      height: 16
+      @onClick: resetLoot()
+
+    Button
+      id: button_customize
+      text: Customize Loot
+      margin-top: 2
+      height: 16
+      @onClick: toggleCustomItem()
+
+    lootAnalyzer
+      margin-top: 3
+      id: labelLoot
+      height: 15
+      SkillNameLabel
+        !text: tr('Loot')
+      SkillValueLabel
+
+    lootAnalyzer
+      id: labelSupplies
+      height: 15
+      SkillNameLabel
+        !text: tr('Supplies')
+      SkillValueLabel
+
+    lootAnalyzer
+      id: labelBalance
+      height: 15
+      SkillNameLabel
+        !text: tr('Balance')
+      SkillValueLabel
+
+    HorizontalSeparator
+      image-source: /images/ui/separator_horizontal
+      image-border: 1
+      height: 2
+      phantom: true
+      focusable: false
+
+    Label
+      !text: tr('Supplies Used')
+      color: #ff9600
+      text-align: center
+
+    HorizontalSeparator
+      image-source: /images/ui/separator_horizontal
+      image-border: 1
+      height: 2
+      phantom: true
+      focusable: false
+
+  MiniBroder
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-bottom: 2
+    margin-left: 2

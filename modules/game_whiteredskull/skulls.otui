@@ -1,0 +1,161 @@
+SkullProgressbar < UIWidget
+  image-source: images/skullbarprogress
+  size: 71 5
+  margin-right: 4
+  anchors.verticalCenter: prev.verticalCenter
+  anchors.right: prev.left
+  padding: 1
+
+  UIProgressBar
+    id: progress
+    anchors.fill: parent
+    background-color: #FF0000
+    visible: false
+
+MiniWindow
+  id: skullsWindow
+  !text: tr('Unjustified Points')
+  icon: /images/topbuttons/skullicon
+  icon-offset: 2 2
+  color: #8F8F8F
+  height: 172
+  @onClose: modules.game_whiteredskull.onMiniWindowClose()
+  &save: true
+
+  MiniWindowContents
+    padding-top: 1
+    padding-left: 8
+    padding-right: 7
+
+    UIWidget
+      id: CentralSkullSlot
+      size: 15 15
+      image-source: images/slot_skull
+      anchors.top: parent.top
+      anchors.horizontalCenter: parent.horizontalCenter
+      tooltip: You currently have no red skull.
+      margin-top: 5
+
+      UIWidget
+        id: skull
+        size: 11 11
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        phantom: true
+
+    Label
+      id: timeStatus
+      margin-top: 5
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.horizontalCenter: prev.horizontalCenter
+      text-align: center
+      text-auto-resize: true
+
+    HorizontalSeparator
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 6 0
+
+    Label
+      text: Daily unjustified
+      text-auto-resize: true
+      anchors.top: prev.bottom
+      margin-top: 4
+      anchors.left: parent.left
+
+    UIWidget
+      id: SkullSlot01
+      size: 15 15
+      image-source: images/slot_skull
+      anchors.top: prev.bottom
+      margin-top: 2
+      anchors.right: parent.right
+      tooltip: UPs gained in 24h. 3 full kills left.
+
+      UIWidget
+        id: skull
+        size: 11 11
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        image-source: /images/game/skulls/skull_red
+        phantom: true
+    
+    SkullProgressbar
+      id: SkullProgressbar01
+    
+    Label
+      id: dailyDesc
+      !text: tr('[3 of 5]')
+      anchors.verticalCenter: prev.verticalCenter
+      anchors.left: parent.left
+      text-auto-resize: true
+
+    Label
+      text: Weekly unjustified
+      text-auto-resize: true
+      anchors.top: prev.bottom
+      margin-top: 4
+      anchors.left: parent.left
+
+    UIWidget
+      id: SkullSlot02
+      size: 15 15
+      image-source: images/slot_skull
+      anchors.top: prev.bottom
+      margin-top: 2
+      anchors.right: parent.right
+      tooltip: UPs gained in 7 days. 5 full kills left.
+
+      UIWidget
+        id: skull
+        size: 11 11
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        image-source: /images/game/skulls/skull_red
+        phantom: true
+    
+    SkullProgressbar
+      id: SkullProgressbar02
+    
+    Label
+      id: weeklyDesc
+      !text: tr('[4 of 10]')
+      anchors.verticalCenter: prev.verticalCenter
+      anchors.left: parent.left
+      text-auto-resize: true
+
+    Label
+      text: Monthly unjustified
+      text-auto-resize: true
+      anchors.top: prev.bottom
+      margin-top: 4
+      anchors.left: parent.left
+
+    UIWidget
+      id: SkullSlot03
+      size: 15 15
+      image-source: images/slot_skull
+      anchors.top: prev.bottom
+      margin-top: 2
+      anchors.right: parent.right
+      tooltip: UPs gained in 30 days. 10 full kills left.
+
+      UIWidget
+        id: skull
+        size: 11 11
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        image-source: /images/game/skulls/skull_red
+        phantom: true
+    
+    SkullProgressbar
+      id: SkullProgressbar03
+    
+    Label
+      id: monthlyDesc
+      !text: tr('[11 of 20]')
+      anchors.verticalCenter: prev.verticalCenter
+      anchors.left: parent.left
+      text-auto-resize: true

@@ -1,0 +1,350 @@
+OriginalMinimapMiniwindow < HeadlessMiniWindow
+  id: minimapWindow
+  height: 119
+  font: verdana-11px-antialised
+  color: #8F8F8F
+  &save: true
+  &autoOpen: 1
+  &forceOpen: true
+  &openOnTopPanel: true
+  &original: true
+  padding: 0
+
+  MiniWindowContents
+    padding: 0
+    margin: 0
+    anchors.fill: parent
+    padding-right: 7
+
+    UIWidget
+      image-source: /images/ui/windowsolid
+      size: 108 108
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 4
+      margin-left: 10
+  
+    UIMinimap
+      id: minimap
+      draggable: true
+      focusable: false
+      cross: true
+      color: black
+      id: minimap
+      size: 106 106
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 5
+      margin-left: 11
+    
+    Button
+      !text: tr('Centre')
+      size: 43 20
+      text-auto-resize: false
+      anchors.right: parent.right
+      anchors.bottom: minimap.bottom
+      margin: 0
+      margin-bottom: -1
+      @onClick: self:getParent():getChildById('minimap'):reset()
+  
+    Button
+      size: 20 20
+      anchors.right: parent.right
+      anchors.bottom: prev.top
+      icon-source: /images/game/minimap/floor_down
+      icon-clip: 0 0 20 20
+      @onClick: self:getParent():getChildById('minimap'):floorDown(1)
+      margin-bottom: 2
+      $pressed:
+        icon-clip: 0 20 20 20
+    
+    Button
+      size: 20 20
+      anchors.right: prev.left
+      margin-right: 4
+      anchors.bottom: prev.bottom
+      icon-source: /images/game/minimap/zoom_in
+      icon-clip: 0 0 20 20
+      @onClick: self:getParent():getChildById('minimap'):zoomIn()
+      $pressed:
+        icon-clip: 0 20 20 20
+  
+    Button
+      size: 20 20
+      anchors.right: parent.right
+      anchors.bottom: prev.top
+      icon-source: /images/game/minimap/floor_up
+      icon-clip: 0 0 20 20
+      @onClick: self:getParent():getChildById('minimap'):floorUp(1)
+      margin-bottom: 2
+      $pressed:
+        icon-clip: 0 20 20 20
+    
+    Button
+      size: 20 20
+      anchors.right: prev.left
+      margin-right: 4
+      anchors.bottom: prev.bottom
+      icon-source: /images/game/minimap/zoom_out
+      icon-clip: 0 0 20 20
+      @onClick: self:getParent():getChildById('minimap'):zoomOut()
+      $pressed:
+        icon-clip: 0 20 20 20
+    
+    UIWidget
+      size: 43 43
+      icon-source: /images/game/minimap/map_navigator
+      anchors.bottom: prev.top
+      margin-bottom: 3
+      anchors.right: parent.right
+
+      UIButton
+        id: center
+        size: 9 8
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        @onClick: self:getParent():getParent():getChildById('minimap'):reset()
+      
+      UIButton
+        size: 9 17
+        id: moveUp
+        anchors.bottom: center.top
+        anchors.horizontalCenter: center.horizontalCenter
+        @onClick: self:getParent():getParent():getChildById('minimap'):move(0,3)
+      
+      UIButton
+        size: 9 17
+        id: moveDown
+        anchors.top: center.bottom
+        anchors.horizontalCenter: center.horizontalCenter
+        @onClick: self:getParent():getParent():getChildById('minimap'):move(0,-3)
+      
+      UIButton
+        size: 16 16
+        id: moveLeft
+        anchors.verticalCenter: center.verticalCenter
+        anchors.left: center.right
+        @onClick: self:getParent():getParent():getChildById('minimap'):move(-3,0)
+      
+      UIButton
+        size: 16 16
+        id: moveRight
+        anchors.verticalCenter: center.verticalCenter
+        anchors.right: center.left
+        @onClick: self:getParent():getParent():getChildById('minimap'):move(3,0)
+
+MinimapMiniwindow < MiniWindow
+  id: minimapWindow
+  !text: tr('Minimap')
+  icon: /images/topbuttons/minimap
+  &save: true
+  &autoOpen: 1
+  &forceOpen: 1
+  color: #8F8F8F
+  height: 175
+  font: verdana-11px-antialised
+  opacity: 1
+  color: #AFAFAF
+  image-source: /images/ui/window
+  image-border: 4
+  image-border-top: 17
+  padding: 0
+  &openOnTopPanel: true
+
+  MiniWindowContents
+    margin-top: 17
+    padding: 0 0 0 1
+
+    Minimap
+      id: minimap
+      anchors.fill: parent
+
+MiniWindow
+  id: minimapWindow
+  height: 119
+  &openOnTopPanel: true
+  padding: 0
+  color: #AFAFAF
+  opacity: 1
+  font: verdana-11px-antialised
+  !text: tr('Minimap')
+  icon: /images/topbuttons/minimap
+  &save: true
+  &autoOpen: 1
+  &forceOpen: 1
+  &headlesswindow: true
+
+  icon-rect: 4 2 13 13
+  icon-clip: 0 0 13 13
+  width: 176
+  text-offset: 19 1
+  text-align: topLeft
+
+  image-source: /images/ui/miniwindow
+  image-border: 4
+  image-border-top: 19
+  image-border-bottom: 5
+
+  focusable: false
+  &minimizedHeight: 19
+
+  MiniWindowContents
+    padding: 0
+    margin: 0
+    anchors.fill: parent
+    padding-right: 7
+
+    UIWidget
+      id: minimapBackground
+      image-source: /images/ui/windowsolid
+      size: 108 108
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin-top: 4
+      margin-left: 11
+      padding: 0
+  
+    UIMinimap
+      id: minimap
+      draggable: true
+      focusable: false
+      cross: true
+      color: black
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+
+      Button
+        id: toggleFullmap
+        size: 20 20
+        !tooltip: tr('Toggle full map')
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        margin: 4
+        icon-source: /images/topbuttons/minimap
+        icon-clip: 0 0 20 20
+        $pressed:
+          icon-clip: 0 20 20 20
+        @onClick: modules.game_minimap.toggleFullMap()
+      
+      MinimapFloorUpButton
+        id: floorUpWidget
+        @onClick: self:getParent():floorUp(1)
+
+      MinimapFloorDownButton
+        id: floorDownWidget
+        @onClick: self:getParent():floorDown(1)
+
+      MinimapZoomInButton
+        id: zoomInWidget
+        @onClick: self:getParent():zoomIn()
+
+      MinimapZoomOutButton
+        id: zoomOutWidget
+        @onClick: self:getParent():zoomOut()
+
+      MinimapResetButton
+        id: resetWidget
+        @onClick: self:getParent():reset()
+    
+    Button
+      id: centreButton
+      !text: tr('Centre')
+      size: 43 21
+      text-auto-resize: false
+      anchors.right: parent.right
+      anchors.bottom: minimap.bottom
+      margin: 0
+      @onClick: self:getParent():getChildById('minimap'):reset()
+  
+    Button
+      id: floorDownButton
+      size: 20 20
+      anchors.right: parent.right
+      anchors.bottom: prev.top
+      icon-source: /images/game/minimap/floor_down
+      icon-clip: 0 0 20 20
+      @onClick: self:getParent():getChildById('minimap'):floorDown(1)
+      margin-bottom: 1
+      $pressed:
+        icon-clip: 0 20 20 20
+    
+    Button
+      id: zoomInButton
+      size: 20 20
+      anchors.right: prev.left
+      margin-right: 4
+      anchors.bottom: prev.bottom
+      icon-source: /images/game/minimap/zoom_in
+      icon-clip: 0 0 20 20
+      @onClick: self:getParent():getChildById('minimap'):zoomIn()
+      $pressed:
+        icon-clip: 0 20 20 20
+  
+    Button
+      id: floorUpButton
+      size: 20 20
+      anchors.right: parent.right
+      anchors.bottom: prev.top
+      icon-source: /images/game/minimap/floor_up
+      icon-clip: 0 0 20 20
+      @onClick: self:getParent():getChildById('minimap'):floorUp(1)
+      margin-bottom: 2
+      $pressed:
+        icon-clip: 0 20 20 20
+    
+    Button
+      id: zoomOutButton
+      size: 20 20
+      anchors.right: prev.left
+      margin-right: 4
+      anchors.bottom: prev.bottom
+      icon-source: /images/game/minimap/zoom_out
+      icon-clip: 0 0 20 20
+      @onClick: self:getParent():getChildById('minimap'):zoomOut()
+      $pressed:
+        icon-clip: 0 20 20 20
+    
+    UIWidget
+      id: navigator
+      size: 43 43
+      icon-source: /images/game/minimap/map_navigator
+      anchors.bottom: prev.top
+      margin-bottom: 3
+      anchors.right: parent.right
+
+      UIButton
+        id: center
+        size: 9 8
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        @onClick: self:getParent():getParent():getChildById('minimap'):reset()
+      
+      UIButton
+        size: 9 17
+        id: moveUp
+        anchors.bottom: center.top
+        anchors.horizontalCenter: center.horizontalCenter
+        @onClick: self:getParent():getParent():getChildById('minimap'):move(0,3 * (3 - minimapWidget:getZoom()))
+      
+      UIButton
+        size: 9 17
+        id: moveDown
+        anchors.top: center.bottom
+        anchors.horizontalCenter: center.horizontalCenter
+        @onClick: self:getParent():getParent():getChildById('minimap'):move(0,-3 * (3 - minimapWidget:getZoom()))
+      
+      UIButton
+        size: 16 16
+        id: moveLeft
+        anchors.verticalCenter: center.verticalCenter
+        anchors.left: center.right
+        @onClick: self:getParent():getParent():getChildById('minimap'):move(-3 * (3 - minimapWidget:getZoom()),0)
+      
+      UIButton
+        size: 16 16
+        id: moveRight
+        anchors.verticalCenter: center.verticalCenter
+        anchors.right: center.left
+        @onClick: self:getParent():getParent():getChildById('minimap'):move(3 * (3 - minimapWidget:getZoom()),0)

@@ -1,0 +1,217 @@
+TopButton < UIButton
+  size: 34 34
+  image-source: /images/ui/button_top
+  image-clip: 0 0 34 34
+  image-border: 3
+  image-color: #ffffffff
+  icon-color: #ffffffff
+  
+  $on:
+    image-source: /images/ui/button_top_blink
+
+  $hover !disabled:
+    image-color: #ffffff99
+    image-clip: 34 0 34 34
+
+  $pressed:
+    image-clip: 68 0 34 34
+
+  $disabled:
+    image-color: #ffffff44
+    icon-color: #ffffff44
+
+TopToggleButton < UIButton
+  size: 34 34
+  image-source: /images/ui/button_top
+  image-clip: 34 0 34 34
+  image-color: #ffffffff
+  image-border: 3
+  icon-color: #ffffffff
+  padding: 0
+  text-horizontal-auto-resize: true
+
+  $on:
+    image-clip: 0 0 34 34
+
+  $hover !disabled:
+    image-color: #ffffff99
+    image-clip: 34 0 34 34
+
+  $pressed:
+    image-clip: 68 0 34 34
+
+  $disabled:
+    image-color: #ffffff44
+    icon-color: #ffffff44
+
+TopTextButton < UIButton
+  font: cipsoftFont
+  color: white
+  size: 20 34
+  text-offset: 0 0
+  image-source: /images/ui/button
+  image-clip: 0 0 22 23
+  image-border: 3
+
+  $hover !disabled:
+    image-clip: 0 23 22 23
+
+  $pressed:
+    image-clip: 0 46 22 23
+    text-offset: 1 1
+
+  $on:
+    color: red
+
+  $disabled:
+    opacity: 0.5
+
+TopToggleTextButton < UIButton
+  font: cipsoftFont
+  color: white
+  text-offset: 0 0
+  image-source: /images/ui/button
+  image-clip: 0 0 22 23
+  image-border: 3
+  text-align: center
+
+  $hover !disabled:
+    image-clip: 0 23 22 23
+
+  $pressed:
+    image-clip: 0 46 22 23
+    text-offset: 1 3
+
+  $on:
+    image-clip: 0 46 22 23
+    text-offset: 1 3
+
+  $disabled:
+    opacity: 0.5
+
+TopToggleOtherLeftTextButton < UIButton
+  font: cipsoftFont
+  color: white
+  text-offset: 16 0
+  image-source: /images/ui/button
+  image-clip: 0 0 22 23
+  image-border: 3
+  text-align: center
+  icon-rect: 4 0 20 20
+  icon-clip: 0 0 20 20
+
+  $hover !disabled:
+    image-clip: 0 23 22 23
+
+  $pressed:
+    image-clip: 0 46 22 23
+    text-offset: 18 3
+    icon-rect: 5 1 20 20
+
+  $on:
+    image-clip: 0 46 22 23
+    text-offset: 18 3
+    icon-rect: 5 1 20 20
+
+  $disabled:
+    opacity: 0.5
+
+TopToggleLeftTextButton < UIButton
+  font: cipsoftFont
+  color: white
+  text-offset: 16 0
+  image-source: /images/ui/button
+  image-clip: 0 0 22 23
+  image-border: 3
+  text-align: center
+  icon-rect: 0 0 18 18
+  icon-clip: 0 0 18 18
+
+  $hover !disabled:
+    image-clip: 0 23 22 23
+
+  $pressed:
+    image-clip: 0 46 22 23
+    text-offset: 18 3
+    icon-rect: 1 0 18 18
+    icon-clip: 0 20 19 18
+
+  $on:
+    image-clip: 0 46 22 23
+    text-offset: 18 3
+    icon-rect: 1 0 18 18
+    icon-clip: 0 20 19 18
+
+  $disabled:
+    opacity: 0.5
+    
+TopMenuButtonsPanel < Panel
+  layout:
+    type: horizontalBox
+    spacing: 4
+    fit-children: true
+  padding: 5 4
+
+TopMenuPanel < Panel
+  height: 30
+  image-source: /images/ui/panel_top
+  image-repeated: true
+  image-border: 3
+  image-border-top: 0
+  focusable: false
+
+TopMenuFrameCounterLabel < Label
+  font: verdana-11px-rounded
+  color: white
+  margin-top: 2
+  margin-left: 5
+
+TopMenuPingLabel < Label
+  font: verdana-11px-rounded
+
+TopMenu < TopMenuPanel
+  id: topMenu
+  anchors.top: parent.top
+  anchors.left: parent.left
+  anchors.right: parent.right
+
+  TopMenuButtonsPanel
+    id: leftButtonsPanel
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    padding-left: 12
+
+  TopMenuButtonsPanel
+    id: leftGameButtonsPanel
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: prev.right
+    visible: false
+
+  TopMenuFrameCounterLabel
+    id: fpsLabel
+    text-auto-resize: true
+    anchors.top: parent.top
+    anchors.left: leftGameButtonsPanel.right
+    phantom: true
+
+  TopMenuPingLabel
+    color: white
+    id: pingLabel
+    text-auto-resize: true
+    anchors.top: fpsLabel.bottom
+    anchors.left: fpsLabel.left
+
+  TopMenuButtonsPanel
+    id: rightButtonsPanel
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+
+  TopMenuButtonsPanel
+    id: rightGameButtonsPanel
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.right: prev.left
+    visible: false

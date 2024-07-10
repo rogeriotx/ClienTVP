@@ -1,0 +1,63 @@
+ConsoleLabel < UITextEdit
+  font: verdana-11px-antialised
+  height: 14
+  color: yellow
+  margin-left: 2
+  text-wrap: true
+  text-auto-resize: true
+  selection-color: #111416
+  selection-background-color: #808080
+  change-cursor-image: false
+  cursor-visible: false
+  editable: false
+  draggable: true
+  selectable: false
+  focusable: false
+
+ConsolePhantomLabel < UILabel
+  font: verdana-11px-antialised
+  height: 14
+  color: yellow
+  text-wrap: true
+  text-auto-resize: true
+  selection-color: #111416
+  selection-background-color: #999999
+
+ConsoleTabBar < MoveableTabBar
+  height: 23
+
+ConsoleTabBarPanel < MoveableTabBarPanel
+  id: consoleTab
+
+  ScrollablePanel
+    id: consoleBuffer
+    anchors.fill: parent
+    vertical-scrollbar: consoleScrollBar
+    layout:
+      type: verticalBox
+      align-bottom: true
+    inverted-scroll: true
+    padding: 3
+
+  VerticalScrollBar
+    id: consoleScrollBar
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    step: 14
+    margin: 3 4 2 0
+    pixels-scroll: true
+    minimum: 12
+
+ConsoleTabBarButton < MoveableTabBarButton
+  font: verdana-11px-rounded
+  text-offset: 0 3
+  height: 18
+  margin-top: 5
+  padding: 26
+  
+LinkedItem < UILinkedItem
+  anchors.top: parent.top
+  anchors.left: parent.left
+  height: 14
+  phantom: false

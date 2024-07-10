@@ -1,0 +1,233 @@
+CustomItemButton < UIButton
+  font: verdana-11px-antialised
+  text-align: left
+  background-color: #00000022
+  size: 382 43
+  margin-right: 2
+  margin-bottom: 2
+
+  Item
+    id: itemImage
+    virtual: true
+    anchors.top: parent.top
+    anchors.left: parent.left
+    image-source: /images/ui/item
+    size: 34 34
+    margin-left: 2
+    margin-top: 2
+
+  Label
+    id: itemName
+    text-align: left
+    text-offset: 0 0
+    anchors.top: itemImage.top
+    anchors.left: itemImage.right
+    width: 250
+    height: 16
+    margin-left: 5
+    font: verdana-11px-antialised
+    color: #00ff4e
+
+  TextEdit
+    @onClick: modules.game_analyserloot.showTextEdit(self, "loot")
+    id: priceSellBar
+    text: ""
+    anchors.left: itemName.left
+    anchors.bottom: parent.bottom
+    width: 70
+    margin-left: 130
+    margin-bottom: 7
+    color: #fff600
+    @onTextChange: modules.game_analyserloot.postTextEdited(self)
+
+  Label
+    id: priceSellBarInfo
+    text: gps
+    text-offset: 0 0
+    anchors.top: priceSellBar.top
+    anchors.left: priceSellBar.right
+    width: 40
+    height: 16
+    margin-left: 3
+    font: verdana-11px-antialised
+    color: #fff600
+
+  TextEdit
+    @onClick: modules.game_analyserloot.showTextEdit(self, "supply")
+    id: priceBuyBar
+    text: ""
+    anchors.left: priceSellBarInfo.right
+    anchors.top: priceSellBarInfo.top
+    width: 70
+    color: #fff600
+    @onTextChange: modules.game_analyserloot.postTextEdited(self)
+
+  Label
+    id: priceBuyBarInfo
+    text: gps
+    text-offset: 0 0
+    anchors.top: priceBuyBar.top
+    anchors.left: priceBuyBar.right
+    width: 30
+    height: 16
+    margin-left: 3
+    font: verdana-11px-antialised
+    color: #fff600
+
+  Label
+    id: playerComment
+    text-align: right
+    text-offset: 0 0
+    anchors.top: itemName.bottom
+    anchors.right: parent.right
+    anchors.left: parent.left
+    height: 16
+    margin-right: 5
+    font: verdana-11px-antialised
+    color: #ffd298
+
+  Label
+    id: itemId
+    anchors.right: parent.right
+    anchors.top: parent.top
+    @onSetup: |
+      self:hide()
+
+  HorizontalSeparator
+    image-source: /images/ui/separator_horizontal
+    image-border: 1
+    width: 393
+    height: 2
+    phantom: true
+    focusable: false
+    anchors.bottom: parent.bottom
+
+
+MainWindow
+  id: customItemWindow
+  size: 400 342
+  padding: 3
+
+  @onEnter: closeCustomItem()
+  @onEscape: closeCustomItem()
+
+  Label
+    id: title
+    !text: tr('Customize Loot')
+    text-align: center
+    font: verdana-11px-antialised
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 10
+
+  Label
+    id: info_name
+    text: Item
+    text-align: left
+    font: verdana-11px-antialised
+    anchors.top: parent.top
+    anchors.left: parent.left
+    height: 17
+    width: 170
+    margin-top: 15
+    margin-left: 3
+    background-color: #00000088
+
+  Label
+    id: info_loot
+    text: Loot Value
+    text-align: left
+    font: verdana-11px-antialised
+    anchors.top: info_name.top
+    anchors.left: info_name.right
+    height: 17
+    width: 111
+    margin-left: 1
+    background-color: #00000088
+
+  Label
+    id: info_use
+    text: Use Value
+    text-align: left
+    font: verdana-11px-antialised
+    anchors.top: info_loot.top
+    anchors.left: info_loot.right
+    height: 17
+    width: 107
+    margin-left: 1
+    background-color: #00000088
+
+  ScrollablePanel
+    id: itemList
+    anchors.top: parent.top
+    anchors.left: parent.left
+    size: 395 274
+    background-color: #00000055
+    margin-top: 34
+    padding: 1
+    vertical-scrollbar: itemListScrollbar
+    layout:
+      type: grid
+      flow: true
+      cell-size: 382 43
+
+  VerticalScrollBar
+    id: itemListScrollbar
+    height: 274
+    margin-top: 1
+    margin-right: 1
+    anchors.top: itemList.top
+    anchors.right: itemList.right
+    step: 14
+    pixels-scroll: true
+
+  HorizontalSeparator
+    id: horizonalSep
+    image-source: /images/ui/separator_horizontal
+    image-border: 1
+    width: 393
+    height: 2
+    phantom: true
+    focusable: false
+    anchors.top: itemListScrollbar.bottom
+
+  Label
+    id: searchBarLabel
+    !text: tr('Search Item:')
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    text-align: center
+    width: 80
+    margin-left: 0
+    margin-bottom: 6
+
+  TextEdit
+    id: searchBar
+    anchors.left: searchBarLabel.right
+    anchors.bottom: parent.bottom
+    width: 150
+    margin-left: 5
+    margin-bottom: 4
+    @onTextChange: onChangeSearchBar(self:getText())
+
+  Button
+    id: closeButton
+    !text: tr('Close')
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: 5
+    margin-bottom: 3
+    width: 45
+    height: 20
+    @onClick: closeCustomItem()
+
+  Button
+    id: showCustomsButton
+    !text: tr('Show Edited')
+    anchors.right: closeButton.left
+    anchors.bottom: closeButton.bottom
+    margin-right: 5
+    width: 70
+    height: 20
+    @onClick: showEditedItems()

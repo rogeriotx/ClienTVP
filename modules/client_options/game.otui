@@ -1,0 +1,213 @@
+OptionPanel
+  size: 237 335
+  text: General Options
+
+  OptionCheckBoxBackground
+
+    OptionCheckBox
+      id: classicControl
+      !text: tr('Classic Control')
+
+    $mobile:
+      visible: false
+
+  OptionCheckBoxBackground
+    OptionCheckBox
+      id: autoChaseOverride
+      !text: tr('Auto Chase Off')
+
+  OptionCheckBoxBackground
+    OptionCheckBox
+      id: wsadWalking
+      !text: tr('Enable WSAD Walking')
+      !tooltip: tr('Disable chat and allow walk using WSAD keys')
+
+    $mobile:
+      visible: false
+
+  OptionCheckBoxBackground
+    OptionCheckBox
+      id: smartWalk
+      !text: tr('Enable Smart Walking')
+      !tooltip: tr('Will detect when to use diagonal step based on the\nkeys you are pressing')
+  
+  OptionCheckBoxBackground
+    OptionCheckBox
+      id: advancedTooltip
+      !text: tr('Enable Show Tooltip')
+  
+  OptionCheckBoxBackground
+    OptionCheckBox
+      id: swapCtrlBehavior
+      !text: tr('Smart Drag Items')
+      !tooltip: tr('Swap CTRL key behavior when moving stackable items')
+  
+  OptionCheckBoxBackground
+    OptionCheckBox
+      id: shiftRighClickFollowCreature
+      !text: tr('Smart Follow')
+      !tooltip: tr('(Shift + Right Click) on character')
+  
+  OptionCheckBoxBackground
+    OptionCheckBox
+      id: openContainerInNewWindow
+      !text: tr('Smart Open Container')
+      !tooltip: tr('Open container in new window (Shift + Right Click)')
+  
+  OptionsLabel
+    id: hotkeyDelayLabel
+    margin-top: 10
+    visible: false
+    !tooltip: tr('Give you some time to make a turn while walking if you press many keys simultaneously')
+    @onSetup: |
+      local value = modules.client_options.getOption('hotkeyDelay')
+      self:setText(tr('Hotkey delay: %s ms', value))
+
+  OptionScrollbar
+    id: hotkeyDelay
+    margin-top: 3
+    minimum: 5
+    maximum: 50
+    visible: false
+
+  OptionsLabel
+    id: walkFirstStepDelayLabel
+    margin-top: 10
+    visible: false
+    @onSetup: |
+      local value = modules.client_options.getOption('walkFirstStepDelay')
+      self:setText(tr('Walk delay after first step: %s ms', value))
+
+    $mobile:
+      visible: false
+
+  OptionScrollbar
+    id: walkFirstStepDelay
+    margin-top: 3
+    minimum: 50
+    maximum: 300
+    visible: false
+
+    $mobile:
+      visible: false
+
+  OptionsLabel
+    id: walkTurnDelayLabel
+    margin-top: 10
+    visible: false
+    @onSetup: |
+      local value = modules.client_options.getOption('walkTurnDelay')
+      self:setText(tr('Walk delay after turn: %s ms', value))
+
+    $mobile:
+      visible: false
+
+  OptionScrollbar
+    id: walkTurnDelay
+    margin-top: 3
+    minimum: 0
+    maximum: 300
+    visible: false
+
+    $mobile:
+      visible: false
+
+  OptionsLabel
+    id: walkCtrlTurnDelayLabel
+    margin-top: 10
+    visible: false
+    $mobile:
+      visible: false
+    @onSetup: |
+      local value = modules.client_options.getOption('walkTurnDelay')
+      self:setText(tr('Walk delay after ctrl turn: %s ms', value))
+
+  OptionScrollbar
+    id: walkCtrlTurnDelay
+    margin-top: 3
+    minimum: 0
+    maximum: 300    
+    visible: false
+    $mobile:
+      visible: false
+
+  OptionsLabel
+    id: walkStairsDelayLabel
+    margin-top: 10
+    visible: false
+    @onSetup: |
+      local value = modules.client_options.getOption('walkStairsDelay')
+      self:setText(tr('Walk delay after floor change: %s ms', value))
+    $mobile:
+      visible: false
+
+  OptionScrollbar
+    id: walkStairsDelay
+    margin-top: 3
+    minimum: 0
+    maximum: 300
+    visible: false
+    $mobile:
+      visible: false
+
+  OptionsLabel
+    id: walkTeleportDelayLabel
+    margin-top: 10
+    visible: false
+    @onSetup: |
+      local value = modules.client_options.getOption('walkTeleportDelay')
+      self:setText(tr('Walk delay after teleport: %s ms', value))
+    $mobile:
+      visible: false
+
+  OptionScrollbar
+    id: walkTeleportDelay
+    margin-top: 3
+    minimum: 0
+    maximum: 300
+    visible: false
+    $mobile:
+      visible: false
+      
+  Panel
+    height: 30
+    margin-top: 10
+
+    Button
+      id: changeLocale
+      !text: tr('Change language')
+      @onClick: modules.client_locales.createWindow()
+      anchors.left: parent.left
+      anchors.top: parent.top
+      width: 150
+  
+  padding: 0
+
+  @onEnter: modules.client_options.okEdits(self)
+  @onEscape: modules.client_options.cancelEdits(self)
+
+  HorizontalSeparator
+    id: separator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 9
+    margin-left: 13
+    margin-right: 13
+
+  Button
+    !text: tr('Ok')
+    size: 43 20
+    anchors.right: next.left
+    anchors.bottom: next.bottom
+    margin-right: 11
+    @onClick: modules.client_options.okEdits(self:getParent())
+  
+  Button
+    !text: tr('Cancel')
+    size: 43 20
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: 13
+    margin-bottom: 10
+    @onClick: modules.client_options.cancelEdits(self:getParent())

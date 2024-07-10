@@ -1,0 +1,11 @@
+Module
+  name: game_analyserexp
+  description: Mostra informações de exp, loot durante o tempo atual de caça.
+  author: Ryukiimaru
+  website: https://www.facebook.com/systemyart
+  sandboxed: true
+  autoload: true
+  autoload-priority: 1001
+  scripts: [ analyserexp ]
+  @onLoad: init()
+  @onUnload: terminate()

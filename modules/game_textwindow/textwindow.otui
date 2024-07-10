@@ -1,0 +1,67 @@
+TextWindow < MainWindow
+  id: textWindow
+  size: 285 269
+  padding: 32 18 10 18
+
+  Item
+    id: textItem
+    virtual: true
+    anchors.top: parent.top
+    anchors.left: parent.left
+    image-color: alpha
+
+  Label
+    id: description
+    anchors.top: parent.top
+    anchors.left: textItem.right
+    margin-left: 8
+    anchors.right: parent.right
+    height: 40
+    text-align: left
+    text-wrap: true
+
+  MultilineTextEdit
+    id: text
+    anchors.top: prev.bottom
+    margin-top: 10
+    height: 132
+    anchors.left: parent.left
+    anchors.right: parent.right
+    vertical-scrollbar: textScroll
+    text-wrap: true
+
+  VerticalScrollBar
+    id: textScroll
+    anchors.top: prev.top
+    anchors.bottom: prev.bottom
+    margin: 1
+    step: 12
+    anchors.right: prev.right
+    pixels-scroll: true
+
+  HorizontalSeparator
+    id: separator2
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 9
+    margin-left: -5
+    margin-right: -5
+
+  Button
+    id: okButton
+    !text: tr('Ok')
+    width: 43
+    anchors.right: next.left
+    anchors.bottom: parent.bottom
+    @onClick: modules.game_hotkeys.ok()
+    margin-right: 10
+
+  Button
+    id: cancelButton
+    !text: tr('Cancel')
+    width: 43
+    anchors.right: parent.right
+    margin-right: -5
+    anchors.bottom: parent.bottom
+    @onClick: modules.game_hotkeys.cancel()

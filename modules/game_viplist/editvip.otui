@@ -1,0 +1,193 @@
+IconButton < CheckBox
+  size: 16 16
+  image-source: /images/game/viplist/vipcheckbox
+  image-size: 16 16
+  image-border: 3
+  margin-left: 4
+  icon-source: /images/game/viplist/icons
+  icon-size: 12 12
+  icon-rect: 0 0 12 12
+  icon-clip: 0 0 12 12
+  icon-offset: 2 2
+  change-cursor-image: false
+
+  $first:
+    margin-left: 0
+
+  $!checked:
+    image-clip: 0 0 16 16
+    change-cursor-image: false
+
+  $hover !checked:
+    image-clip: 0 0 16 16
+    change-cursor-image: false
+
+  $checked:
+    image-clip: 16 0 16 16
+    change-cursor-image: false
+
+  $hover checked:
+    image-clip: 16 0 16 16
+    change-cursor-image: false
+
+MainWindow
+  size: 286 266
+  !text: tr('Change player in VIP list')
+  padding-left: 18
+  padding-right: 18
+
+  Label
+    id: nameLabel
+    text: Name
+    anchors.top: parent.top
+    anchors.left: parent.left
+    color: #bfbfbf
+    width: 180
+    margin-top: 6
+    margin-left: -1
+
+  HorizontalSeparator
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 3
+
+  Label
+    !text: tr('Select a type') .. ':'
+    anchors.left: parent.left
+    color: #bfbfbf
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    text-auto-resize: true
+    margin-bottom: 3
+    margin-left: -1
+
+  UIWidget
+    layout: horizontalBox
+    anchors.bottom: next.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 24
+    margin-bottom: 5
+
+    IconButton
+      id: icon0
+
+    IconButton
+      id: icon1
+      icon-clip: 12 0 12 12
+
+    IconButton
+      id: icon2
+      icon-clip: 24 0 12 12
+
+    IconButton
+      id: icon3
+      icon-clip: 36 0 12 12
+
+    IconButton
+      id: icon4
+      icon-clip: 48 0 12 12
+
+    IconButton
+      id: icon5
+      icon-clip: 60 0 12 12
+
+    IconButton
+      id: icon6
+      icon-clip: 72 0 12 12
+
+    IconButton
+      id: icon7
+      icon-clip: 84 0 12 12
+
+    IconButton
+      id: icon8
+      icon-clip: 96 0 12 12
+
+    IconButton
+      id: icon9
+      icon-clip: 108 0 12 12
+
+    IconButton
+      id: icon10
+      icon-clip: 120 0 12 12
+
+  Label
+    !text: tr('Enter a short description') .. ':'
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    color: #bfbfbf
+    margin-bottom: 3
+    text-auto-resize: true
+    margin-left: -1
+  
+  MultilineTextEdit
+    id: descriptionText
+    height: 48
+    anchors.bottom: checkboxBackground.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 14
+    vertical-scrollbar: textScroll
+    text-wrap: true
+  
+  VerticalScrollBar
+    id: textScroll
+    anchors.top: prev.top
+    anchors.bottom: prev.bottom
+    margin: 1
+    step: 12
+    anchors.right: prev.right
+    pixels-scroll: true
+
+  UIWidget
+    id: checkboxBackground
+    image-source: /images/ui/button
+    image-border: 3
+    image-clip: 0 46 22 23
+    text-offset: 1 1
+    height: 22
+    padding: 2 0 4 6
+    image-smooth: true
+    anchors.bottom: next.top
+    margin-bottom: 21
+    anchors.left: parent.left
+    anchors.right: parent.right
+
+    CheckBox
+      id: checkBoxNotify
+      !text: tr('Notify at login')
+      !tooltip: tr('Notify at login')
+      color: #afafaf
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.top: parent.top
+      margin-top: 3
+
+  HorizontalSeparator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 9
+    margin-right: -5
+    margin-left: -5
+
+  Button
+    id: buttonOK
+    !text: tr('Ok')
+    width: 43
+    anchors.right: next.left
+    anchors.bottom: parent.bottom
+    margin-bottom: -6
+    margin-right: 11
+
+  Button
+    id: buttonCancel
+    !text: tr('Cancel')
+    width: 43
+    margin-right: -5
+    anchors.right: parent.right
+    margin-bottom: -6
+    anchors.bottom: parent.bottom

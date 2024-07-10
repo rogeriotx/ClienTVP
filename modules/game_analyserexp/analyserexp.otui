@@ -1,0 +1,92 @@
+TandValue < UIWidget
+  id: value
+  anchors.right: parent.right
+  anchors.top: parent.top
+  text-align: right
+  margin-right: 2
+  text: 0
+  text-auto-resize: true
+
+TextAndV < UIWidget
+  height: 15
+  anchors.top: prev.bottom
+  anchors.left: parent.left
+  anchors.right: parent.right
+  margin-top: 6
+  text-align: left
+  text-offset: 2 0
+
+ExpPanel < UIWidget
+  id: expPanel
+  padding: 3 5
+
+  Button
+    id: resetExp
+    height: 20
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    font: verdana-11px-rounded
+    !text: tr('Reset')
+    @onClick: resetExpPanel(true)
+
+  TextAndV
+    id: lblSession
+    !text: tr('Session')
+    color: #AFAFAF
+
+    TandValue
+      color: #A6A8A7
+
+  TextAndV
+    id: lblExpH
+    !text: tr('Exp/h')
+    color: #AFAFAF
+
+    TandValue
+      color: #00DC50
+
+  TextAndV
+    id: lblExpGained
+    !text: tr('Exp Gained')
+    color: #AFAFAF
+
+    TandValue
+      color: #CAF063
+
+  TextAndV
+    id: lblExpToLvl
+    !text: tr('Exp to level')
+    color: #AFAFAF
+
+    TandValue
+      color: #EB9E45
+
+  TextAndV
+    id: lblTimeToLevel
+    !text: tr('Time to level')
+    color: #AFAFAF
+
+    TandValue
+      color: #C67D7F
+
+MiniWindow
+  id: analyserExp
+  height: 156
+  text: Exp Analyzer
+  color: #8F8F8F
+  &save: true
+  visible: false
+  icon: /images/topbuttons/expanalyzer
+  icon-rect: 4 2 12 12
+  icon-clip: 0 0 12 12
+
+  MiniWindowContents
+    ExpPanel
+      anchors.fill: parent
+
+  MiniBroder
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-bottom: 2
+    margin-left: 2

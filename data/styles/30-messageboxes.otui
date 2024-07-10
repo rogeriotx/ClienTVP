@@ -1,0 +1,32 @@
+MessageBoxLabel < Label
+  id: messageBoxLabel
+  anchors.left: parent.left
+  anchors.top: parent.top
+  text-wrap: true
+  text-auto-resize: true
+  color: #bfbfbf
+  margin-left: 5
+
+MessageBoxButtonHolder < UIWidget
+  id: buttonHolder
+  margin-top: 10
+  anchors.bottom: parent.bottom
+  anchors.right: parent.right
+
+MessageBoxButton < Button
+  margin-right: 0
+  size: 43 20
+
+  $pressed:
+    text-offset: 2 2
+
+MessageBoxMainWindow < MainWindow
+  padding: 29 13 10 12
+  color: #8f8f8f
+
+MessageBoxSeparator < HorizontalSeparator
+  anchors.bottom: parent.bottom
+  anchors.left: parent.left
+  anchors.right: parent.right
+  margin-bottom: 28
+  margin-left: 1

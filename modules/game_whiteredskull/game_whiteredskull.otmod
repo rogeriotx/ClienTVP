@@ -1,0 +1,10 @@
+Module
+  name: game_whiteredskull
+  description: By Gaamelu
+  author: Gaamelu
+  website: github.com/gaamelu
+  sandboxed: true
+  scripts: [ game_whiteredskull ]
+  @onLoad: init()
+  @onUnload: terminate()
+  autoload: true

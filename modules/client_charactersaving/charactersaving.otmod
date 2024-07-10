@@ -1,0 +1,13 @@
+Module
+  name: client_charactersaving
+  description: Improve character saving info
+  author: Drazyn
+  website: https://github.com/Drazyn
+  scripts: [ charactersaving ]
+  @onLoad: load()
+  @onUnload: terminate()
+  autoload: true
+  
+  load-later:
+    - game_things
+    - game_features

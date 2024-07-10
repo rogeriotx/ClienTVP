@@ -1,0 +1,20 @@
+HorizontalSeparator < UIWidget
+  image-source: /images/ui/separator_horizontal
+  image-border: 1
+  height: 2
+  phantom: true
+  focusable: false
+
+VerticalSeparator < UIWidget
+  image-source: /images/ui/separator_vertical
+  image-border: 1
+  width: 2
+  phantom: true
+  focusable: false
+
+MiniBroder < UIWidget
+  id: miniBroder
+  image-source: /images/ui/minibroder
+  image-border: 1
+  focusable: false
+  virtual: false

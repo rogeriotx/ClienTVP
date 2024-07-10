@@ -1,0 +1,307 @@
+CapPanel < Panel
+  image-source: /images/game/slots/cap
+  image-border: 1
+  border-width: 0
+
+PurseButton < UIButton
+  id: purseButton
+  size: 34 12
+  !tooltip: tr('Open purse')
+  icon-source: /images/game/slots/purse
+  icon-clip: 0 0 34 12
+  
+  $on:
+    icon-clip: 0 12 34 12
+
+  $pressed:
+    icon-clip: 0 12 34 12
+
+InventoryItem < Item
+
+HeadSlot < InventoryItem
+  id: slot1
+  image-source: /images/game/slots/head
+  &position: {x=65535, y=1, z=0}
+
+BodySlot < InventoryItem
+  id: slot4
+  image-source: /images/game/slots/body
+  &position: {x=65535, y=4, z=0}
+
+LegSlot < InventoryItem
+  id: slot7
+  image-source: /images/game/slots/legs
+  &position: {x=65535, y=7, z=0}
+
+FeetSlot < InventoryItem
+  id: slot8
+  image-source: /images/game/slots/feet
+  &position: {x=65535, y=8, z=0}
+
+NeckSlot < InventoryItem
+  id: slot2
+  image-source: /images/game/slots/neck
+  &position: {x=65535, y=2, z=0}
+
+LeftSlot < InventoryItem
+  id: slot6
+  image-source: /images/game/slots/left-hand
+  &position: {x=65535, y=6, z=0}
+
+FingerSlot < InventoryItem
+  id: slot9
+  image-source: /images/game/slots/finger
+  &position: {x=65535, y=9, z=0}
+
+BackSlot < InventoryItem
+  id: slot3
+  image-source: /images/game/slots/back
+  &position: {x=65535, y=3, z=0}
+
+RightSlot < InventoryItem
+  id: slot5
+  image-source: /images/game/slots/right-hand
+  &position: {x=65535, y=5, z=0}
+
+AmmoSlot < InventoryItem
+  id: slot10
+  image-source: /images/game/slots/ammo
+  &position: {x=65535, y=10, z=0}
+
+CombatBox < UICheckBox
+  size: 20 20
+  image-clip: 0 0 20 20
+  margin: 2 4
+
+  $checked:
+    image-clip: 0 20 20 20
+
+StandModeBox < CombatBox
+  image-source: /images/game/combatmodes/standmode
+FightOffensiveBox < CombatBox
+  image-source: /images/game/combatmodes/fightoffensive
+FightBalancedBox < CombatBox
+  image-source: /images/game/combatmodes/fightbalanced
+FightDefensiveBox < CombatBox
+  image-source: /images/game/combatmodes/fightdefensive
+ChaseModeBox < CombatBox
+  image-source: /images/game/combatmodes/chasemode
+SafeFightBox < CombatBox
+  image-source: /images/game/combatmodes/safefight
+
+CapLabel < GameLabel
+  id: capLabel
+  text-align: center
+  color: white
+  font: verdana-11px-antialised
+  color: #AFAFAF
+  anchors.bottom: capPanel.bottom
+  anchors.right: capPanel.right
+  anchors.left: capPanel.left
+  margin: 0 0 -1 0
+
+CapTitle < GameLabel
+  id: capTitle
+  text: Cap:
+  text-align: center
+  color: white
+  font: cipsoftFont
+  anchors.bottom: capLabel.top
+  anchors.right: capLabel.right
+  anchors.left: capLabel.left
+  margin: 0 0 -4 0
+
+ConditionWidget < UIWidget
+  size: 9 9
+
+HeadlessMiniWindow
+  id: inventoryWindow
+  height: 68
+  !text: tr('Inventory')
+  font: verdana-11px-antialised
+  color: #8F8F8F
+  &save: true
+  &autoOpen: 4
+  &forceOpen: true
+  padding: 0
+
+  MiniWindowContents
+    size: 0 0
+  
+  FlatPanel
+    id: conditionpluscap
+    size: 34 42
+    image-source: /images/game/slots/conditionpluscap
+    image-border: 1
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  UIButton
+    id: minimizeButton
+    anchors.top: parent.top
+    anchors.left: parent.left
+    size: 12 12
+    image-source: /images/ui/miniwindow_buttons
+    image-clip: 0 0 12 12
+
+    $hover:
+      image-clip: 0 12 12 12
+
+    $pressed:
+      image-clip: 0 24 12 12
+
+    $on:
+      image-clip: 12 0 12 12
+
+    $on hover:
+      image-clip: 12 12 12 12
+
+    $on pressed:
+      image-clip: 12 24 12 12
+
+    @onClick: |
+        self:getParent().minimizeButton:onClick()
+
+  UIButton
+    id: lockButton
+    size: 12 12
+    image-source: /images/ui/miniwindow_buttons
+    image-clip: 60 0 12 12
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+    $hover:
+      image-clip: 60 12 12 12
+
+    $pressed:
+      image-clip: 60 24 12 12
+
+    $on:
+      image-clip: 48 0 12 12
+
+    $on hover:
+      image-clip: 48 12 12 12
+
+    $on pressed:
+      image-clip: 48 24 12 12
+
+  HeadSlot
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  BodySlot
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  LegSlot
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  FeetSlot
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  NeckSlot
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  LeftSlot
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  FingerSlot
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  BackSlot
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  RightSlot
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  AmmoSlot
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  CapPanel
+    id: capPanel
+    height: 21
+    width: 34
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  CapTitle
+  CapLabel
+
+  PurseButton
+    anchors.left: slot3.left
+    anchors.top: slot1.top
+
+  FlatPanel
+    id: conditionPanel
+    image-source: /images/game/slots/conditionPanel
+    height: 21
+    width: 34
+    padding: 0
+    border-width: 0
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  FightOffensiveBox
+    id: fightOffensiveBox
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  FightBalancedBox
+    id: fightBalancedBox
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  FightDefensiveBox
+    id: fightDefensiveBox
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  StandModeBox
+    id: standModeBox
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  ChaseModeBox
+    id: chaseModeBox
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  SafeFightBox
+    id: safeFightBox
+    anchors.top: parent.top
+    anchors.left: parent.left
+  
+  Button
+    id: logoutButton
+    anchors.top: parent.top
+    anchors.left: parent.left
+    size: 43 20
+    text: Logout
+    @onClick: modules.game_interface.tryLogout(true)
+
+  Button
+    id: optionsButton
+    anchors.top: parent.top
+    anchors.left: parent.left
+    size: 43 20
+    text: Options
+    !tooltip: tr('Options (Ctrl+Enter)')
+    @onClick: modules.client_options.toggle()
+
+  Button
+    id: stopButton
+    anchors.top: parent.top
+    anchors.left: parent.left
+    size: 43 20
+    text: Stop
+    !tooltip: tr('Cancel attack or follow creature')
+    @onClick: g_game.stop(); g_game.cancelAttackAndFollow()
+

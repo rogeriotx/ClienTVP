@@ -1,0 +1,12 @@
+lib/*
+*.log
+*.exp
+*.lib
+vc16/.vs/
+vc16/DirectX/
+vc16/OpenGL/
+vc16/Debug/
+vc16/Debug_lib/
+.vscode/*
+*.pdb
+vcpkg*

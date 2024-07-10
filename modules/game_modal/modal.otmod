@@ -1,0 +1,9 @@
+Module
+  name: game_modal
+  description: Custom modal
+  author: Undefined
+  website: undefined_.
+  sandboxed: true
+  scripts: [ modal ]
+  @onLoad: Modal.Init()
+  @onUnload: Modal.Terminate()

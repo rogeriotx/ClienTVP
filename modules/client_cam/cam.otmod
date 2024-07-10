@@ -1,0 +1,9 @@
+Module
+  name: client_cam
+  description: Client cam player
+  author: Tibiara
+  website: https://tibiara.com
+  sandboxed: true
+  scripts: [ cam ]
+  @onLoad: init()
+  @onUnload: terminate()

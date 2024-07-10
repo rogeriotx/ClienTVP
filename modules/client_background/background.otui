@@ -1,0 +1,112 @@
+BackGroundBroder < UIWidget
+  image-source: /images/ui/menubarleft
+  image-border: 1
+  phantom: true
+  focusable: false
+
+EntergameButton < UIButton
+  size: 88 20
+  font: cipsoftFont
+  color: white
+  text-offset: 0 0
+  image-source: /images/ui/button
+  image-clip: 0 0 22 23
+  image-border: 3
+  padding: 5 10
+
+  $hover !disabled:
+    image-clip: 0 23 22 23
+
+  $pressed:
+    image-clip: 0 46 22 23
+    text-offset: 3 3
+
+  $disabled:
+    opacity: 0.5
+
+  $!disabled:
+    opacity: 1
+
+Panel
+  id: background
+  image-source: /images/background
+  anchors.top: parent.top
+  anchors.left: parent.left
+  anchors.right: parent.right
+  anchors.bottom: parent.bottom
+  focusable: false
+
+  UIWidget
+    id: loadingSpinner
+    size: 200 200
+    anchors.bottom: next.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    image-source: loading_spinner
+  
+  Label
+    id: warning
+    font: sans-bold-16px
+    text-auto-resize: true
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.bottom: parent.bottom
+    margin-bottom: 10
+    text: Wait! Loading game assets...
+
+  BackGroundBroder
+    anchors.top: enterGame.top
+    anchors.left: enterGame.left
+    anchors.right: enterGame.right
+    anchors.bottom: exit.bottom
+    margin-top: -17
+    margin-left: -13
+    margin-right: -16
+    margin-bottom: -18
+
+  EntergameButton
+    id: enterGame
+    !text: tr('Enter Game')
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    margin-bottom: 205
+    margin-left: 75
+    @onClick: modules.client_entergame.EnterGame.show()
+
+  EntergameButton
+    id: playCam
+    !text: tr('Play Cams')
+    anchors.top: enterGame.bottom
+    anchors.left: enterGame.left
+    margin-top: 10
+    @onClick: CharacterList.createCamList()
+
+  EntergameButton
+    id: accessAccount
+    !text: tr('Access Account')
+    anchors.top: playCam.bottom
+    anchors.left: playCam.left
+    margin-top: 10
+    @onClick: accessAccount()
+
+  EntergameButton
+    id: options
+    !text: tr('Options')
+    anchors.top: prev.bottom
+    anchors.left: prev.left
+    margin-top: 10
+    @onClick: modules.client_options.toggle()
+
+  EntergameButton
+    id: info
+    !text: tr('Info')
+    anchors.top: prev.bottom
+    anchors.left: prev.left
+    margin-top: 10
+    @onClick: modules.client_info.toggle()
+
+  EntergameButton
+    id: exit
+    !text: tr('Exit Game')
+    anchors.top: info.bottom
+    anchors.left: info.left
+    margin-top: 10
+    @onClick: g_app.exit()

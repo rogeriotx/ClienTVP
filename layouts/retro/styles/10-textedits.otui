@@ -1,0 +1,28 @@
+TextEdit < UITextEdit
+  font: verdana-11px-antialised
+  color: #dfdfdf
+  size: 86 22
+  text-offset: 0 4
+  opacity: 1
+  padding: 4
+  image-border: 1
+  selection-color: #dfdfdf
+  selection-background-color: #808080
+  change-cursor-image: true
+  
+  $!disabled:
+    image-source: /images/ui/textedit
+  $disabled:
+    image-source: /images/ui/texteditoff
+    change-cursor-image: false
+
+PasswordTextEdit < TextEdit
+  padding: 1
+  text-hidden: true
+  font: classicFont
+  color: white
+  padding: 1 0 0 1
+
+MultilineTextEdit < TextEdit
+  multiline: true
+  padding: 1

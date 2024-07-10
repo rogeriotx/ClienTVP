@@ -1,0 +1,124 @@
+ProgressBar < UIProgressBar
+  height: 11
+  background-color: red
+  image-source: /images/ui/progressbar
+  image-border: 1
+  font: verdana-11px-rounded
+
+  $!on:
+    visible: false
+    margin-top: 0
+    margin-bottom: 0
+    height: 0
+
+HealthInfoProgressBar < UIProgressBar
+  height: 11
+  background-color: red
+  image-source: /images/ui/progressbar
+  image-border-left: 1
+  image-border-top: 1
+  image-border-bottom: 1
+  font: verdana-11px-rounded
+
+  $!on:
+    visible: false
+    margin-top: 0
+    margin-bottom: 0
+    height: 0
+
+FullHealthBar < HealthInfoProgressBar
+  image-source: /images/ui/progressbar
+  anchors.top: parent.top
+  anchors.left: parent.left
+  margin-left: 21
+  margin-top: 2
+
+HealthBar < HealthInfoProgressBar
+  id: healthBar
+  image-source: /images/ui/progressbarhp
+  anchors.top: parent.top
+  anchors.left: parent.left
+  margin-left: 21
+  margin-top: 2
+
+ManaBar < HealthInfoProgressBar
+  id: manaBar
+  image-source: /images/ui/progressbarmana
+  anchors.top: healthBar.bottom
+  anchors.left: parent.left
+  margin-left: 21
+  margin-top: 3
+
+FullManaBar < HealthInfoProgressBar
+  image-source: /images/ui/progressbar
+  anchors.top: healthBar.bottom
+  anchors.left: parent.left
+  margin-left: 21
+  margin-top: 3
+
+HealthLabel < GameLabel
+  id: healthLabel
+  color: #AFAFAF
+  font: verdana-11px-antialised
+  text-offset: 140 0
+  anchors.right: parent.right
+  anchors.left: parent.left
+  anchors.top: healthBar.top
+  anchors.bottom: healthBar.bottom
+  margin-top: -2
+  margin-left: -20
+
+ManaLabel < GameLabel
+  id: manaLabel
+  color: #AFAFAF
+  font: verdana-11px-antialised
+  text-offset: 140 0
+  anchors.left: parent.left
+  anchors.right: parent.right
+  anchors.top: manaBar.top
+  anchors.bottom: manaBar.bottom
+  margin-top: -2
+  margin-left: -20
+
+ProgressIcons < Panel
+  image-source: /images/ui/progress_icons
+  image-border: 1
+
+HeadlessMiniWindow
+  id: healthinfoWindow
+  height: 32
+  icon: /images/topbuttons/healthinfo
+  icon-rect: 4 2 12 12
+  icon-clip: 0 0 32 32
+  &save: true
+  &notMinimize: true
+  &autoOpen: 2
+  font: verdana-11px-antialised
+  color: #8F8F8F  
+  padding: 0
+
+  MiniWindowContents
+    padding: 0
+    margin: 0
+    margin-top: 2
+    margin-left: 6
+
+    FullHealthBar
+      phantom: true
+    HealthBar
+      phantom: true
+    FullManaBar
+      phantom: true
+    ManaBar
+      phantom: true
+    HealthLabel
+      phantom: true
+    ManaLabel
+      phantom: true
+
+    ProgressIcons
+      phantom: true
+      anchors.top: parent.top
+      anchors.left: manaBar.left
+      margin-left: -17
+      margin-top: 3

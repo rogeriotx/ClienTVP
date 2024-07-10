@@ -1,0 +1,11 @@
+Module
+  name: game_messaging
+  description: Contains messaging callback
+  author: Reddington#9222
+  autoload: true
+  sandboxed: true
+  scripts: [messaging]
+  @onLoad: init()
+  @onUnload: terminate()
+  dependencies:
+    - game_interface

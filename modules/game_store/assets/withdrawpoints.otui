@@ -1,0 +1,84 @@
+StoreWindowWidget
+  id: withdrawWindow
+  size: 278 160
+  visible: false
+  @onEscape: withdrawCancel()
+  !text: tr('Withdraw Coins')
+  
+  Label
+    id: descriptionText
+    !text: tr('Please select the amount of Coins you like to withdraw.')
+    text-wrap: true
+    text-vertical-auto-resize: true
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 7
+
+  Label
+    id: transferAmount
+    !text: tr('Amount to withdraw:')
+    anchors.top: transferableAmount.bottom
+    anchors.left: parent.left
+    text-auto-resize: true
+    margin: 7
+    margin-top: 10
+
+  TextEdit
+    id: withdrawValue
+    anchors.verticalCenter: transferAmount.verticalCenter
+    anchors.left: prev.right
+    margin-left: 10
+    height: 16
+    text-offset: 1 1
+    padding: 1 0 0 2
+    anchors.right: closeButton.right
+
+  Label
+    id: transferableAmount
+    !text: tr('Transferable Retronia Coins:')
+    anchors.top: descriptionText.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 7
+    margin-top: 10
+
+  StoreFlatPanelWidget
+    id: coinBalance2
+    size: 65 16
+    anchors.top: transferableAmount.top
+    anchors.right: next.right
+    text-align: left
+    text-offset: 20 0
+    image-color: #1111118c
+    text: 0
+    icon: tibiaCoin
+    icon-align: left
+    icon-offset: 5 0
+
+  HorizontalSeparator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: closeButton.top
+    margin-bottom: 7
+    margin-left: -5
+    margin-right: -5
+
+  StoreButtonWidget
+    id: closeButton
+    width: 43
+    margin-right: -5
+    margin-bottom: -3
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    !text: tr('Cancel')
+    @onClick: withdrawCancel()
+
+  StoreButtonWidget
+    id: buttonOk
+    anchors.right: closeButton.left
+    anchors.bottom: prev.bottom
+    margin-right: 11
+    !text: tr('Withdraw')
+    width: 52
+    @onClick: withdrawAccept()

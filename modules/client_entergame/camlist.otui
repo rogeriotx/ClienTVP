@@ -1,0 +1,174 @@
+CharacterWidget < UILabel
+  font: verdana-11px-antialised
+  padding: 0
+  focusable: true
+  phantom: false
+  height: 12
+  width: 184
+  margin: 1 0 1 0
+  text-offset: -2 -4
+  background-color: alpha
+  color: #afafaf
+
+  $!focus:
+    background-color: alpha
+    color: #afafaf
+
+  $focus:
+    background-color: #707070
+    color: white
+
+  &updateOnStates: |
+    function(self)
+      local children = self:getChildren()
+      for i=1,#children do
+        children[i]:setOn(self:isFocused())
+      end
+    end
+  @onFocusChange: self:updateOnStates()
+  @onSetup: self:updateOnStates()
+
+  Label
+    id: name
+
+    anchors.top: parent.top
+    anchors.left: parent.left
+    font: verdana-11px-antialised
+    text-auto-resize: true
+    background-color: alpha
+    text-offset: 0 -2
+    background-color: alpha
+    color: #afafaf
+
+    $!on:
+      background-color: alpha
+      color: #afafaf
+
+    $on:
+      background-color: #707070
+      color: white
+
+  Label
+    id: worldName
+    anchors.top: parent.top
+    anchors.right: parent.right
+    height: 12
+    text-offset: 0 -2
+    font: verdana-11px-antialised
+    text-auto-resize: true
+    background-color: alpha
+    &baseText: '(%s)'
+    background-color: alpha
+    color: #afafaf
+
+    $!on:
+      background-color: alpha
+      color: #afafaf
+
+    $on:
+      background-color: #707070
+      color: white
+
+MainWindow
+  id: charactersWindow
+  !text: tr('Select Character')
+  visible: false
+  size: 236 294
+  padding-left: 18
+  padding-right: 18
+  $mobile:
+    size: 350 280
+  @onEnter: CharacterList.doLogin()
+  @onEscape: CharacterList.hide(true)
+  @onSetup: |
+    g_keyboard.bindKeyPress('Up', function() self:getChildById('characters'):focusPreviousChild(KeyboardFocusReason) end, self)
+    g_keyboard.bindKeyPress('Down', function() self:getChildById('characters'):focusNextChild(KeyboardFocusReason) end, self)  
+
+  Label
+    id: accountStatusCaption
+    !text: tr('Select character') .. ':'
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin-top: 6
+    color: #bfbfbf
+
+  TextList
+    id: characters
+    size: 200 146
+    anchors.top: parent.top
+    margin-top: 22
+    anchors.left: parent.left
+    vertical-scrollbar: characterListScrollBar
+    auto-focus: first
+    color: #484444
+    text-offset: 0 4
+    opacity: 1
+    image-source: /images/ui/windowsolid
+    image-border: 1
+    padding: 1 14 1 2
+
+    $disabled:
+      color: #27272788
+      opacity: 0.5
+
+  VerticalScrollBar
+    id: characterListScrollBar
+    anchors.top: characters.top
+    anchors.bottom: characters.bottom
+    anchors.right: characters.right
+    margin: 1
+    step: 12
+    pixels-scroll: true
+
+  Button
+    id: buttonShowRecords
+    !text: tr('Open Records Folder')
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: characters.bottom
+    margin-top: 12
+    @onClick: CharacterList.showRecordsFolder()
+
+  HorizontalSeparator
+    id: separator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 3
+    margin-left: -5
+    margin-right: -5
+
+  Button
+    id: autoReconnect
+    width: 140
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    visible: false
+    
+    $!on:
+      image-color: red    
+      !text: tr('Auto reconnect: Off')
+
+    $on:
+      !text: tr('Auto reconnect: On')
+      image-color: green
+
+  Button
+    id: buttonOk
+    !text: tr('Ok')
+    size: 43 20
+    anchors.right: next.left
+    anchors.bottom: parent.bottom
+    margin-right: 11
+    @onClick: CharacterList.doLogin()
+    margin-bottom: -6
+
+  Button
+    id: buttonCancel
+    !text: tr('Cancel')
+    size: 43 20
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    @onClick: CharacterList.hide(true)
+    margin-right: -5
+    margin-bottom: -6

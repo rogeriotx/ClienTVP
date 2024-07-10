@@ -1,0 +1,253 @@
+TradeWindow < UIMiniWindow
+  !text: tr('Trade')
+  height: 97
+  &autoOpen: 1
+  icon: /images/topbuttons/loot
+  font: verdana-11px-antialised
+  icon-rect: 4 2 13 13
+  icon-clip: 0 0 13 13
+  color: #9F9F9F
+  width: 176
+  text-offset: 19 1
+  text-align: topLeft
+  image-source: /images/ui/miniwindow
+  image-border: 4
+  image-border-top: 19
+  image-border-bottom: 5
+  focusable: false
+  &minimizedHeight: 19
+
+  $on:
+    image-border-bottom: 4
+
+  UIWidget
+    id: miniwindowTopBar
+    anchors.top: parent.top
+    anchors.right: parent.right
+    anchors.left: parent.left
+    margin-right: 3
+    margin-left: 3
+    margin-top: 3
+    size: 258 14
+    phantom: true
+
+  UIButton
+    id: closeButton
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 2
+    margin-right: 3
+    size: 12 12
+    image-source: /images/ui/miniwindow_buttons
+    image-clip: 24 0 12 12
+
+    $hover:
+      image-clip: 24 12 12 12
+
+    $pressed:
+      image-clip: 24 24 12 12
+
+  UIButton
+    id: minimizeButton
+    anchors.top: closeButton.top
+    anchors.right: closeButton.left
+    margin-right: 2
+    size: 12 12
+    image-source: /images/ui/miniwindow_buttons
+    image-clip: 0 0 12 12
+
+    $hover:
+      image-clip: 0 12 12 12
+
+    $pressed:
+      image-clip: 0 24 12 12
+
+    $on:
+      image-clip: 12 0 12 12
+
+    $on hover:
+      image-clip: 12 12 12 12
+
+    $on pressed:
+      image-clip: 12 24 12 12
+
+  UIButton
+    id: lockButton
+    anchors.top: minimizeButton.top
+    anchors.right: minimizeButton.left
+    margin-right: 2
+    size: 12 12
+    image-source: /images/ui/miniwindow_buttons
+    image-clip: 60 0 12 12
+
+    $hover:
+      image-clip: 60 12 12 12
+
+    $pressed:
+      image-clip: 60 24 12 12
+
+    $on:
+      image-clip: 48 0 12 12
+
+    $on hover:
+      image-clip: 48 12 12 12
+
+    $on pressed:
+      image-clip: 48 24 12 12
+  
+  ResizeBorder
+    id: bottomResizeBorder
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 3
+    minimum: 48
+    margin-left: 3
+    margin-right: 3
+    background: #ffffff88
+
+  VerticalScrollBar
+    id: miniwindowScrollBar
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    step: 14
+    margin-top: 27
+    margin-right: 4
+    margin-bottom: 30
+    pixels-scroll: false
+    minimum: 11
+  
+  MiniBroder
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-bottom: 2
+    margin-left: 2
+  
+  MiniWindowContents
+    padding: 0
+    margin: 0
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+
+    HorizontalSeparator
+      id: sep1
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.top: parent.top
+      margin: 25 4 0 4
+
+    Label
+      id: counterTradeLabel
+      anchors.bottom: sep1.top
+      anchors.left: verticalSep.left
+      anchors.right: sep1.right
+      text-offset: 5 5
+      font: cipsoftFont
+      color: white
+
+    Label
+      id: ownTradeLabel
+      font: cipsoftFont
+      color: white
+      anchors.bottom: sep1.top
+      anchors.left: sep1.left
+      anchors.right: sep1.horizontalCenter
+      text-offset: 3 5
+
+    ScrollablePanel
+      id: ownTradeContainer
+      anchors.top: sep1.bottom
+      anchors.bottom: sep2.top
+      anchors.left: ownTradeLabel.left
+      anchors.right: ownTradeLabel.right
+      padding: 4 3 0 3
+      margin-bottom: 4
+      layout:
+        type: grid
+        cell-size: 34 34
+        flow: true
+        cell-spacing: 2
+
+    VerticalSeparator
+      id: verticalSep
+      anchors.top: sep1.bottom
+      anchors.bottom: sep2.top
+      anchors.horizontalCenter: parent.horizontalCenter
+      margin-top: 1
+      margin-right: 6
+
+    ScrollablePanel
+      id: counterTradeContainer
+      anchors.top: sep1.bottom
+      anchors.bottom: sep2.top
+      anchors.left: counterTradeLabel.left
+      anchors.right: counterTradeLabel.right
+      padding: 4 5
+      layout:
+        type: grid
+        cell-size: 34 34
+        flow: true
+        cell-spacing: 2
+
+    HorizontalSeparator
+      id: sep2
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: next.top
+      margin: 0 4 3 4
+
+    Button
+      !text: tr('Cancel')
+      size: 43 20
+      id:  rejectButton
+      anchors.bottom: parent.bottom
+      margin-bottom: 6
+      anchors.right: parent.right
+      margin-right: 8
+      @onClick: g_game.rejectTrade()
+
+    Button
+      !text: tr('Accept')
+      id: acceptButton
+      size: 43 20
+      anchors.bottom: parent.bottom
+      margin-bottom: 6
+      anchors.right: prev.left
+      margin-right: 5
+      enabled: false
+      @onClick: g_game.acceptTrade() self:disable()
+
+      $disabled:
+        visible: false
+      
+      $!disabled:
+        visible: true
+    
+    Label
+      id: counteroffertext
+      text: Please wait for a
+      width: 75
+      anchors.top: sep2.top
+      margin-top: 4
+      margin-left: 28
+      anchors.left: parent.left
+      padding: 0
+      font: cipsoftFont
+      color: white
+      visible: true
+
+    Label
+      id: counteroffertext2
+      text: counteroffer
+      width: 75
+      anchors.top: prev.bottom
+      margin-left: -13
+      margin-top: -3
+      anchors.horizontalCenter: parent.horizontalCenter
+      padding: 0
+      font: cipsoftFont
+      color: white
+      visible: true

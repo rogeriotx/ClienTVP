@@ -1,0 +1,133 @@
+SideButton < UIButton
+  size: 20 20
+  image-clip: 0 0 20 20
+  padding: 0
+
+  $pressed:
+    image-clip: 0 20 20 20
+
+  $!on !pressed:
+    image-clip: 0 0 20 20
+  
+  $on !pressed:
+    image-clip: 0 20 20 20
+
+  $disabled:
+    opacity: 0.5
+  
+  $!disabled:
+    opacity: 1.0
+
+HeadlessMiniWindow
+  id: sidemenuwindow
+  height: 26
+  &save: true
+  &notMinimize: true
+  &autoOpen: 4  
+  padding: 0
+  padding-left: 10
+  padding-right: 7
+  padding-top: 3
+
+  MiniWindowContents
+    size: 0 0
+
+  UIButton
+    id: storeButton
+    size: 108 20
+    !tooltip: tr('Store (Ctrl+Shift+S)')
+    text: Store
+    text-align: center
+    color: #bfbfbf
+    image-source: /images/ui/button
+    image-clip: 0 0 22 23
+    image-border: 3
+    image-color: #75bfff
+    padding: 0
+    icon: /images/topbuttons/shop
+
+    $!on !pressed:
+      text-offset: 20 0
+      icon-rect: 28 0 20 20
+
+      icon-clip: 0 0 20 20
+    
+    $on !pressed:
+      text-offset: 22 2
+      icon-rect: 29 0 20 20
+
+      image-clip: 0 46 20 20
+      icon-clip: 0 20 20 20
+
+    $pressed:
+      text-offset: 22 2
+      icon-rect: 29 0 20 20
+
+      image-clip: 0 46 20 20
+      icon-clip: 0 20 20 20
+
+    $disabled:
+      opacity: 0.5
+    
+    $!disabled:
+      opacity: 1.0
+
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  UIButton
+    id: optionsButton
+    size: 43 20
+    image-source: /images/topbuttons/sidepanel/optionslist
+    tooltip: Show options (Ctrl+Shift+Enter)
+
+    $pressed:
+      image-clip: 0 20 43 20
+
+    $on !pressed:
+      image-clip: 0 0 43 20
+    
+    $!on !pressed:
+      image-clip: 0 20 43 20
+
+    anchors.top: prev.top
+    anchors.right: parent.right
+
+  Panel
+    id: leftSideButtonsPanel
+    height: 48
+    width: 108
+    anchors.left: parent.left
+    anchors.top: optionsButton.bottom
+    margin-top: 6
+    phantom: true
+
+    layout:
+      type: grid
+      cell-size: 20 20
+      cell-spacing: 2
+      flow: true
+  
+  VerticalSeparator
+    anchors.top: prev.top
+    anchors.bottom: prev.bottom
+    anchors.left: prev.right
+    margin-left: 4
+    margin-bottom: 6
+
+  Panel
+    id: rightSideButtonsPanel
+    anchors.left: prev.right
+    margin-left: 4
+    anchors.right: parent.right
+    anchors.top: prev.top
+    anchors.bottom: prev.bottom
+    phantom: true
+
+    layout:
+      type: grid
+      cell-size: 20 20
+      cell-spacing: 2
+      flow: true
+
+    

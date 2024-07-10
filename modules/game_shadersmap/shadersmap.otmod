@@ -1,0 +1,8 @@
+Module
+  name: game_shadersmap
+  description: Load shaders map
+  author: Kinh
+  scripts: [ shadersmap ]
+  sandboxed: true
+  @onLoad: init()
+  @onUnload: terminate()

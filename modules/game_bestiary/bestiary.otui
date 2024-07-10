@@ -1,0 +1,452 @@
+ResistProgressBar < UIWidget
+  size: 80 16
+  icon-align: left
+
+  UIWidget
+    id: fill
+    size: 65 4
+    anchors.left: next.left
+    anchors.top: next.top
+    background-color: red
+    margin-top: 1
+
+  UIWidget
+    id: bar
+    image-source: images/resist-bar
+    anchors.centerIn: parent
+    margin-left: 5
+
+BestiaryProgressBar < UIWidget
+  size: 63 20
+  image-source: /images/ui/panel_map
+
+  UIWidget
+    image-source: images/progress_bar
+    anchors.centerIn: parent
+    phantom: true
+
+  UIWidget
+    id: fill
+    image-source: images/fill
+    anchors.left: parent.left
+    phantom: true
+
+  Label
+    id: value
+    text-auto-resize: true
+    anchors.centerIn: parent
+    phantom: true
+
+BestiaryLoot < UIWidget
+  image-source: images/button-item
+  padding: 3
+  size: 32 32
+
+  UIItem
+    id: item
+    anchors.fill: parent
+    image-color: alpha
+
+BestiaryLootObject < UIWidget
+  height: 100
+
+  Label
+    id: type
+    width: 96
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    margin-left: 10
+
+  ScrollablePanel
+    id: items
+    focusable: false
+    height: 32
+    width: 525
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: type.right
+    margin-left: 20
+    layout:
+      type: grid
+      cell-spacing: 2
+      cell-size: 32 32
+      flow: true
+      fit-children: true
+
+    BestiaryLoot
+      id: 1
+
+    BestiaryLoot
+      id: 2
+
+    BestiaryLoot
+      id: 3
+
+    BestiaryLoot
+      id: 4
+
+    BestiaryLoot
+      id: 5
+
+    BestiaryLoot
+      id: 6
+
+    BestiaryLoot
+      id: 7
+
+    BestiaryLoot
+      id: 8
+
+    BestiaryLoot
+      id: 9
+
+    BestiaryLoot
+      id: 10
+
+    BestiaryLoot
+      id: 11
+
+    BestiaryLoot
+      id: 12
+
+    BestiaryLoot
+      id: 13
+
+    BestiaryLoot
+      id: 14
+
+    BestiaryLoot
+      id: 15
+
+BestiaryCreatureIcon < UIWidget
+  size: 16 14
+  Label
+    id: value
+    !text: ('10000')
+    font: verdana-9px
+    anchors.top: parent.top
+    anchors.left: parent.right
+
+BestiaryDifficulty < UIWidget
+  image-source: images/icons/difficulty-inactive
+  !tooltip: tr('Difficulty: ')
+
+OccurrenceDifficulty < UIWidget
+  image-source: images/icons/occurrence-inactive
+  !tooltip: tr('Occurence: ')
+
+BestiaryCategory < Window
+  !text: tr('Category')
+  color: #909090
+  text-offset: 0 1
+  image-source: /images/ui/window
+  draggable: false
+
+  Button
+    id: button
+    size: 64 64
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    opacity: 1.0
+
+    $hover:
+      opacity: 0.7
+
+  Label
+    id: total
+    text-auto-resize: true
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-bottom: 5
+
+  Label
+    id: known
+    text-auto-resize: true
+    anchors.top: total.bottom
+    anchors.horizontalCenter: total.horizontalCenter
+    margin-top: 1
+
+BestiaryCreature < Window
+  !text: tr('Creature')
+  color: #909090
+  text-offset: 0 1
+  image-source: /images/ui/window
+  draggable: false
+
+  Button
+    id: button
+    size: 64 64
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    opacity: 1.0
+
+    $hover:
+      opacity: 0.7
+
+    UICreature
+      size: 64 64
+      id: creature
+      anchors.centerIn: parent
+      phantom: true
+      scale: 0.9
+      margin: 2 0 0 2
+      old-scaling: true
+
+  Label
+    id: unlocked
+    text-auto-resize: true
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-bottom: 5
+
+MainWindow
+  id: main
+  !text: tr('Bestiary')
+  size: 725 550
+  anchors.centerIn: parent
+
+  Label
+    id: searchLabel
+    !text: tr('Search') .. ':'
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 9
+    text-auto-resize: true
+  
+  TextEdit
+    id: search
+    anchors.verticalCenter: prev.verticalCenter
+    anchors.left: prev.right
+    margin-left: 7
+    width: 132
+    @onTextChange: modules.game_npctrade.onSearchTextChange()
+    shift-navigation: true
+    max-length: 255
+    height: 16
+    padding: 1 0 0 2
+    text-offset: 1 1
+
+  Button
+    !text: tr('Search')
+    size: 64 22
+    anchors.verticalCenter: prev.verticalCenter
+    anchors.left: search.right
+    margin-left: 10
+    @onClick: G_BESTIARY.search(self)
+
+  FlatPanel
+    id: panel
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 45
+    anchors.bottom: next.bottom
+    margin-bottom: 8
+
+    Window
+      id: creature
+      color: #909090
+      text-offset: 0 1
+      image-source: /images/ui/window
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      visible: false
+      padding-left: 2
+      padding-right: 2
+      padding-bottom: 2
+
+      UICreature
+        id: lookType
+        size: 96 96
+        anchors.top: parent.top
+        anchors.left: parent.left
+        margin-left: 15
+        margin-top: 15
+
+      BestiaryProgressBar
+        id: progressFillLeft
+        anchors.top: lookType.top
+        anchors.left: lookType.right
+        margin-top: 5
+        margin-left: 10
+
+      BestiaryProgressBar
+        id: progressFillMiddle
+        anchors.top: progressFillLeft.top
+        anchors.left: progressFillLeft.right
+        margin-left: 3
+
+      BestiaryProgressBar
+        id: progressFillRight
+        anchors.top: progressFillMiddle.top
+        anchors.left: progressFillMiddle.right
+        margin-left: 3
+      
+      Label
+        !text: tr('Total Kills')
+        text-auto-resize: true
+        anchors.bottom: progressFillMiddle.top
+        anchors.horizontalCenter: progressFillMiddle.horizontalCenter
+        margin-bottom: 5
+
+      ScrollablePanel
+        id: difficultyList
+        size: 64 10
+        focusable: false
+        anchors.top: progressFillLeft.top
+        anchors.left: progressFillLeft.left
+        margin-top: 25
+        layout:
+          type: grid
+          cell-spacing: 2
+          cell-size: 9 10
+          flow: true
+
+        BestiaryDifficulty
+          id: 1
+
+        BestiaryDifficulty
+          id: 2
+  
+        BestiaryDifficulty
+          id: 3
+
+        BestiaryDifficulty
+          id: 4
+
+        BestiaryDifficulty
+          id: 5
+
+      ScrollablePanel
+        id: occurrenceList
+        size: 64 10
+        focusable: false
+        anchors.top: difficultyList.bottom
+        anchors.left: difficultyList.left
+        margin-top: 5
+        layout:
+          type: grid
+          cell-spacing: 2
+          cell-size: 9 10
+          flow: true
+
+        OccurrenceDifficulty
+          id: 1
+
+        OccurrenceDifficulty
+          id: 2
+
+        OccurrenceDifficulty
+          id: 3
+
+        OccurrenceDifficulty
+          id: 4
+
+      FlatPanel
+        id: lootPanel
+        height: 200
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-bottom: 5
+        margin-left: 5
+        margin-right: 5
+
+        ScrollablePanel
+          id: list
+          focusable: false
+          anchors.top: parent.top
+          anchors.bottom: parent.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          vertical-scrollbar: scrollbar
+          layout:
+            type: grid
+            cell-size: 650 50
+            flow: true
+
+        VerticalScrollBar
+          id: scrollbar
+          anchors.top: list.top
+          anchors.bottom: list.bottom
+          anchors.right: parent.right
+
+      Label
+        !text: tr('Track Kills:')
+        anchors.bottom: lootPanel.top
+        anchors.horizontalCenter: lookType.horizontalCenter
+        margin-bottom: 10
+
+      CheckBox
+        id: trackKills
+        anchors.top: prev.top
+        anchors.left: prev.right
+        margin-left: 10
+        margin-top: 2
+        @onCheckChange: G_BESTIARY.onTracker(self)
+
+    UIWindow
+      id: categories
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+
+      ScrollablePanel
+        id: list
+        focusable: false
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        padding-left: 10
+        padding-top: 10
+        padding-bottom: 10
+        vertical-scrollbar: scrollbar
+        layout:
+          type: grid
+          cell-spacing: 5
+          cell-size: 128 128
+          flow: true
+
+      VerticalScrollBar
+        id: scrollbar
+        anchors.top: list.top
+        anchors.bottom: list.bottom
+        anchors.right: parent.right
+        step: 48
+        pixels-scroll: true
+
+  HorizontalSeparator
+    id: separator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 10
+  
+  Button
+    id: closeButton
+    !text: tr('Close')
+    size: 64 22
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    @onClick: G_BESTIARY.closeBackButton(self)
+
+  Panel
+    id: bestiaryPoints
+    size: 100 22
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    image-source: /images/ui/panel_flat
+    image-border: 3
+    margin-left: 0
+    text-align: left
+    text-offset: 5 0
+    image-color: #1111118c
+    text: 0
+    icon: /images/game/prey/prey_star
+    icon-align: right
+    icon-offset: -5 0
+    tooltip: Bestiary Points
+    phantom: false

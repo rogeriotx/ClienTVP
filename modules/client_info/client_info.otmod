@@ -1,0 +1,10 @@
+Module
+  name: client_info
+  description: Handles the info window
+  author: Aurelion
+  website: www.otclient.net
+  autoload: true
+  sandboxed: true
+  scripts: [ client_info ]
+  @onLoad: init()
+  @onUnload: terminate()

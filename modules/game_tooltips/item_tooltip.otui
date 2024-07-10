@@ -1,0 +1,19 @@
+TooltipLabel < Label
+  anchors.top: prev.bottom
+  anchors.left: parent.left
+  anchors.right: parent.right
+  font: verdana-11px-rounded
+  text-align: left-align
+  text-vertical-auto-resize: true
+  padding: 0
+
+TooltipSeparator < HorizontalSeparator
+  anchors.top: prev.bottom
+  anchors.left: parent.left
+  anchors.right: parent.right
+  margin-top: 3
+
+TooltipEmpty < UIWidget
+  anchors.top: prev.bottom
+  anchors.left: parent.left
+  anchors.right: parent.right

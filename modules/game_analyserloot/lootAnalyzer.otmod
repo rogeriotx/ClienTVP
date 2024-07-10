@@ -1,0 +1,13 @@
+Module
+  name: game_analyserloot
+  description: Loot Analyzer window
+  author: danilopucci
+  website: https://github.com/danilopucci
+  sandboxed: true
+  scripts: [ util, itemDatabase, balanceWidget, itemWidget, lootAnalyzer, customItem, customItemRow ]
+  autoload: true
+  autoload-priority: 1001
+  @onLoad: init()
+  @onUnload: terminate()
+  dependencies:
+    - game_interface

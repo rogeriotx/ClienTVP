@@ -1,0 +1,9 @@
+Module
+  name: game_sidemenu
+  description: Game Side Menu
+  author: gaamelu
+  website: http://github.com/gaamelu
+  sandboxed: true
+  scripts: [ sidemenu ]
+  @onLoad: init()
+  @onUnload: terminate()
