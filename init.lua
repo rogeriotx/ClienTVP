@@ -32,7 +32,7 @@ discordInviteLink = "https://discord.gg/unTqBsa"
 
 -- Servers accept http login url, websocket login url or ip:port:version
 Servers = {
-  TS = "131.196.198.162:7171:772" --TesteServer
+  TS = "191.96.81.140:7171:772" --TesteServer
   -- Ravenor = "127.0.0.1:7171:772" --Oficial
 }
 
