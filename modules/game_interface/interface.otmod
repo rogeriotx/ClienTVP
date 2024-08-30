@@ -45,5 +45,6 @@ Module
     - game_whiteredskull
     - game_modal
     - game_bestiary
+    - game_battlepass
   @onLoad: init()
   @onUnload: terminate()
