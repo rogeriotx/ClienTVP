@@ -108,8 +108,7 @@ function onUnload()
 end
 
 function onBattlepassGameStart()
-	print('onBattlepassGameStart')
-	m_BattlepassFunctions.button = modules.client_topmenu.addRightGameToggleButton("battlepassButton", tr("Battlepass"), "/images/topbuttons/spelllist", m_BattlepassFunctions.open, false, 4)
+  m_BattlepassFunctions.button = modules.game_sidemenu.getBattlepassButton()
 end
 
 function onBattlepassGameEnd()

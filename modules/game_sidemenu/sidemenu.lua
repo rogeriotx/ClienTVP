@@ -79,6 +79,10 @@ function getBestiaryButton()
     return buttons.bestiary
 end
 
+function getBattlepassButton()
+    return buttons.battlepass
+end
+
 function init()
 
     -- g_ui.importStyle('sidemenu')
@@ -98,11 +102,16 @@ function init()
     buttons.unjustified = addSideButton("unjustifiedButton", tr('Unjustified Points (Ctrl+I)'), "/images/topbuttons/sidepanel/unjustifiedpoints", getLeftButtonsPanel())
     buttons.analyzer = addSideButton("analyzerButton", "Analytics", "/images/topbuttons/sidepanel/analyzers", getLeftButtonsPanel())
     buttons.bestiary = addSideButton("bestiaryButton", "Bestiary (Ctrl+)", "/images/topbuttons/sidepanel/bestiary", getLeftButtonsPanel())
+    buttons.battlepass = addSideButton("battlepass", "BattlePass (Ctrl+)", "/images/topbuttons/sidepanel/battlepass", getLeftButtonsPanel())
 
     buttons.hotkeys = addSideButton("hotkeysButton", tr('Hotkeys') .. ' (Ctrl+K)', "/images/topbuttons/sidepanel/hotkeys", getRightButtonsPanel())
 
     buttons.bestiary.callback = function()
         modules.game_bestiary.toggleTracker()
+    end
+
+    buttons.battlepass.callback = function()
+        modules.game_battlepass.m_BattlepassFunctions.open()
     end
     
     buttons.hotkeys.callback = function()
