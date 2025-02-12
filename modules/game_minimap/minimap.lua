@@ -19,7 +19,7 @@ function build_minimap_style(mode)
   minimapWindow.miniwindowScrollBar:setVisible(false)
   if mode == "retro" then
     -- minimapWindow = g_ui.createWidget('OriginalMinimapMiniwindow')
-    minimapWindow:disableResize()
+    -- minimapWindow:disableResize()
     
     minimapWindow:setImageSource("/images/ui/special_miniwindow")
     minimapWindow:setImageBorder(4)
