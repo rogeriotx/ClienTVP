@@ -98,6 +98,9 @@ local implicits = {
     ["attrFastHand"] = "Fast Hand",
     ["attrSharpShooter"] = "Sharpshooter",
     ["attrBleeding"] = "Bleeding",
+	["attrEletricfying"] = "Eletricfying",
+	["attrBurning"] = "Burning",
+	["attrPoisoning"] = "Poisoning",
     ["attrSpeed"] = "Increased Movement Speed"
 }
 
@@ -136,6 +139,9 @@ local impPercent = {
     ["attrFastHand"] = true,
     ["attrSharpShooter"] = true,
     ["attrBleeding"] = true,
+	["attrEletricfying"] = true,
+	["attrBurning"] = true,
+	["attrPoisoning"] = true,
     ["attrParry"] = true
 }
 
