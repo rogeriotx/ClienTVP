@@ -137,7 +137,7 @@ function getSortType()
   local settings = g_settings.getNode('BattleList')
   if not settings then
     if g_app.isMobile() then
-      return 'distance'
+      return 'screenage'
     else
       return 'name'
     end
@@ -146,7 +146,7 @@ function getSortType()
 end
 
 function setSortType(state)
-  settings = {}
+  local settings = g_settings.getNode('BattleList') or {}
   settings['sortType'] = state
   g_settings.mergeNode('BattleList', settings)
 
@@ -162,7 +162,7 @@ function getSortOrder()
 end
 
 function setSortOrder(state)
-  settings = {}
+  local settings = g_settings.getNode('BattleList') or {}
   settings['sortOrder'] = state
   g_settings.mergeNode('BattleList', settings)
 
@@ -276,7 +276,7 @@ function checkCreatures()
   sortCreatures(creatures)
   battlePanel:getLayout():disableUpdates()
   
-  -- sorting
+  --sorting
   local ascOrder = isSortAsc()
   for i=1,#creatures do  
 	  local creature = creatures[i]
@@ -338,33 +338,31 @@ end
 function sortCreatures(creatures)
   local player = g_game.getLocalPlayer()
   
-  if getSortType() == 'distance' then
-    local playerPos = player:getPosition()
-    table.sort(creatures, function(a, b) 
-      if getDistanceBetween(playerPos, a:getPosition()) == getDistanceBetween(playerPos, b:getPosition()) then
-        return ages[a:getId()] > ages[b:getId()]
+  table.sort(creatures, function(a, b) 
+    if getSortType() == 'distance' then
+      local playerPos = player:getPosition()
+      local distA = getDistanceBetween(playerPos, a:getPosition())
+      local distB = getDistanceBetween(playerPos, b:getPosition())
+      if distA == distB then
+        return ages[a:getId()] < ages[b:getId()]
       end
-      return getDistanceBetween(playerPos, a:getPosition()) > getDistanceBetween(playerPos, b:getPosition()) 
-    end)
-  elseif getSortType() == 'health' then
-    table.sort(creatures, function(a, b) 
+      return distA < distB
+    elseif getSortType() == 'health' then
       if a:getHealthPercent() == b:getHealthPercent() then
-        return ages[a:getId()] > ages[b:getId()]
+        return ages[a:getId()] < ages[b:getId()]
       end
-      return a:getHealthPercent() > b:getHealthPercent() 
-    end)
-  elseif getSortType() == 'age' then
-    table.sort(creatures, function(a, b) return ages[a:getId()] > ages[b:getId()] end)
-  elseif getSortType() == 'screenage' then
-    table.sort(creatures, function(a, b) return a.screenAge > b.screenAge end)
-  else -- name
-    table.sort(creatures, function(a, b)
+      return a:getHealthPercent() > b:getHealthPercent()
+    elseif getSortType() == 'age' then
+      return ages[a:getId()] < ages[b:getId()]
+    elseif getSortType() == 'screenage' then
+      return a.screenAge > b.screenAge
+    else -- 'name'
       if a:getName():lower() == b:getName():lower() then
-        return ages[a:getId()] > ages[b:getId()]
+        return ages[a:getId()] < ages[b:getId()]
       end
-      return a:getName():lower() > b:getName():lower() 
-    end)
-  end
+      return a:getName():lower() < b:getName():lower()
+    end
+  end)
 end
 
 -- other functions
