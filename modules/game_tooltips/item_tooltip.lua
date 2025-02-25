@@ -245,6 +245,13 @@ function sortImplitics(implitics)
     return sortedTable
 end
 
+function convertRegenValue(key, value)
+    if key == "attrManaRegen" or key == "attrHpRegen" then
+        return string.format("%.1f", value * 0.2) 
+    end
+    return value
+end
+
 function getImpliticsText(key, value)
     local impText = nil
     if not implicits[key] then
@@ -260,8 +267,9 @@ function getImpliticsText(key, value)
             impText = implicits[key] .. " " .. (value > 0 and ": " or "") ..
                           (value / 1000) .. (impDuration[key] and "s" or "")
         else
-            impText = implicits[key] .. " " .. (value > 0 and "+" or "") ..
-                          value .. (impPercent[key] and "%" or "")
+            local formattedValue = convertRegenValue(key, value)
+			impText = implicits[key] .. " " .. (value > 0 and "+" or "") .. 
+				formattedValue .. (impPercent[key] and "%" or "")
         end
     end
     return impText
@@ -802,43 +810,43 @@ function buildItemTooltip(item)
 
         if (tierLevel == ITEM_TIER_1) then
             if (rarityLevel == ITEM_UNCOMMON) then
+                return 10
+            elseif (rarityLevel == ITEM_RARE) then
+                return 10
+            elseif (rarityLevel == ITEM_EPIC) then
+                return 10
+            elseif (rarityLevel == ITEM_LEGENDARY) then
+                return 10
+            end
+        elseif (tierLevel == ITEM_TIER_2) then
+            if (rarityLevel == ITEM_UNCOMMON) then
                 return 15
             elseif (rarityLevel == ITEM_RARE) then
                 return 20
             elseif (rarityLevel == ITEM_EPIC) then
                 return 25
             elseif (rarityLevel == ITEM_LEGENDARY) then
-                return 35
-            end
-        elseif (tierLevel == ITEM_TIER_2) then
-            if (rarityLevel == ITEM_UNCOMMON) then
-                return 45
-            elseif (rarityLevel == ITEM_RARE) then
-                return 55
-            elseif (rarityLevel == ITEM_EPIC) then
-                return 65
-            elseif (rarityLevel == ITEM_LEGENDARY) then
-                return 75
+                return 30
             end
         elseif (tierLevel == ITEM_TIER_3) then
             if (rarityLevel == ITEM_UNCOMMON) then
-                return 80
+                return 35
             elseif (rarityLevel == ITEM_RARE) then
-                return 85
+                return 40
             elseif (rarityLevel == ITEM_EPIC) then
-                return 90
+                return 45
             elseif (rarityLevel == ITEM_LEGENDARY) then
-                return 100
+                return 50
             end
         elseif (tierLevel == ITEM_TIER_4) then
             if (rarityLevel == ITEM_UNCOMMON) then
-                return 110
+                return 55
             elseif (rarityLevel == ITEM_RARE) then
-                return 120
+                return 60
             elseif (rarityLevel == ITEM_EPIC) then
-                return 130
+                return 65
             elseif (rarityLevel == ITEM_LEGENDARY) then
-                return 140
+                return 70
             end
         end
         return 0
