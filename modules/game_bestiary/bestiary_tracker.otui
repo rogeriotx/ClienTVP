@@ -93,7 +93,7 @@ MiniWindow
       cell-size: 192 32
       flow: true
   
-  MiniBroder
+  UIWindow
     anchors.left: parent.left
     anchors.bottom: parent.bottom
     margin-bottom: 2

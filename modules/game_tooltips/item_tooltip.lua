@@ -78,7 +78,8 @@ local implicits = {
     ["attrArmor"] = "Increased Armor",
     ["attrDef"] = "Increased Defense",
     ["attrSkill"] = "Increased Skills",
-    ["attrMagic"] = "Increased Magic",
+--  ["attrMagic"] = "Increased Magic",
+	["attrWeightReduction"] = "Reduced Weight",
     ["attrManaRegen"] = "Increased Mana Regeneration",
     ["attrHpRegen"] = "Increased Health Regeneration",
     ["attrMaxHp"] = "Increased Max Health",
@@ -142,7 +143,8 @@ local impPercent = {
 	["attrEletricfying"] = true,
 	["attrBurning"] = true,
 	["attrPoisoning"] = true,
-    ["attrParry"] = true
+    ["attrParry"] = true,
+	["attrWeightReduction"] = true
 }
 
 local impInterval = {["attrAtkSpeed"] = true}
@@ -248,6 +250,8 @@ end
 function convertRegenValue(key, value)
     if key == "attrManaRegen" or key == "attrHpRegen" then
         return string.format("%.1f", value * 0.2) 
+    elseif key == "attrWeightReduction" then
+        return value * 20 -- Converte o Tier para a redução correta (1 → 20%, 2 → 40%, etc.)
     end
     return value
 end
@@ -257,7 +261,10 @@ function getImpliticsText(key, value)
     if not implicits[key] then
         impText = value
     else
-        if impPercent[key] then
+		if key == "attrWeightReduction" then
+            local formattedValue = convertRegenValue(key, value)
+            impText = implicits[key] .. " -" .. formattedValue .. "%"
+        elseif impPercent[key] then
             impText = implicits[key] .. " " .. value ..
                           (impPercent[key] and "%" or "")
         elseif impInterval[key] then

@@ -236,6 +236,7 @@ G_BESTIARY.onStart = function()
     G_BESTIARY.send("requestData")
     G_BESTIARY.load()
     G_BESTIARY.Tracker.UI:setup()
+	G_BESTIARY.send("requestCharms")
 end
 
 G_BESTIARY.onEnd = function()
@@ -243,6 +244,9 @@ G_BESTIARY.onEnd = function()
         closeBestiaryWindow()
     end
     G_BESTIARY.save()
+	for _, charm in pairs(G_BESTIARY.UI:recursiveGetChildById('charmsList'):getChildren()) do
+		charm:destroy()
+	end
 end
 
 G_BESTIARY.define = function()
@@ -442,6 +446,8 @@ G_BESTIARY.define = function()
                 creature.object = obj
                 button.creature:setOutfit(obj.outfit)
                 button.creature:setAnimate(true)
+
+				creature.outfit = obj.outfit
             end
         end
 
@@ -565,7 +571,15 @@ G_BESTIARY.define = function()
             end
         elseif buffer.action == "bestiaryBalance" then
             G_BESTIARY.UI.bestiaryPoints:setText(data.value)
+		elseif buffer.action == "charms" then
+            onReceiveCharms(buffer.data)
+		elseif buffer.action == "msg" then
+            onReceiveMsg(buffer.data)
+		elseif buffer.action == "coins" then
+            onReceiveCoins(buffer.data)
         end
+
+		addCreaturesCharmsList()
     end
 
     G_BESTIARY.loadData = function(creature)
@@ -759,4 +773,124 @@ function toggleTracker()
         G_BESTIARY.Tracker.UI:open()
         -- modules.game_sidemenu.getBestiaryButton():setOn(true)
     end
+end
+
+function onReceiveCharms(info)
+	G_BESTIARY.UI:recursiveGetChildById('UnlockButton'):setEnabled(false)
+	G_BESTIARY.UI:recursiveGetChildById('ItemBase'):getChildById('image'):setImageSource()
+	G_BESTIARY.UI:recursiveGetChildById('imageID'):setText("nil")
+	G_BESTIARY.UI:recursiveGetChildById('showCreature'):setOutfit({type = 0, auxType = 0, head = 0, body = 0, legs = 0, feet = 0, addons = 0, wings = 0, aura = 0, shader = ""})
+	G_BESTIARY.UI:recursiveGetChildById('showCreatureID'):setText("nil")
+	G_BESTIARY.UI:recursiveGetChildById('CreatureList'):hide()
+
+	for _, charm in pairs(G_BESTIARY.UI:recursiveGetChildById('charmsList'):getChildren()) do
+		charm:destroy()
+	end
+
+	local allCharms = {}
+	for charmName, charm in pairs(info) do
+		table.insert(allCharms, charm)
+	end
+
+	local function compareWidgets(widgetA, widgetB)
+		return widgetA.order < widgetB.order
+	end
+
+	table.sort(allCharms, compareWidgets)
+
+	for i = 1, #allCharms do
+		addCharm(allCharms[i], allCharms[i].name)
+	end
+end
+
+function addCharm(charm, charmName)
+	local createCharm = g_ui.createWidget("CharmItem", G_BESTIARY.UI:recursiveGetChildById('charmsList'))
+
+	createCharm:setId(charmName)
+	createCharm.order = charm.order
+	createCharm.charmBase.image:setImageSource("images/charms/"..charmName.."")
+	createCharm:setText(charmName)
+	createCharm.desc = charm.desc
+	createCharm.monster = (charm.monster and charm.monster or "nil")
+	createCharm:recursiveGetChildById('outfit'):setOutfit({type = charm.outfit and charm.outfit.lookType or 0,auxType = charm.outfit and charm.outfit.lookTypeEx or 0, head = charm.outfit and charm.outfit.lookHead or 0, body = charm.outfit and charm.outfit.lookBody or 0, legs = charm.outfit and charm.outfit.lookLegs or 0, feet = charm.outfit and charm.outfit.lookFeet or 0, addons = 0, wings = 0, aura = 0, shader = ""})
+	createCharm:recursiveGetChildById('outfit'):setAnimate(charm.outfit and true or false)
+	createCharm:recursiveGetChildById('outfit'):setEnabled(charm.outfit and true or false)
+	createCharm.PriceBase.Value:setText(charm.monster and charm.goldCoin or charm.charmCoin)
+	if charm.rune then
+		createCharm.PriceBase.Gold:setVisible(true)
+		createCharm.PriceBase.Charm:setVisible(false)
+		createCharm.charmBase.lockedMask:setVisible(false)
+	else
+		createCharm.PriceBase.Gold:setVisible(false)
+		createCharm.PriceBase.Charm:setVisible(true)
+		createCharm.charmBase.lockedMask:setVisible(true)
+	end
+end
+
+local randomColor = "#414141"
+function addCreaturesCharmsList()
+	local allMonsters = {}
+	for _A, cat in pairs(G_BESTIARY.UI.panel.categories.list:getChildren()) do
+		if G_BESTIARY.data[cat:getId()] then
+			for _, obj in pairs(G_BESTIARY.data[cat:getId()]) do
+				local creature = {}
+				creature.id = string.lower(obj.name)
+				creature.name = formatWidgetName(obj.name)
+				creature.outfit = obj.outfit
+				table.insert(allMonsters, creature)
+			end
+		end
+	end
+
+	local function compareWidgets(widgetA, widgetB)
+		return widgetA.id:lower() < widgetB.id:lower()
+	end
+
+	table.sort(allMonsters, compareWidgets)
+
+	for i = 1, #allMonsters do
+		if allMonsters[i].outfit.shader ~= "outfit_black" then
+			if not G_BESTIARY.UI:recursiveGetChildById('CreatureList'):getChildById(allMonsters[i].id) then
+				local newCreature = g_ui.createWidget("CharmCreatureName", G_BESTIARY.UI:recursiveGetChildById('CreatureList'))
+				newCreature:setId(allMonsters[i].id)
+				newCreature:setText(allMonsters[i].name)
+				newCreature:setBackgroundColor(randomColor == "#414141" and "#484848" or "#414141")
+				randomColor = randomColor == "#414141" and "#484848" or "#414141"
+				newCreature.outfit = allMonsters[i].outfit
+				newCreature.monster = allMonsters[i].name
+			end
+		end
+	end
+end
+
+function onReceiveMsg(info)
+	G_BESTIARY.UI:recursiveGetChildById('message'):setVisible(true)
+	G_BESTIARY.UI:recursiveGetChildById('msgLabel'):setText(info.msg)
+end
+
+function onReceiveCoins(info)
+	G_BESTIARY.UI:recursiveGetChildById('goldCoinsValue'):setText(info.gold)
+	G_BESTIARY.UI:recursiveGetChildById('goldCoins'):setText(formatMoney(info.gold))
+	G_BESTIARY.UI:recursiveGetChildById('charmsPoints'):setText(info.charm)
+	G_BESTIARY.UI:recursiveGetChildById('extraCharmsPoints'):setText(info.extracharm)
+end
+
+function formatMoney(money)
+    if money >= 10^6 then
+        return string.format("%.2fkk", money / 10^6)
+    elseif money >= 10^3 then
+        return string.format("%.2fk", money / 10^3)
+    else
+        return tostring(money)
+    end
+end
+
+function searchMonsterCharm(search)
+    for _, monster in pairs(G_BESTIARY.UI:recursiveGetChildById('CreatureList'):getChildren()) do
+		if string.find(monster:getId():lower(), search:lower()) or not search or search == "" then
+			monster:show()
+		else
+			monster:hide()
+		end
+	end
 end

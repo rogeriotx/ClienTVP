@@ -183,9 +183,9 @@ BestiaryCreature < Window
       opacity: 0.7
 
     UICreature
-      size: 64 64
       id: creature
       anchors.centerIn: parent
+      size: 64 64
       phantom: true
       scale: 0.9
       margin: 2 0 0 2
@@ -198,40 +198,206 @@ BestiaryCreature < Window
     anchors.horizontalCenter: parent.horizontalCenter
     margin-bottom: 5
 
+CharmItem < UICheckBox
+  !text: tr('Title')
+  image-source: images/ui/minipanel
+  image-border: 3
+  image-border-top: 22
+  color: #929292
+  text-offset: 0 3
+  text-align: top
+  border: 0 #ffffff
+  $focus:
+    border: 2 #ffffff
+  @onClick: |
+    local main = self:getParent():getParent():getParent():getParent()
+    local selectPoints = tonumber(self:recursiveGetChildById('Value'):getText()) and tonumber(self:recursiveGetChildById('Value'):getText()) or 0
+    local goldCoins = tonumber(main:recursiveGetChildById('goldCoinsValue'):getText()) and tonumber(main:recursiveGetChildById('goldCoinsValue'):getText()) or 0
+    local charmsPoints = tonumber(main:recursiveGetChildById('charmsPoints'):getText()) and tonumber(main:recursiveGetChildById('charmsPoints'):getText()) or 0
+    local extraCharmsPoints = tonumber(main:recursiveGetChildById('extraCharmsPoints'):getText()) and tonumber(main:recursiveGetChildById('extraCharmsPoints'):getText()) or 0
+    local canOutfit = self:recursiveGetChildById('outfit'):getOutfit().type ~= 0 and true or false
+
+    self:getParent():focusChild(self, ActiveFocusReason)
+    main:recursiveGetChildById('showCreatureID'):setText(self.monster)
+    main:recursiveGetChildById('showCreature'):setOutfit(self:recursiveGetChildById('outfit'):getOutfit())
+    main:recursiveGetChildById('showCreature'):setAnimate(canOutfit)
+    main:recursiveGetChildById('showCreature'):setEnabled(canOutfit)
+    main:recursiveGetChildById('ItemBase'):getChildById('image'):getChildById('imageID'):setText(self:getId())
+    main:recursiveGetChildById('ItemBase'):getChildById('image'):setImageSource("images/charms/"..self:getId().."")
+    main:recursiveGetChildById('TextBase'):setText(self.desc)
+    main:recursiveGetChildById('PriceBaseMain'):getChildById('Value'):setText(selectPoints)
+
+    if self:recursiveGetChildById('lockedMask'):isVisible() then
+      main:recursiveGetChildById('UnlockButton'):setText("Unlock")
+      if charmsPoints+extraCharmsPoints >= selectPoints then
+        main:recursiveGetChildById('UnlockButton'):setEnabled(true)
+      else
+        main:recursiveGetChildById('UnlockButton'):setEnabled(false)
+      end
+      main:recursiveGetChildById('PriceBaseMain'):getChildById('Gold'):setVisible(false)
+      main:recursiveGetChildById('PriceBaseMain'):getChildById('Charm'):setVisible(true)
+    else
+      if main:recursiveGetChildById('showCreature'):getOutfit().type == 0 then
+        main:recursiveGetChildById('UnlockButton'):setText("Select")
+        if goldCoins >= selectPoints then
+            main:recursiveGetChildById('UnlockButton'):setEnabled(true)
+        else
+            main:recursiveGetChildById('UnlockButton'):setEnabled(false)
+        end
+        if not canOutfit then
+          main:recursiveGetChildById('UnlockButton'):setEnabled(false)
+        end
+      else
+        main:recursiveGetChildById('UnlockButton'):setText("Remove")
+        if goldCoins >= selectPoints then
+            main:recursiveGetChildById('UnlockButton'):setEnabled(true)
+        else
+            main:recursiveGetChildById('UnlockButton'):setEnabled(false)
+        end
+      end
+      main:recursiveGetChildById('PriceBaseMain'):getChildById('Gold'):setVisible(true)
+      main:recursiveGetChildById('PriceBaseMain'):getChildById('Charm'):setVisible(false)
+    end
+
+    if self:recursiveGetChildById('lockedMask'):isVisible()
+    or main:recursiveGetChildById('UnlockButton'):getText() == "Remove" then
+      main:recursiveGetChildById('CreatureList'):hide()
+    else
+      main:recursiveGetChildById('CreatureList'):show()
+    end
+
+    modules.game_bestiary.G_BESTIARY.send("coins")
+
+  UIWindow
+    id: InfoBase
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-bottom: 5
+    margin-right: 5
+    image-source: images/ui/panel_flat
+    image-border: 10
+    size: 66 66
+    phantom: true
+
+    UICreature
+      id: outfit
+      anchors.centerIn: parent
+      size: 64 64
+      phantom: true
+
+  UIWidget
+    id: PriceBase
+    size: 73 20
+    anchors.left: parent.left
+    anchors.bottom: InfoBase.bottom
+    margin-left: 8
+    image-source: images/ui/item
+    image-border: 10
+    phantom: true
+
+    Label
+      id: Value
+      anchors.centerIn: parent
+      !text: tr('0')
+      text-auto-resize: true
+      margin-right: 3
+
+    UIWidget
+      id: Charm
+      anchors.left: Value.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 2
+      image-source: images/ui/icon_charms
+
+    UIWidget
+      id: Gold
+      anchors.left: Value.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 2
+      image-source: images/ui/icon_gold
+      visible: false
+
+  UIWindow
+    id: charmBase
+    anchors.bottom: PriceBase.top
+    anchors.horizontalCenter: PriceBase.horizontalCenter
+    margin-bottom: 7
+    image-source: images/ui/panel_flat
+    image-border: 10
+    size: 37 37
+    phantom: true
+
+    UIWidget
+      size: 32 32
+      id: image
+      anchors.centerIn: parent
+      phantom: true
+
+    UIWidget
+      id: lockedMask
+      size: 35 35
+      anchors.centerIn: parent
+      image-source: images/ui/ditherpattern
+      phantom: true
+
+CharmCreatureName < UICheckBox
+  color: #C0C0C0
+  background-color: #484848
+  @onClick: |
+    local main = self:getParent():getParent():getParent():getParent():getParent()
+    main:recursiveGetChildById('showCreature'):setOutfit(self.outfit)
+    main:recursiveGetChildById('showCreature'):setAnimate(self.outfit)
+    main:recursiveGetChildById('showCreatureID'):setText(self.monster)
+    local selectPoints = tonumber(main:recursiveGetChildById('PriceBaseMain'):getChildById('Value'):getText()) and tonumber(main:recursiveGetChildById('PriceBaseMain'):getChildById('Value'):getText()) or 0
+    local goldCoins = tonumber(main:recursiveGetChildById('goldCoinsValue'):getText()) and tonumber(main:recursiveGetChildById('goldCoinsValue'):getText()) or 0
+    if goldCoins >= selectPoints then
+      main:recursiveGetChildById('UnlockButton'):setEnabled(true)
+    else
+      main:recursiveGetChildById('UnlockButton'):setEnabled(false)
+    end
+
+  $checked:
+    background-color: #585858
+
 MainWindow
   id: main
   !text: tr('Bestiary')
   size: 725 550
   anchors.centerIn: parent
 
-  Label
-    id: searchLabel
-    !text: tr('Search') .. ':'
+  Button
+    id: bestiaryBtn
     anchors.top: parent.top
     anchors.left: parent.left
-    margin-top: 9
-    text-auto-resize: true
-  
-  TextEdit
-    id: search
-    anchors.verticalCenter: prev.verticalCenter
-    anchors.left: prev.right
-    margin-left: 7
-    width: 132
-    @onTextChange: modules.game_npctrade.onSearchTextChange()
-    shift-navigation: true
-    max-length: 255
-    height: 16
-    padding: 1 0 0 2
-    text-offset: 1 1
+    margin: 0 0 0 0
+    size: 125 34
+    text: Bestiary
+    text-offset: 30 0
+    icon: images/topbuttons/bestiary
+    icon-align: left
+    @onClick: |
+      self:getParent():getChildById('panel'):show()
+      self:getParent():getChildById('searchLabel'):show()
+      self:getParent():getChildById('search'):show()
+      self:getParent():getChildById('searchBtn'):show()
+      self:getParent():getChildById('charmsPanel'):hide()
 
   Button
-    !text: tr('Search')
-    size: 64 22
-    anchors.verticalCenter: prev.verticalCenter
-    anchors.left: search.right
-    margin-left: 10
-    @onClick: G_BESTIARY.search(self)
+    id: charmsBtn
+    anchors.top: parent.top
+    anchors.left: prev.right
+    margin: 0 0 0 15
+    size: 125 34
+    text: Charms
+    text-offset: 30 0
+    icon: images/topbuttons/charms
+    icon-align: left
+    @onClick: |
+      self:getParent():getChildById('panel'):hide()
+      self:getParent():getChildById('searchLabel'):hide()
+      self:getParent():getChildById('search'):hide()
+      self:getParent():getChildById('searchBtn'):hide()
+      self:getParent():getChildById('charmsPanel'):show()
 
   FlatPanel
     id: panel
@@ -240,7 +406,7 @@ MainWindow
     anchors.right: parent.right
     margin-top: 45
     anchors.bottom: next.bottom
-    margin-bottom: 8
+    margin-bottom: 25
 
     Window
       id: creature
@@ -404,6 +570,7 @@ MainWindow
         padding-top: 10
         padding-bottom: 10
         vertical-scrollbar: scrollbar
+
         layout:
           type: grid
           cell-spacing: 5
@@ -418,29 +585,321 @@ MainWindow
         step: 48
         pixels-scroll: true
 
+  Label
+    id: searchLabel
+    !text: tr('Search') .. ':'
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin: 0 211 25 0
+    text-auto-resize: true
+  
+  TextEdit
+    id: search
+    anchors.verticalCenter: prev.verticalCenter
+    anchors.left: prev.right
+    margin-left: 7
+    width: 132
+    @onTextChange: modules.game_npctrade.onSearchTextChange()
+    shift-navigation: true
+    max-length: 255
+    height: 16
+    padding: 1 0 0 2
+    text-offset: 1 1
+
+  Button
+    id: searchBtn
+    !text: tr('Search')
+    size: 64 22
+    anchors.verticalCenter: prev.verticalCenter
+    anchors.left: search.right
+    margin-left: 10
+    @onClick: G_BESTIARY.search(self)
+
+  FlatPanel
+    id: charmsPanel
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 45
+    anchors.bottom: prev.bottom
+    margin-bottom: 25
+    visible: false
+
+    UIWindow
+      id: charmsLeftPanel
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: next.left
+      image-source: images/ui/minipanel
+      image-border: 3
+      image-border-top: 22
+      text: Information
+      text-offset: 12 2
+
+      UIWidget
+        id: TextBase
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin: 20 5 5 5
+        height: 110
+        text-align: topLeft
+        text-wrap: true
+        color: #C1C1C1
+        margin-top: 25
+
+      UIWindow
+        id: InfoBase
+        anchors.top: parent.top
+        anchors.right: parent.right
+        margin-top: 140
+        margin-right: 7
+        image-source: images/ui/panel_flat
+        image-border: 10
+        size: 66 66
+        phantom: true
+
+        UICreature
+          id: showCreature
+          anchors.centerIn: parent
+          size: 64 64
+
+          UIWidget
+            id: showCreatureID
+            anchors.centerIn: parent
+            text: nil
+            phantom: true
+            visible:false
+
+      Button
+        id: UnlockButton
+        size: 75 20
+        anchors.bottom: InfoBase.bottom
+        anchors.left: parent.left
+        margin-left: 10
+        margin-right: 10
+        !text: tr('Unlock')
+        //font: verdana-bold-8px-antialiased
+        text-offset: 0 -1
+        color: #C0C0C0
+        enabled: false
+        @onClick: |
+          local sendCharm = self:getParent():recursiveGetChildById('imageID'):getText()
+          local sendCreature = self:getParent():recursiveGetChildById('showCreatureID'):getText()
+          G_BESTIARY.send(self:getText(), {charm = sendCharm, monster = sendCreature})
+
+      UIWindow
+        id: ItemBase
+        anchors.top: InfoBase.top
+        anchors.horizontalCenter: UnlockButton.horizontalCenter
+        image-source: images/ui/panel_flat
+        image-border: 10
+        size: 37 37
+        phantom: true
+
+        UIWidget
+          size: 32 32
+          id: image
+          anchors.centerIn: parent
+          phantom: true
+
+          UIWidget
+            id: imageID
+            anchors.centerIn: parent
+            text: nil
+            phantom: true
+            visible:false
+
+      UIWidget
+        id: PriceBaseMain
+        anchors.left: UnlockButton.left
+        anchors.right: UnlockButton.right
+        anchors.top: UnlockButton.bottom
+        margin-top: 5
+        height: 20
+        image-source: images/ui/item
+        image-border: 10
+        phantom: true
+
+        Label
+          id: Value
+          anchors.centerIn: parent
+          !text: tr('0')
+          text-auto-resize: true
+
+        UIWidget
+          id: Charm
+          anchors.left: Value.right
+          anchors.verticalCenter: parent.verticalCenter
+          margin-left: 2
+          image-source: images/ui/icon_charms
+
+        UIWidget
+          id: Gold
+          anchors.left: Value.right
+          anchors.verticalCenter: parent.verticalCenter
+          margin-left: 2
+          image-source: images/ui/icon_gold
+          visible: false
+
+      UIWidget
+        id: StoreButton
+        anchors.right: InfoBase.right
+        anchors.top: PriceBaseMain.top
+        margin-top: -2
+        size: 26 20
+        image-source: images/ui/button_store
+        image-clip: 0 0 26 20
+
+        $pressed:
+          image-source: images/ui/button_store
+          image-clip: 0 20 26 20
+
+        @onClick: |
+          modules.game_store.toggle()
+          modules.game_interface.getRootPanel():focus()
+          G_BESTIARY.Tracker.UI.bestiaryWindowButton:setOn(false)
+          resetAllWidgetOpacity(G_BESTIARY.UI)
+
+      UIWidget
+        id: InfoButton
+        anchors.right: StoreButton.left
+        anchors.verticalCenter: StoreButton.verticalCenter
+        margin-right: 5
+        image-source: images/ui/show_gui_help_grey
+        !tooltip: ('You can assign 4 more Charms to creatures.\nBuy a "Charm Expansion" to assign your unlocked Charms to\ncreatures nearly unlimitedly and to get a 25% discount whenever\nyou are removing a Charm.')
+
+      TextEdit
+        id: SearchEdit
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        margin-bottom: 10
+        color: #C0C0C0
+        placeholder: Type to search
+        placeholder-color: #6E706F
+        padding-top: 1
+        size: 140 17
+        @onTextChange: modules.game_bestiary.searchMonsterCharm(self:getText())
+
+      Label
+        id: SearchLabel
+        anchors.left: SearchEdit.left
+        anchors.bottom: SearchEdit.top
+        margin-bottom: 5
+        color: #C0C0C0
+        !text: tr('Search') .. ':'
+
+      UIWindow
+        id: CreaturesBase
+        anchors.bottom: SearchEdit.top
+        anchors.right: SearchEdit.right
+        anchors.left: SearchEdit.left
+        margin-bottom: 30
+        image-source: images/ui/panel_flat
+        image-border: 10
+        height: 105
+        phantom: true
+
+        UIScrollArea
+          id: CreatureList
+          vertical-scrollbar: CreatureListScrollbar
+          anchors.fill: parent
+          margin-right: 13
+          padding-left: 3
+          padding-top: 3
+          padding-bottom: 2
+          visible: false
+
+          layout:
+            type: grid
+            cell-size: 125 15
+            cell-spacing: 2
+            flow: true
+
+        VerticalScrollBar
+          id: CreatureListScrollbar
+          anchors.top: parent.top
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          step: 80
+          pixel-scroll: true
+
+      Label
+        id: CreaturesLabel
+        anchors.left: CreaturesBase.left
+        anchors.bottom: CreaturesBase.top
+        margin-bottom: 5
+        color: #C0C0C0
+        !text: tr('Select Creature') .. ':'
+
+    FlatPanel
+      id: charmsRightPanel
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      width: 510
+
+      ScrollablePanel
+        id: charmsList
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        width: 500
+        phantom: true
+        focusable: false
+        vertical-scrollbar: CharmListScrollbar
+
+        layout:
+          type: grid
+          cell-size: 158 94
+          cell-spacing: 2
+          flow: true
+
+      VerticalScrollBar
+        id: CharmListScrollbar
+        anchors.top: charmsList.top
+        anchors.right: charmsList.right
+        anchors.bottom: charmsList.bottom
+        step: 80
+
   HorizontalSeparator
     id: separator
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.bottom: next.top
-    margin-bottom: 10
-  
-  Button
-    id: closeButton
-    !text: tr('Close')
-    size: 64 22
-    anchors.bottom: parent.bottom
-    anchors.right: parent.right
-    @onClick: G_BESTIARY.closeBackButton(self)
+    margin-bottom: 4
 
   Panel
-    id: bestiaryPoints
+    id: goldCoins
     size: 100 22
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     image-source: /images/ui/panel_flat
     image-border: 3
-    margin-left: 0
+    text-align: left
+    text-offset: 5 0
+    image-color: #1111118c
+    text: 0
+    icon: images/ui/icon_gold
+    icon-align: right
+    icon-offset: -5 0
+    tooltip: Bestiary Points
+    phantom: false
+    margin: 0 0 -10 0
+
+    UIWidget
+      id: goldCoinsValue
+      text: 0
+      visible: false
+
+  Panel
+    id: bestiaryPoints
+    size: 100 22
+    anchors.bottom: parent.bottom
+    anchors.left: prev.right
+    image-source: /images/ui/panel_flat
+    image-border: 3
     text-align: left
     text-offset: 5 0
     image-color: #1111118c
@@ -450,3 +909,70 @@ MainWindow
     icon-offset: -5 0
     tooltip: Bestiary Points
     phantom: false
+    margin: 0 0 -10 20
+
+  Panel
+    id: charmsPoints
+    size: 100 22
+    anchors.bottom: parent.bottom
+    anchors.left: prev.right
+    image-source: /images/ui/panel_flat
+    image-border: 3
+    text-align: left
+    text-offset: 5 0
+    image-color: #1111118c
+    text: 0
+    icon: images/ui/icon_charms
+    icon-align: right
+    icon-offset: -5 0
+    tooltip: Charms Points
+    phantom: false
+    margin: 0 0 -10 20
+
+  Panel
+    id: extraCharmsPoints
+    size: 100 22
+    anchors.bottom: parent.bottom
+    anchors.left: prev.right
+    image-source: /images/ui/panel_flat
+    image-border: 3
+    text-align: left
+    text-offset: 5 0
+    image-color: #1111118c
+    text: 0
+    icon: images/ui/icon_extracharms
+    icon-align: right
+    icon-offset: -5 0
+    tooltip: Charms Points
+    phantom: false
+    margin: 0 0 -10 20
+
+  MainWindow
+    id: message
+    anchors.centerIn: parent
+    size: 500 150
+    text: Message
+    visible: false
+
+    Label
+      id: msgLabel
+      anchors.centerIn: parent
+      text-auto-resize: true
+
+    Button
+      id: okBtn
+      anchors.bottom: parent.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      text: Ok
+      @onClick: self:getParent():hide()
+
+  Button
+    id: closeButton
+    !text: tr('Close')
+    size: 64 22
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    @onClick: |
+      G_BESTIARY.closeBackButton(self)
+      self:getParent():recursiveGetChildById('CreatureList'):hide()
+    margin: 0 0 -10 0
