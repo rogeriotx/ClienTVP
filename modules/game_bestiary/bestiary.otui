@@ -211,8 +211,8 @@ CharmItem < UICheckBox
     border: 2 #ffffff
   @onClick: |
     local main = self:getParent():getParent():getParent():getParent()
-    local selectPoints = tonumber(self:recursiveGetChildById('Value'):getText()) and tonumber(self:recursiveGetChildById('Value'):getText()) or 0
-    local goldCoins = tonumber(main:recursiveGetChildById('goldCoinsValue'):getText()) and tonumber(main:recursiveGetChildById('goldCoinsValue'):getText()) or 0
+    local selectPoints = tonumber(self:recursiveGetChildById('ValueFix'):getText()) and tonumber(self:recursiveGetChildById('ValueFix'):getText()) or 0
+    local goldCoins = tonumber(main:recursiveGetChildById('goldCoinsValue'):getText()) and tonumber(main:recursiveGetChildById('goldCoinsValue'):getText())*g_game:getLocalPlayer():getLevel() or 0
     local charmsPoints = tonumber(main:recursiveGetChildById('charmsPoints'):getText()) and tonumber(main:recursiveGetChildById('charmsPoints'):getText()) or 0
     local extraCharmsPoints = tonumber(main:recursiveGetChildById('extraCharmsPoints'):getText()) and tonumber(main:recursiveGetChildById('extraCharmsPoints'):getText()) or 0
     local canOutfit = self:recursiveGetChildById('outfit'):getOutfit().type ~= 0 and true or false
@@ -225,7 +225,11 @@ CharmItem < UICheckBox
     main:recursiveGetChildById('ItemBase'):getChildById('image'):getChildById('imageID'):setText(self:getId())
     main:recursiveGetChildById('ItemBase'):getChildById('image'):setImageSource("images/charms/"..self:getId().."")
     main:recursiveGetChildById('TextBase'):setText(self.desc)
-    main:recursiveGetChildById('PriceBaseMain'):getChildById('Value'):setText(selectPoints)
+    if not self:recursiveGetChildById('Charm'):isVisible() then
+      main:recursiveGetChildById('PriceBaseMain'):getChildById('Value'):setText(modules.game_bestiary.formatMoney(selectPoints*g_game:getLocalPlayer():getLevel()))
+    else
+      main:recursiveGetChildById('PriceBaseMain'):getChildById('Value'):setText(selectPoints)
+    end
 
     if self:recursiveGetChildById('lockedMask'):isVisible() then
       main:recursiveGetChildById('UnlockButton'):setText("Unlock")
@@ -301,6 +305,11 @@ CharmItem < UICheckBox
       !text: tr('0')
       text-auto-resize: true
       margin-right: 3
+
+      UIWidget
+        id: ValueFix
+        text: 0
+        visible: false
 
     UIWidget
       id: Charm

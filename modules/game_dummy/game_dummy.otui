@@ -1,0 +1,70 @@
+newSkin < UIWidget
+  height: 85
+  originalcolor: #414141
+
+  $focus:
+    border: 1 #ffffff
+    background-color: #ffffff22
+
+  @onFocusChange: |
+    self:setBorderWidth(0)
+    self:setBackgroundColor(self.originalcolor)
+    self:setBorderColor(self.originalcolor)
+
+  UICreature
+    id: skinID
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    margin: 0 0 0 10
+    size: 64 64
+
+  Label
+    id: skinName
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: skinID.right
+    margin: 0 0 0 10
+    text: Skin
+    text-auto-resize: true
+
+  Button
+    id: skinButton
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.right: parent.right
+    margin: 0 10 0 0
+    text: Apply
+    @onClick: modules.game_dummy.onSendInfo(self:getParent():getChildById('skinName'):getText())
+
+MainWindow
+  id: gameDummy
+  anchors.verticalCenter: parent.verticalCenter
+  anchors.horizontalCenter: parent.horizontalCenter
+  size: 350 500
+  text: Dummy Management
+  phantom: false
+  focusable: true
+  draggable: false
+
+  Label
+    id: dummyLabel
+    anchors.top: parent.top
+    anchors.left: parent.left
+    text: Select the Skin to your Dummy:
+
+  ScrollablePanel
+    id: skinsWindow
+    anchors.top: dummyLabel.bottom
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin: 15 0 30 0
+    width: 325
+    background-color: #41414199
+
+    layout:
+      type: verticalBox
+
+  Button
+    id: closeButton
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    text: Close
+    @onClick: self:getParent():hide()

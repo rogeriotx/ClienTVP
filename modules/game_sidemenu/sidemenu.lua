@@ -63,6 +63,10 @@ function getBattleButton()
     return buttons.battle
 end
 
+function getDummyButton()
+    return buttons.dummy
+end
+
 function getInventoryButton()
     return buttons.inventory
 end
@@ -98,6 +102,7 @@ function init()
     --TODO: questlog    
     buttons.skills = addSideButton("skillsButton", tr('Skills (Ctrl+S)'), "/images/topbuttons/sidepanel/skills", getLeftButtonsPanel())
     buttons.battle = addSideButton("battleButton", tr('Battle') .. ' (Ctrl+B)', "/images/topbuttons/sidepanel/battle", getLeftButtonsPanel())
+	buttons.dummy = addSideButton("dummyButton", tr('Dummy') .. ' (Ctrl+N+B)', "/images/topbuttons/sidepanel/dummy", getLeftButtonsPanel())
     buttons.viplist = addSideButton("viplistButton", tr('VIP List') .. ' (Ctrl+P)', "/images/topbuttons/sidepanel/viplist", getLeftButtonsPanel())
     buttons.unjustified = addSideButton("unjustifiedButton", tr('Unjustified Points (Ctrl+I)'), "/images/topbuttons/sidepanel/unjustifiedpoints", getLeftButtonsPanel())
     buttons.analyzer = addSideButton("analyzerButton", "Analytics", "/images/topbuttons/sidepanel/analyzers", getLeftButtonsPanel())
@@ -125,6 +130,10 @@ function init()
 
     buttons.battle.callback = function()
         modules.game_battle.toggle()
+    end
+
+    buttons.dummy.callback = function()
+        modules.game_dummy.toggle()
     end
 
     buttons.unjustified.callback = function()

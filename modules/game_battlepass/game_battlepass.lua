@@ -109,6 +109,7 @@ end
 
 function onBattlepassGameStart()
   m_BattlepassFunctions.button = modules.game_sidemenu.getBattlepassButton()
+  m_BattlepassFunctions.button:hide()
 end
 
 function onBattlepassGameEnd()

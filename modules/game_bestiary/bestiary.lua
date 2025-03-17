@@ -815,15 +815,18 @@ function addCharm(charm, charmName)
 	createCharm:recursiveGetChildById('outfit'):setOutfit({type = charm.outfit and charm.outfit.lookType or 0,auxType = charm.outfit and charm.outfit.lookTypeEx or 0, head = charm.outfit and charm.outfit.lookHead or 0, body = charm.outfit and charm.outfit.lookBody or 0, legs = charm.outfit and charm.outfit.lookLegs or 0, feet = charm.outfit and charm.outfit.lookFeet or 0, addons = 0, wings = 0, aura = 0, shader = ""})
 	createCharm:recursiveGetChildById('outfit'):setAnimate(charm.outfit and true or false)
 	createCharm:recursiveGetChildById('outfit'):setEnabled(charm.outfit and true or false)
-	createCharm.PriceBase.Value:setText(charm.monster and charm.goldCoin or charm.charmCoin)
 	if charm.rune then
 		createCharm.PriceBase.Gold:setVisible(true)
 		createCharm.PriceBase.Charm:setVisible(false)
 		createCharm.charmBase.lockedMask:setVisible(false)
+		createCharm.PriceBase.Value.ValueFix:setText(charm.goldCoin*g_game:getLocalPlayer():getLevel())
+		createCharm.PriceBase.Value:setText(formatMoney(charm.goldCoin*g_game:getLocalPlayer():getLevel()))
 	else
 		createCharm.PriceBase.Gold:setVisible(false)
 		createCharm.PriceBase.Charm:setVisible(true)
 		createCharm.charmBase.lockedMask:setVisible(true)
+		createCharm.PriceBase.Value:setText(charm.charmCoin)
+		createCharm.PriceBase.Value.ValueFix:setText(charm.charmCoin)
 	end
 end
 
