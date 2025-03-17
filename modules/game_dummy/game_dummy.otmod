@@ -1,0 +1,10 @@
+Module
+  name: game_dummy
+  description: Mananger Dummy
+  author: ALS
+  website: https://github.com/edubart/otclient
+  sandboxed: true
+  autoload: true
+  scripts: [ game_dummy ]
+  @onLoad: init()
+  @onUnload: terminate()
