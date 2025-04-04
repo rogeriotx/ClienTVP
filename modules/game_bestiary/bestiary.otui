@@ -226,7 +226,7 @@ CharmItem < UICheckBox
     main:recursiveGetChildById('ItemBase'):getChildById('image'):setImageSource("images/charms/"..self:getId().."")
     main:recursiveGetChildById('TextBase'):setText(self.desc)
     if not self:recursiveGetChildById('Charm'):isVisible() then
-      main:recursiveGetChildById('PriceBaseMain'):getChildById('Value'):setText(modules.game_bestiary.formatMoney(selectPoints*g_game:getLocalPlayer():getLevel()))
+      main:recursiveGetChildById('PriceBaseMain'):getChildById('Value'):setText(self:recursiveGetChildById('Value'):getText())
     else
       main:recursiveGetChildById('PriceBaseMain'):getChildById('Value'):setText(selectPoints)
     end
@@ -373,6 +373,7 @@ MainWindow
   !text: tr('Bestiary')
   size: 725 550
   anchors.centerIn: parent
+  draggable: false
 
   Button
     id: bestiaryBtn
@@ -645,6 +646,7 @@ MainWindow
       image-border-top: 22
       text: Information
       text-offset: 12 2
+      draggable: false
 
       UIWidget
         id: TextBase

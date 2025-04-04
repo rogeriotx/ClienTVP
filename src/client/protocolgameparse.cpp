@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (c) 2010-2017 OTClient <https://github.com/edubart/otclient>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -3449,8 +3449,13 @@ CreaturePtr ProtocolGame::getCreature(const InputMessagePtr& msg, int type)
 
             std::string name = g_game.formatCreatureName(msg->getString());
 
+			std::string marketDescription = msg->getString();
+
             if (creature) {
                 creature->setName(name);
+				if (marketDescription != "") {
+					creature->setText(marketDescription, Color::white);
+				}
             } else {
                 if (id == m_localPlayer->getId())
                     creature = m_localPlayer;
@@ -3472,6 +3477,10 @@ CreaturePtr ProtocolGame::getCreature(const InputMessagePtr& msg, int type)
                 if (creature) {
                     creature->setId(id);
                     creature->setName(name);
+
+					if (marketDescription != "") {
+						creature->setText(marketDescription, Color::white);
+					}
 
                     g_map.addCreature(creature);
                 }

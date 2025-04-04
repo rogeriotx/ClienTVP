@@ -476,6 +476,9 @@ private:
     int m_coins;
     int m_transferableCoins;
 
+	Position* marketPosInit;
+	Position* marketPosEnd;
+
     bool m_showRealDirection = false;
     bool m_ignoreServerDirection = true;
     bool m_tileThingsLuaCallback = false;

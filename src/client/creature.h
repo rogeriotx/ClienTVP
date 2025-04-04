@@ -242,6 +242,7 @@ protected:
     TexturePtr m_typeTexture;
     TexturePtr m_iconTexture;
     TexturePtr m_starTexture;
+	TexturePtr m_marketTexture;
     stdext::boolean<true> m_showSkullTexture;
     stdext::boolean<true> m_skullBlink;
     stdext::boolean<true> m_showShieldTexture;
