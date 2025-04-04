@@ -268,8 +268,8 @@ function getImpliticsText(key, value)
             impText = implicits[key] .. " " .. value ..
                           (impPercent[key] and "%" or "")
         elseif impInterval[key] then
-            impText = implicits[key] .. " " .. (value > 0 and "-" or "") ..
-                          (value / 10) .. (impInterval[key] and "s" or "")
+            impText = implicits[key] .. " -" .. 
+							string.format("%.2f", value * 0.05) .. "s"
         elseif impDuration[key] then
             impText = implicits[key] .. " " .. (value > 0 and ": " or "") ..
                           (value / 1000) .. (impDuration[key] and "s" or "")

@@ -63,10 +63,6 @@ function getBattleButton()
     return buttons.battle
 end
 
-function getDummyButton()
-    return buttons.dummy
-end
-
 function getInventoryButton()
     return buttons.inventory
 end
@@ -81,6 +77,10 @@ end
 
 function getBestiaryButton()
     return buttons.bestiary
+end
+
+function getDummyButton()
+    return buttons.dummy
 end
 
 function getBattlepassButton()
@@ -101,12 +101,12 @@ function init()
     
     --TODO: questlog    
     buttons.skills = addSideButton("skillsButton", tr('Skills (Ctrl+S)'), "/images/topbuttons/sidepanel/skills", getLeftButtonsPanel())
-    buttons.battle = addSideButton("battleButton", tr('Battle') .. ' (Ctrl+B)', "/images/topbuttons/sidepanel/battle", getLeftButtonsPanel())
-	buttons.dummy = addSideButton("dummyButton", tr('Dummy') .. ' (Ctrl+N+B)', "/images/topbuttons/sidepanel/dummy", getLeftButtonsPanel())
+    buttons.battle = addSideButton("battleButton", tr('Battle') .. ' (Ctrl+B)', "/images/topbuttons/sidepanel/battle", getLeftButtonsPanel())	
     buttons.viplist = addSideButton("viplistButton", tr('VIP List') .. ' (Ctrl+P)', "/images/topbuttons/sidepanel/viplist", getLeftButtonsPanel())
     buttons.unjustified = addSideButton("unjustifiedButton", tr('Unjustified Points (Ctrl+I)'), "/images/topbuttons/sidepanel/unjustifiedpoints", getLeftButtonsPanel())
     buttons.analyzer = addSideButton("analyzerButton", "Analytics", "/images/topbuttons/sidepanel/analyzers", getLeftButtonsPanel())
     buttons.bestiary = addSideButton("bestiaryButton", "Bestiary (Ctrl+)", "/images/topbuttons/sidepanel/bestiary", getLeftButtonsPanel())
+	buttons.dummy = addSideButton("dummyButton", tr('Dummy') .. ' (Ctrl+)', "/images/topbuttons/sidepanel/dummy", getLeftButtonsPanel())
     buttons.battlepass = addSideButton("battlepass", "BattlePass (Ctrl+)", "/images/topbuttons/sidepanel/battlepass", getLeftButtonsPanel())
 
     buttons.hotkeys = addSideButton("hotkeysButton", tr('Hotkeys') .. ' (Ctrl+K)', "/images/topbuttons/sidepanel/hotkeys", getRightButtonsPanel())
