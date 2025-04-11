@@ -10,6 +10,7 @@ function terminate()
 end
 
 function sanitize_filename(filename)
+	--[[
     -- Substituir caracteres não permitidos por "_"
     filename = filename:gsub("[\\/:%*%?\"<>|]", "_")
     
@@ -20,20 +21,25 @@ function sanitize_filename(filename)
     end
     
     return filename
+	--]]
 end
 
 local function getCharacterConfigName(name)
+	--[[
     local player = g_game.getCharacterName()
     -- return "/config-"..base64.encode(name and name or player)..".otml"
     return "/config-"..sanitize_filename((name and name or player))..".otml"
+	--]]
 end
 
 function onExit()
+	--[[
     onLogout()
+	--]]
 end
 
 function onLogout()
-    
+    --[[
     modules.game_console.save_channels_history()
 
     save_file()
@@ -49,22 +55,28 @@ function onLogout()
     g_settings.mergeNode('VipList', viplist_settings)
     
     g_settings.setNode('Minimap', minimap_settings)
+	--]]
 end
 
 function onGameEnd()
+	--[[
     addEvent(modules.client_options.setup)
     for _, panel in pairs(modules.game_interface.getAllPanelList()) do
         addEvent(function()
             panel:closeAll()
         end)
     end
+	--]]
 end
 
 function save_file(name)
+	--[[
     g_settings.save()
+	--]
 end
 
 function onLogin()
+	--[[
     local viplist = modules.game_viplist.getVipListInfo()
     local settings = g_settings.getNode('Minimap')
     g_configs.loadSettings(getCharacterConfigName())
@@ -72,4 +84,5 @@ function onLogin()
     modules.game_viplist.saveVipInfo()
     g_settings.setNode('Minimap', settings)
     g_settings.save()
+	--]]
 end

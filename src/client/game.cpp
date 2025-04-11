@@ -577,6 +577,8 @@ void Game::loginWorld(const std::string& account, const std::string& password, c
     m_protocolGame->login(account, password, worldHost, (uint16)worldPort, characterName, authenticatorToken, sessionKey, worldName);
     m_characterName = characterName;
     m_worldName = worldName;
+
+	g_lua.callGlobalField("g_game", "onLoadConfig", characterName);
 }
 
 void Game::playRecord(const std::string& file)

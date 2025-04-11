@@ -157,6 +157,8 @@ function UIMinimap:addFlag(pos, icon, description, temporary)
   flag.onDestroy = function() table.removevalue(self.flags, flag) end
   table.insert(self.flags, flag)
   self:centerInPosition(flag, pos)
+
+  flag:setId("flag")
 end
 
 function UIMinimap:addAlternativeWidget(widget, pos, maxZoom)
@@ -282,7 +284,7 @@ function UIMinimap:onMouseRelease(pos, button)
     local menu = g_ui.createWidget('PopupMenu')
     menu:setGameMenu(true)
     menu:addOption(tr('Create mark'), function() self:createFlagWindow(mapPos) end)
-    menu:addOption(tr('Import full map'), function() modules.game_minimap.load_full_map() end)
+	--menu:addOption(tr('Import full map'), function() modules.game_minimap.load_full_map() end)
     menu:display(pos)
     return true
   end

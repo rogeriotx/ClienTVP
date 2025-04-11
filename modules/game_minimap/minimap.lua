@@ -206,14 +206,19 @@ function toggle()
 end
 
 function online()
-  minimapWindow:setup()
-
-  
-  loadMap()
-  updateCameraPosition()
-  minimapWindow:open()
-  build_minimap_style(minimapWindow:getParent().topPanel and "otcv8" or "retro")
-  minimapWidget:fixCross()
+	addEvent(function()
+		minimapWindow:setup()
+		for _, widget in pairs(minimapWidget:getChildren()) do
+			if string.find(widget:getId(), 'flag') then
+				widget:destroy()
+			end
+		end
+		loadMap()
+		updateCameraPosition()
+		minimapWindow:open()
+		build_minimap_style(minimapWindow:getParent().topPanel and "otcv8" or "retro")
+		minimapWidget:fixCross()
+	end)
 end
 
 function offline()
