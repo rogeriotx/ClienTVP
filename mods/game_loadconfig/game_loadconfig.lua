@@ -11,17 +11,21 @@ function terminate()
 end
 
 function onLoadConfig(characterName)
-	if lastLoad and lastLoad ~= characterName then
-		if g_settings.exists("Minimap") then
-			g_settings.remove("Minimap")
+	if characterName then
+		if lastLoad and lastLoad ~= characterName then
+			if g_settings.exists("Minimap") then
+				g_settings.remove("Minimap")
+			end
 		end
-	end
 
-	g_configs.loadSettings("/"..characterName..".otml")
-	lastLoad = characterName
+		g_configs.loadSettings("/"..characterName..".otml")
+		lastLoad = characterName
+	end
 end
 
 function onGameEnd()
-	g_settings.save()
-	g_configs.unload("/"..characterName..".otml")
+	if lastLoad then
+		g_settings.save()
+		g_configs.unload("/"..lastLoad..".otml")
+	end
 end
