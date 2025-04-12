@@ -247,11 +247,13 @@ function sortImplitics(implitics)
     return sortedTable
 end
 
-function convertRegenValue(key, value)
+function convertValue(key, value)
     if key == "attrManaRegen" or key == "attrHpRegen" then
-        return string.format("%.1f", value * 0.2) 
+        return string.format("%.1f", value * 0.2)
     elseif key == "attrWeightReduction" then
-        return value * 20 -- Converte o Tier para a redução correta (1 → 20%, 2 → 40%, etc.)
+        return value * 20
+    elseif key == "attrSpeed" then
+        return value * 5
     end
     return value
 end
@@ -262,7 +264,7 @@ function getImpliticsText(key, value)
         impText = value
     else
 		if key == "attrWeightReduction" then
-            local formattedValue = convertRegenValue(key, value)
+            local formattedValue = convertValue(key, value)
             impText = implicits[key] .. " -" .. formattedValue .. "%"
         elseif impPercent[key] then
             impText = implicits[key] .. " " .. value ..
@@ -274,7 +276,7 @@ function getImpliticsText(key, value)
             impText = implicits[key] .. " " .. (value > 0 and ": " or "") ..
                           (value / 1000) .. (impDuration[key] and "s" or "")
         else
-            local formattedValue = convertRegenValue(key, value)
+            local formattedValue = convertValue(key, value)
 			impText = implicits[key] .. " " .. (value > 0 and "+" or "") .. 
 				formattedValue .. (impPercent[key] and "%" or "")
         end
