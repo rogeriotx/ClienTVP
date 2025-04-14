@@ -2,6 +2,10 @@ lib/*
 *.log
 *.exp
 *.lib
+.vs/
+.vs/TVP_Ravenor-Client
+.vs/TVP_Ravenor-Client/v17
+vc16/
 vc16/.vs/
 vc16/DirectX/
 vc16/OpenGL/
