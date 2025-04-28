@@ -109,7 +109,7 @@ end
 
 function onBattlepassGameStart()
   m_BattlepassFunctions.button = modules.game_sidemenu.getBattlepassButton()
-  m_BattlepassFunctions.button:hide()
+  --m_BattlepassFunctions.button:hide()
 end
 
 function onBattlepassGameEnd()
@@ -122,7 +122,7 @@ function onBattlepassGameEnd()
 end
 
 m_BattlepassFunctions.getExperiencePerLevel = function(level)
-	return 500 + ((level / 2) * (2000 + ((level - 1) * 100)))
+	return 500 + ((level / 2) * (2000 + ((level - 1) * 50)))
 end
 
 m_BattlepassFunctions.registerProtocol = function()
