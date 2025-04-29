@@ -108,8 +108,10 @@ function onUnload()
 end
 
 function onBattlepassGameStart()
-  m_BattlepassFunctions.button = modules.game_sidemenu.getBattlepassButton()
-  --m_BattlepassFunctions.button:hide()
+	if not m_BattlepassFunctions.button then
+		m_BattlepassFunctions.button = modules.client_topmenu.addRightGameButton('battlepassButton', tr('Battlepass'), '/images/topbuttons/sidepanel/battlepass', m_BattlepassFunctions.open)
+	end
+	m_BattlepassFunctions.button:setOn(false)
 end
 
 function onBattlepassGameEnd()
@@ -285,6 +287,10 @@ m_BattlepassFunctions.getQuestWidget = function(id)
 end
 
 m_BattlepassFunctions.updateQuest = function(id, amount)
+	if not m_BattlepassList.questsPanel then
+		return false
+	end
+
 	local widget = m_BattlepassFunctions.getQuestWidget(id)
 	if not widget then
 		return false
