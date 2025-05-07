@@ -10,7 +10,7 @@ OptionCheckBoxBackground < UIWidget
   image-smooth: true
   @onClick: |
     local child = self:getChildByIndex(1)
-    if child then
+    if child and not child:isDisabled() then
       modules.client_options.setOption(child:getId(), not child:isChecked(), false, true)
     end
 
@@ -63,12 +63,9 @@ OptionPanel < MainWindow
 MainWindow
   id: optionsWindow
   !text: tr('Options')
-  size: 286 294
+  size: 286 327
   padding: 0
   color: #8f8f8f
-
-  $mobile:
-    size: 490 360
 
   @onEnter: modules.client_options.hide()
   @onEscape: modules.client_options.hide()
@@ -133,6 +130,15 @@ MainWindow
     margin-top: 16
     margin-left: 5
     @onClick: g_platform.openUrl(discordInviteLink)
+  
+  Button
+    id: OpenConfigs
+    text: Game Data
+    size: 86 20
+    anchors.top: prev.bottom
+    anchors.left: prev.left
+    margin-top: 14
+    @onClick: g_platform.openDir(g_resources.getWriteDir())  
   
   HorizontalSeparator
     id: separator2
@@ -251,3 +257,21 @@ MainWindow
     anchors.top: prev.bottom
     color: #afafaf
     margin-top: 1
+  
+  Label
+    text-vertical-auto-resize: true
+    text: "Open \"Ravenor Online\""
+    text-align: bottomleft
+    anchors.left: prev.left
+    anchors.top: OpenConfigs.top
+    color: #afafaf
+    margin-top: -3
+  Label
+    text-vertical-auto-resize: true
+    text: "game data folder"
+    text-align: bottomleft
+    anchors.left: prev.left
+    anchors.top: prev.bottom
+    color: #afafaf
+    margin-top: 1
+  

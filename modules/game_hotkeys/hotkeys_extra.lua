@@ -78,18 +78,26 @@ function setupExtraHotkeys(combobox)
   end)
   
   addExtraHotkey("takeSS", "Take screenshot", function(repeated)
-    if not repeated then
+	  if not repeated then
+		if not g_resources.directoryExists("/screenshots") then
+		  g_resources.makeDir("/screenshots")
+		end
 
-      if not g_resources.directoryExists("/screeshots") then
-        g_resources.makeDir("/screenshots")
-      end
-      local function getFormattedDateTime()
-        local dateTime = os.date("*t")
-        return string.format("%04d-%02d-%02d-%02d-%02d-%02d", dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.min, dateTime.sec)
-      end
-      local filename = "/screenshots/".. modules.client_charactersaving.sanitize_filename(g_game.getCharacterName()) .."-"..getFormattedDateTime()..".png" 
-      g_app.doScreenshot(filename)
-    end
+		local function getFormattedDateTime()
+		  local dateTime = os.date("*t")
+		  return string.format("%04d-%02d-%02d-%02d-%02d-%02d", dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.min, dateTime.sec)
+		end
+
+		local function simpleSanitize(name)
+		  return name:gsub("[^%w]", "_")
+		end
+
+		local characterName = g_game.getCharacterName()
+		local safeName = simpleSanitize(characterName)
+		local filename = "/screenshots/" .. safeName .. "-" .. getFormattedDateTime() .. ".png"
+
+		g_app.doScreenshot(filename)
+	  end
   end)
   
   for index, actionDetails in ipairs(extraHotkeys) do
