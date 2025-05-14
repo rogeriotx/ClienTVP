@@ -779,7 +779,7 @@ MainWindow
         anchors.verticalCenter: StoreButton.verticalCenter
         margin-right: 5
         image-source: images/ui/show_gui_help_grey
-        !tooltip: ('You can assign 4 more Charms to creatures.\nBuy a "Charm Expansion" to assign your unlocked Charms to\ncreatures nearly unlimitedly and to get a 25% discount whenever\nyou are removing a Charm.')
+        !tooltip: ('You can assign 3 Charms to diferent creatures.\nBuy an "Extra Charm" in Market to assign your unlocked Charms\nto creatures unlimitedly.')
 
       TextEdit
         id: SearchEdit
