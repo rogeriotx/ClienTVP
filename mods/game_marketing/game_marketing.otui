@@ -179,7 +179,7 @@ MainWindow
   MainWindow
     id: message
     anchors.centerIn: parent
-    size: 500 150
+    size: 300 150
     text: Message
     visible: false
 
@@ -198,16 +198,16 @@ MainWindow
   MainWindow
     id: messageStart
     anchors.centerIn: parent
-    size: 350 150
-    text: Message
+    size: 260 120
+    text: Logout Confirmation
     visible: false
     draggable: false
 
     Label
       id: msgLabelStart
       anchors.centerIn: parent
-      size: 320 35
-      text: By clicking "Ok" you will be logged out, are you sure you want to do this ?
+      size: 230 50
+      text: By clicking "Ok" you will be logged out, are you sure you want to do this?
       text-wrap: true
 
     Button
@@ -229,7 +229,7 @@ MainWindow
   MainWindow
     id: descWindow
     anchors.centerIn: parent
-    size: 350 150
+    size: 250 160
     text: Market Description
     visible: false
     draggable: false
@@ -238,8 +238,8 @@ MainWindow
     TextEdit
       id: descEdit
       anchors.centerIn: parent
-      size: 175 20
-      placeholder: Set your market description
+      size: 200 20
+      placeholder: Set your market description!
 
     Button
       id: descOK
@@ -262,8 +262,8 @@ MainWindow
   MainWindow
     id: buyWindow
     anchors.centerIn: parent
-    size: 350 150
-    text: Market Description
+    size: 300 110
+    text: Purchase Confirmation
     visible: false
     draggable: false
     focusable: true
@@ -271,8 +271,8 @@ MainWindow
     Label
       id: buyMsg
       anchors.centerIn: parent
-      size: 320 35
-      text: Are you sure you want to make this purchase ?
+      size: 280 35
+      text: Are you sure you want to make this purchase?
       text-wrap: true
 
     Button
