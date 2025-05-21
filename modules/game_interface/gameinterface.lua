@@ -708,6 +708,11 @@ function createThingMenu(menuPosition, lookThing, useThing, creatureThing, uiite
 
     menu:addSeparator()
     menu:addOption(tr('Copy Name'), function() g_window.setClipboardText(creatureThing:getName()) end)
+	if (creatureThing:getName() == "Dummy") then
+      menu:addSeparator()
+      menu:addOption(tr('Change Dummy Skin'), function() modules.game_dummy.toggle() end)
+    end
+	
   end
 
   -- hooked menu options

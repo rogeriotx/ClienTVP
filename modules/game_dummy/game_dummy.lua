@@ -30,7 +30,7 @@ end
 function load()
 	gameDummy = g_ui.displayUI('game_dummy')
 	gameDummy:hide()
-	gameDummy.topButton = modules.game_sidemenu.getDummyButton()
+	--gameDummy.topButton = modules.game_sidemenu.getDummyButton()
 end
 
 function toggle()

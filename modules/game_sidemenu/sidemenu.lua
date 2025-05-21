@@ -79,9 +79,9 @@ function getBestiaryButton()
     return buttons.bestiary
 end
 
-function getDummyButton()
-    return buttons.dummy
-end
+--function getDummyButton()
+  --  return buttons.dummy
+--end
 
 function getBattlepassButton()
     return buttons.battlepass
@@ -106,7 +106,7 @@ function init()
     buttons.unjustified = addSideButton("unjustifiedButton", tr('Unjustified Points (Ctrl+I)'), "/images/topbuttons/sidepanel/unjustifiedpoints", getLeftButtonsPanel())
     buttons.analyzer = addSideButton("analyzerButton", "Analytics", "/images/topbuttons/sidepanel/analyzers", getLeftButtonsPanel())
     buttons.bestiary = addSideButton("bestiaryButton", "Bestiary (Ctrl+)", "/images/topbuttons/sidepanel/bestiary", getLeftButtonsPanel())
-	buttons.dummy = addSideButton("dummyButton", tr('Dummy') .. ' (Ctrl+)', "/images/topbuttons/sidepanel/dummy", getLeftButtonsPanel())
+	--buttons.dummy = addSideButton("dummyButton", tr('Dummy') .. ' (Ctrl+)', "/images/topbuttons/sidepanel/dummy", getLeftButtonsPanel())
     buttons.battlepass = addSideButton("battlepass", "BattlePass (Ctrl+)", "/images/topbuttons/sidepanel/battlepass", getLeftButtonsPanel())
 
     buttons.hotkeys = addSideButton("hotkeysButton", tr('Hotkeys') .. ' (Ctrl+K)', "/images/topbuttons/sidepanel/hotkeys", getRightButtonsPanel())
@@ -132,9 +132,9 @@ function init()
         modules.game_battle.toggle()
     end
 
-    buttons.dummy.callback = function()
-        modules.game_dummy.toggle()
-    end
+   -- buttons.dummy.callback = function()
+    --    modules.game_dummy.toggle()
+    --end
 
     buttons.unjustified.callback = function()
         modules.game_whiteredskull.toggle()
