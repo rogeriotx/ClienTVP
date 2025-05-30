@@ -51,16 +51,15 @@ function toggle()
 	end
 end
 
-function sendMarket(name, oppened)
+function sendMarket(name)
 	market_player = name
 	g_game.getProtocolGame():sendExtendedJSONOpcode(96, {action = "Refresh", market = market_player})
-	if not oppened then
-		toggle()
-	end
 end
 
 function onReceiveInfo(buffer)
 	if buffer.action == "Refresh" then
+
+		toggle()
 
 		for _, item in pairs(gameMarketing.marketWindow:getChildren()) do
 			item:destroy()
@@ -209,7 +208,11 @@ function onMousePress(self, mousePos, button)
 
 		elseif button == 2 then
 
-			g_game.getProtocolGame():sendExtendedJSONOpcode(96, {action = "Open", data = {market = market_player, uid = self:getId()}})
+			scheduleEvent(function()
+				if g_game.getProtocolGame() then
+					g_game.getProtocolGame():sendExtendedJSONOpcode(96, {action = "Open", data = {market = market_player, uid = self:getId()}})
+				end
+			end, 100)
 
 		end
 	end
