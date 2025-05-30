@@ -3617,20 +3617,22 @@ ItemPtr ProtocolGame::getItem(const InputMessagePtr& msg, int id, bool hasDescri
         msg->getU8(); // mark
     }
 
-    if (item->isStackable() || item->isChargeable()) {
-        item->setCountOrSubType(g_game.getFeature(Otc::GameCountU16) ? msg->getU16() : msg->getU8());
-    }
-    else if (item->isFluidContainer() || item->isSplash()) {
+    uint8_t subType = msg->getU8();
+    if (subType == 1) {
         item->setCountOrSubType(msg->getU8());
-    }
-    else if (item->rawGetThingType()->isContainer() && (g_game.getFeature(Otc::GameTibia12Protocol) || g_game.getFeature(Otc::GameQuickLootFlags))) {
-        // not sure about this part
-        uint8_t hasQuickLootFlags = msg->getU8();
-        if (hasQuickLootFlags > 0) {
-            item->setQuickLootFlags(msg->getU32()); // quick loot flags
-        }
+        item->setShowCount(1);
     }
 
+    if (subType == 2) {
+        item->setCountOrSubType(msg->getU8());
+        item->setShowCount(2);
+    }
+
+    if (subType == 3) {
+        uint32 time = msg->getU32();
+        item->setCountOrSubType(time);
+        item->setShowCount(3);
+    }
     if (g_game.getFeature(Otc::GameItemAnimationPhase)) {
         if (item->getAnimationPhases() > 1) {
             // 0x00 => automatic phase

@@ -88,6 +88,7 @@ public:
     void setId(uint32 id);
     void setOtbId(uint16 id);
     void setCountOrSubType(int value) { m_countOrSubType = value; }
+    void setShowCount(int value) { m_showCount = value; }
     void setCount(int count) { m_countOrSubType = count; }
     void setSubType(int subType) { m_countOrSubType = subType; }
     void setColor(const Color& c) { m_color = c; }
@@ -96,6 +97,7 @@ public:
     void setShader(const std::string& str) { m_shader = str; }
 
     int getCountOrSubType() { return m_countOrSubType; }
+    int getShowCount() { return m_showCount; }
     int getSubType();
     int getCount();
     uint32 getId() { return m_clientId; }
@@ -167,7 +169,8 @@ public:
 private:
     uint16 m_clientId;
     uint16 m_serverId;
-    uint16 m_countOrSubType;
+    uint32 m_countOrSubType;
+    uint16 m_showCount;
     stdext::packed_storage<uint8> m_attribs;
     ItemVector m_containerItems;
     Color m_color;

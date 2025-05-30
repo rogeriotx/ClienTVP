@@ -62,6 +62,8 @@ protected:
     stdext::boolean<true> m_showCount;
     std::string m_shader;
     std::string m_countText;
+    Color m_decayColor;
+    Color m_chargeColor;
 };
 
 #endif
