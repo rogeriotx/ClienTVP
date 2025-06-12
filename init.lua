@@ -22,18 +22,37 @@ Services = {
 
 discordInviteLink = "https://discord.gg/unTqBsa"
 
-
 --g_proxy.addProxy("proxy-us01.ravenor.online", 7162, 0)
 --g_proxy.addProxy("proxy-us02.ravenor.online", 7162, 0)
---g_proxy.addProxy("proxy-us03.ravenor.online", 7162, 0)
+--g_proxy.addProxeu y("proxy-us03.ravenor.online", 7162, 0)
 --g_proxy.addProxy("proxy-uk01.ravenor.online", 7162, 0)
---g_proxy.addProxy("proxy-br01.ravenor.online", 7162, 0)
---g_proxy.addProxy("proxy-br02.ravenor.online", 7162, 0)
+math.randomseed(os.time())
+
+local proxyId = math.random(1,9)
+vpsPort = tonumber(6580 + proxyId)
+g_proxy.addProxy("p01.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p02.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p03.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p04.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p05.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p06.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p07.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p08.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p09.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p10.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p11.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p12.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p13.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p14.ravenor.online", vpsPort, 0)
+g_proxy.addProxy("p15.ravenor.online", vpsPort, 0)
+
+-- g_proxy.addProxy("5.188.238.75", 7171, 0)
 
 -- Servers accept http login url, websocket login url or ip:port:version
 Servers = {
-  TS = "191.96.81.140:7171:772" --TesteServer
-  -- Ravenor = "127.0.0.1:7171:772" --Oficial
+  -- TS = "23.95.79.111:7162:772" --TesteServer
+  --Ravenor = "5.188.238.75:443:772", --Oficial
+  Proxy = "127.0.0.1:17171:772"
 }
 
 --Server = "ws://otclient.ovh:3000/"
