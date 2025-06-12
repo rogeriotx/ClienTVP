@@ -76,7 +76,7 @@ end
 
 local function onProxyList(protocol, proxies)
   for _, proxy in ipairs(proxies) do
-    g_proxy.addProxy(proxy["host"], proxy["port"], proxy["priority"])
+    --g_proxy.addProxy(proxy["host"], proxy["port"], proxy["priority"])
   end
 end
 
