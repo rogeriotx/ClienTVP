@@ -3633,6 +3633,11 @@ ItemPtr ProtocolGame::getItem(const InputMessagePtr& msg, int id, bool hasDescri
         item->setCountOrSubType(time);
         item->setShowCount(3);
     }
+
+    if (subType == 4) {
+        item->setCountOrSubType(msg->getU8());
+    }
+
     if (g_game.getFeature(Otc::GameItemAnimationPhase)) {
         if (item->getAnimationPhases() > 1) {
             // 0x00 => automatic phase
