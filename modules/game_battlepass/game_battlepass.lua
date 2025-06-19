@@ -70,13 +70,13 @@ m_BattlepassFunctions.questCategoryTitles = {
 
 m_BattlepassFunctions.messages = {
 	[0] = "You already have premium battlepass. The purchase has been cancelled.",
-	[1] = "You do not have enough premium points to buy the premium battlepass.",
-	[2] = "Premium battlepass has been bought. Premium coins have been taken from your account.",
-	[3] = "Quest has been shuffled. Premium coins have been taken from your account.",
-	[4] = "You do not have enough premium points to shuffle this quest.",
+	[1] = "You do not have enough ravenor coin to buy the premium battlepass.",
+	[2] = "Premium battlepass has been bought. Ravenor coins have been taken from your account.",
+	[3] = "Quest has been shuffled. Ravenor coins have been taken from your account.",
+	[4] = "You do not have enough Ravenor coin to shuffle this quest.",
 
-	[50] = "Do you want to upgrade your battlepass to premium for 100 premium coins?",
-	[51] = "Do you want to shuffle this quest for 10 premium coins?",
+	[50] = "Do you want to upgrade your battlepass to premium for 200 ravenor coins?",
+	[51] = "Do you want to shuffle this quest for 10 ravenor coins?",
 
 	[100] = "Current status: Free battlepass",
 	[101] = "Current status: Premium battlepass"
