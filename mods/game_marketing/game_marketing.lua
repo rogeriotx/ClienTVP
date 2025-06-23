@@ -59,7 +59,7 @@ end
 function onReceiveInfo(buffer)
 	if buffer.action == "Refresh" then
 
-		toggle()
+		gameMarketing:show()
 
 		for _, item in pairs(gameMarketing.marketWindow:getChildren()) do
 			item:destroy()
@@ -70,7 +70,10 @@ function onReceiveInfo(buffer)
 				local addItem = g_ui.createWidget("newItem", gameMarketing.marketWindow)
 				addItem:setId(item.uid)
 				addItem.name = item.name:gsub("(%a)([%w_']*)", function(first, rest) return first:upper() .. rest:lower() end)
-				addItem:setItem(Item.create(item.id, item.quant))
+				local newItem = Item.create(item.id, item.quant)
+				newItem:setShowCount(1)
+				print(item.quant)
+				addItem:setItem(newItem)
 				addItem.quant = item.quant
 				addItem.price = item.price
 				addItem.look = item.look
@@ -145,16 +148,16 @@ function selectObject(widget, mousePosition, mouseButton)
 
 				gameMarketing.itemBKG.id = clickedWidget:getItemId()
 				gameMarketing.itemBKG.pos = item:getPosition().z
-				gameMarketing.itemBKG.quant = clickedWidget:getItemCount()
-				gameMarketing.itemBKG:setItem(Item.create(clickedWidget:getItemId(), clickedWidget:getItemCount()))
+				gameMarketing.itemBKG.quant = clickedWidget:getItemCountOrSubType()
+				gameMarketing.itemBKG:setItem(Item.create(clickedWidget:getItemId(), clickedWidget:getItemCountOrSubType()))
 
 				gameMarketing.itemBKG.rarity = item:getCustomAttribute(29305)
 				gameMarketing.itemBKG:setItemRarity(item:getCustomAttribute(29305))
 				gameMarketing.itemBKG:updateItemRarity()
 
-				gameMarketing.itemAmountBar:setMaximum(clickedWidget:getItemCount())
-				gameMarketing.itemAmountBar:setValue(clickedWidget:getItemCount())
-				gameMarketing.itemAmountCount:setText(clickedWidget:getItemCount())
+				gameMarketing.itemAmountBar:setMaximum(clickedWidget:getItemCountOrSubType())
+				gameMarketing.itemAmountBar:setValue(clickedWidget:getItemCountOrSubType())
+				gameMarketing.itemAmountCount:setText(clickedWidget:getItemCountOrSubType())
 
 
 				if market_player == g_game.getLocalPlayer():getName() then
@@ -187,7 +190,7 @@ function onMousePress(self, mousePos, button)
 					gameMarketing:getChildById('itemAmountBar'):setMaximum(tonumber(self.quant) or 1)
 					gameMarketing:getChildById('itemAmountBar'):setValue(tonumber(self.quant) or 1)
 					gameMarketing:getChildById('itemBKG').uid = self:getId()
-					gameMarketing:getChildById('itemBKG'):setItem(Item.create(self:getItemId(), self:getItemCount()))
+					gameMarketing:getChildById('itemBKG'):setItem(Item.create(self:getItemId(), self:getItemCountOrSubType()))
 					gameMarketing:getChildById('itemLook'):getChildById('lookLabel'):setText(self.look)
 					gameMarketing:getChildById('priceWindow'):setVisible(false)
 					gameMarketing:getChildById('cancelButton'):setEnabled(true)
