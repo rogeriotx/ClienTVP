@@ -64,13 +64,17 @@ Protocol::~Protocol()
 
 void Protocol::connect(const std::string& host, uint16 port)
 {
+    std::cout << "Protocol::connect called with host=" << host << ", port=" << port << std::endl;
+    
     if (host == "proxy" || host == "0.0.0.0" || (host == "127.0.0.1" && g_proxy.isActive())) {
+        std::cout << "Connecting via proxy session." << std::endl;
         m_disconnected = false;
         m_proxy = g_proxy.addSession(port,
                                      std::bind(&Protocol::onProxyPacket, asProtocol(), std::placeholders::_1),
                                      std::bind(&Protocol::onLocalDisconnected, asProtocol(), std::placeholders::_1));
         return onConnect();
     }
+    std::cout << "Connecting directly to host." << std::endl;
     m_connection = ConnectionPtr(new Connection);
     m_connection->setErrorCallback(std::bind(&Protocol::onError, asProtocol(), std::placeholders::_1));
     m_connection->connect(host, port, std::bind(&Protocol::onConnect, asProtocol()));
