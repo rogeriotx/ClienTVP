@@ -1,5 +1,6 @@
 function init()
 	--btnDummy = modules.client_topmenu.addLeftGameToggleButton('dummyButton', tr('Dummy Management'), '/images/topbuttons/guild', toggle)
+	--TESTE ATUALIZACAO
 
 	load()
 
