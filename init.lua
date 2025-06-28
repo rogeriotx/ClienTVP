@@ -12,7 +12,7 @@ BAD_DLLS = {"intruder.dll", "d3dx8d.dll", "d3dwrap.dll"}
 -- If you don't use updater or other service, set it to updater = ""
 Services = {
   website = "https://ravenor.online", -- currently not used
-  updater = "https://patch.ravenor.online/api/updater.php", -- Comentado: EMAC / Descomentado: Versão antiga
+  updater = "http://109.104.155.200/updater.php", -- Comentado: EMAC / Descomentado: Versão antiga
 --   stats = "",
 --   crash = "http://otclient.ovh/api/crash.php",
 --   feedback = "http://otclient.ovh/api/feedback.php",
@@ -20,7 +20,7 @@ Services = {
   accessAccountWebsite = "https://ravenor.online/account/login"
 }
 
-discordInviteLink = "https://discord.gg/unTqBsa"
+discordInviteLink = "https://discord.gg/KxPKE6Sh"
 
 --g_proxy.addProxy("proxy-us01.ravenor.online", 7162, 0)
 --g_proxy.addProxy("proxy-us02.ravenor.online", 7162, 0)
