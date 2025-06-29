@@ -1,5 +1,6 @@
 G_BESTIARY = {}
 
+
 local CONFIG = {
     CLIENT_OPCODE = 91,
     SERVER_OPCODE = 92

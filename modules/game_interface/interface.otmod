@@ -47,5 +47,6 @@ Module
     - game_bestiary
     - game_battlepass
     - game_dummy
+    - game_marketing
   @onLoad: init()
   @onUnload: terminate()

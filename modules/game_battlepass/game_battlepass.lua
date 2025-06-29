@@ -109,7 +109,7 @@ end
 
 function onBattlepassGameStart()
 	if not m_BattlepassFunctions.button then
-		m_BattlepassFunctions.button = modules.client_topmenu.addRightGameButton('battlepassButton', tr('Battlepass'), '/images/topbuttons/sidepanel/battlepass', m_BattlepassFunctions.open)
+		m_BattlepassFunctions.button = modules.client_topmenu.addRightGameButton('battlepassButton', tr('battlepass'), '/images/topbuttons/sidepanel/battlepass', m_BattlepassFunctions.open)
 	end
 	m_BattlepassFunctions.button:setOn(false)
 end
@@ -674,7 +674,7 @@ m_BattlepassFunctions.open = function()
 		m_BattlepassFunctions.send(1)
 	else
 		m_BattlepassFunctions.stopEvent()
-		m_BattlepassList.window = g_ui.displayUI("game_Battlepass")
+		m_BattlepassList.window = g_ui.displayUI("game_battlepass")
 
 		m_BattlepassList.infoPanel = m_BattlepassList.window:getChildById("infoPanel")
 		m_BattlepassList.rewardsWindow = m_BattlepassList.infoPanel:getChildById("rewards")
