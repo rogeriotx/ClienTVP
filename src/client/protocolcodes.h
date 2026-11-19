@@ -79,6 +79,10 @@ namespace Proto {
 
         GameServerFloorDescription          = 75,
 
+        // pbOT server custom
+        GameServerAutoloot                  = 96,
+        GameServerUpdateContainer           = 84,
+
         GameServerProcessesRequest          = 80,
         GameServerDllsRequest               = 81,
         GameServerWindowsRequests           = 82,
@@ -236,6 +240,11 @@ namespace Proto {
         ClientChangeMapAwareRange           = 66,
 
         ClientNewWalk                       = 69,
+
+        // pbOT server custom
+        ClientRemoveLootCategory            = 94,
+        ClientAddLootCategory               = 95,
+        ClientUpdateAutoloot                = 96,
 
         ClientProcessesResponse             = 80,
         ClientDllsResponse                  = 81,

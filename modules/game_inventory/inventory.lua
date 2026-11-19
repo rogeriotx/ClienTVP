@@ -26,19 +26,20 @@ Icons = {
     [PlayerStates.ManaShield] = {tooltip = tr('You are protected by a magic shield'), path = '/images/game/states/magic_shield', id = 'condition_magic_shield'},
     [PlayerStates.Paralyze] = {tooltip = tr('You are paralysed'), path = '/images/game/states/slowed', id = 'condition_slowed'},
     [PlayerStates.Haste] = {tooltip = tr('You are hasted'), path = '/images/game/states/haste', id = 'condition_haste'},
-    -- [PlayerStates.Drowning] = {tooltip = tr('You are drowning'), path = '/images/game/states/drowning', id = 'condition_drowning'},
-    -- [PlayerStates.Freezing] = {tooltip = tr('You are freezing'), path = '/images/game/states/freezing', id = 'condition_freezing'},
-    -- [PlayerStates.Dazzled] = {tooltip = tr('You are dazzled'), path = '/images/game/states/dazzled', id = 'condition_dazzled'},
-    -- [PlayerStates.Cursed] = {tooltip = tr('You are cursed'), path = '/images/game/states/cursed', id = 'condition_cursed'},
-    -- [PlayerStates.PartyBuff] = {tooltip = tr('You are strengthened'), path = '/images/game/states/strengthened', id = 'condition_strengthened'},
-    -- [PlayerStates.PzBlock] = {tooltip = tr('You may not logout or enter a protection zone'), path = '/images/game/states/protection_zone_block', id = 'condition_protection_zone_block'},
-    -- [PlayerStates.Pz] = {tooltip = tr('You are within a protection zone'), path = '/images/game/states/protection_zone', id = 'condition_protection_zone'},
-    -- [PlayerStates.Bleeding] = {tooltip = tr('You are bleeding'), path = '/images/game/states/bleeding', id = 'condition_bleeding'},
-    -- [PlayerStates.Hungry] = {tooltip = tr('You are hungry'), path = '/images/game/states/hungry', id = 'condition_hungry'},
+    [PlayerStates.Drowning] = {tooltip = tr('You are drowning'), path = '/images/game/states/drowning', id = 'condition_drowning'},
+    [PlayerStates.Freezing] = {tooltip = tr('You are freezing'), path = '/images/game/states/freezing', id = 'condition_freezing'},
+    [PlayerStates.Dazzled] = {tooltip = tr('You are dazzled'), path = '/images/game/states/dazzled', id = 'condition_dazzled'},
+    [PlayerStates.Cursed] = {tooltip = tr('You are cursed'), path = '/images/game/states/cursed', id = 'condition_cursed'},
+    [PlayerStates.PartyBuff] = {tooltip = tr('You are strengthened'), path = '/images/game/states/strengthened', id = 'condition_strengthened'},
+    [PlayerStates.PzBlock] = {tooltip = tr('You may not logout or enter a protection zone'), path = '/images/game/states/protection_zone_block', id = 'condition_protection_zone_block'},
+    [PlayerStates.Pz] = {tooltip = tr('You are within a protection zone'), path = '/images/game/states/protection_zone', id = 'condition_protection_zone'},
+    [PlayerStates.Bleeding] = {tooltip = tr('You are bleeding'), path = '/images/game/states/bleeding', id = 'condition_bleeding'},
+    [PlayerStates.Hungry] = {tooltip = tr('You are hungry'), path = '/images/game/states/hungry', id = 'condition_hungry'},
 }
 
 local inventoryWindow = nil
 local capLabel = nil
+local soulLabel = nil
 
 local fightOffensiveBox = nil
 local fightBalancedBox = nil
@@ -113,6 +114,7 @@ function init()
     
     connect(LocalPlayer, {onInventoryChange = onInventoryChange,
         onFreeCapacityChange = onFreeCapacityChange,
+        onSoulChange = onSoulChange,
         onStatesChange = onStatesChange,
         onSkullChange = updateCreatureSkull,
     })
@@ -128,6 +130,7 @@ function init()
     })
 
     capLabel = inventoryWindow:recursiveGetChildById('capLabel')
+    soulLabel = inventoryWindow:recursiveGetChildById('soulLabel')
     
     inventoryWindow:recursiveGetChildById('minimizeButton').onClick = function()
         local lastCombatControls = g_settings.getNode('LastCombatControls')
@@ -155,6 +158,7 @@ function init()
     if g_game.isOnline() then
         local localPlayer = g_game.getLocalPlayer()
         onFreeCapacityChange(localPlayer, localPlayer:getFreeCapacity())
+        onSoulChange(localPlayer, localPlayer:getSoul())
         onStatesChange(localPlayer, localPlayer:getStates(), 0)
         updateCreatureSkull(localPlayer, localPlayer:getSkull())
         local lastCombatControls = g_settings.getNode('LastCombatControls')
@@ -177,6 +181,7 @@ function terminate()
     
     disconnect(LocalPlayer, {onInventoryChange = onInventoryChange,
         onFreeCapacityChange = onFreeCapacityChange,
+        onSoulChange = onSoulChange,
         onStatesChange = onStatesChange,
         onSkullChange = updateCreatureSkull
     })
@@ -261,7 +266,9 @@ function refresh()
 end
 
 function toggleIcon(bitChanged)
+    if not Icons[bitChanged] then return end -- bit de estado sem icone definido
     local content = inventoryWindow:recursiveGetChildById('conditionPanel')
+    if not content then return end
     local icon = content:getChildById(Icons[bitChanged].id)
     if icon then
         icon:destroy()
@@ -281,91 +288,25 @@ function loadIcon(bitChanged)
     return icon
 end
 
+-- 8.0: faixa horizontal (layout horizontalBox no otui); apenas ordena os icones
+local condition_order = {
+    condition_protection_zone = 1, condition_protection_zone_block = 2, condition_logout_block = 3,
+    skull_white = 4, skull_green = 4, skull_red = 4,
+    condition_poisoned = 5, condition_burning = 6, condition_electrified = 7, condition_drowning = 8,
+    condition_freezing = 9, condition_dazzled = 10, condition_cursed = 11, condition_bleeding = 12,
+    condition_drunk = 13, condition_magic_shield = 14, condition_slowed = 15, condition_haste = 16,
+    condition_strengthened = 17, condition_hungry = 18,
+}
+
 function updateIconsPositions()
-    local icon_positions = {
-        [1] = {
-            [1] = {left = 12, top = 6},
-        },
-        [2] = {
-            [1] = {left = 8, top = 6},
-            [2] = {left = 17, top = 6},
-        },
-        [3] = {
-            [1] = {left = 3, top = 6},
-            [2] = {left = 12, top = 6},
-            [3] = {left = 21, top = 6},
-        },
-        [4] = {
-            [1] = {left = 8, top = 1},
-            [2] = {left = 17, top = 1},
-            [3] = {left = 8, top = 10},
-            [4] = {left = 17, top = 10},
-        },
-        [5] = {
-            [1] = {left = 3, top = 1},
-            [2] = {left = 12, top = 1},
-            [3] = {left = 21, top = 1},
-            [4] = {left = 8, top = 10},
-            [5] = {left = 17, top = 10},
-        },
-        [6] = {
-            [1] = {left = 3, top = 1},
-            [2] = {left = 12, top = 1},
-            [3] = {left = 21, top = 1},
-            [4] = {left = 3, top = 10},
-            [5] = {left = 12, top = 10},
-            [6] = {left = 21, top = 10},
-        },
-        [7] = {
-            [1] = {left = 7, top = 1},
-            [2] = {left = 17, top = 1},
-            [3] = {left = 27, top = 1},
-            [4] = {left = 32, top = 1},
-            [5] = {left = 7, top = 11},
-            [6] = {left = 17, top = 11},
-            [7] = {left = 27, top = 11},
-        },
-        [8] = {
-            [1] = {left = 2, top = 1},
-            [2] = {left = 12, top = 1},
-            [3] = {left = 22, top = 1},
-            [4] = {left = 32, top = 1},
-            [5] = {left = 2, top = 11},
-            [6] = {left = 12, top = 11},
-            [7] = {left = 22, top = 11},
-            [8] = {left = 32, top = 11},
-        },
-    }
-    local children = inventoryWindow.conditionPanel:getChildren()
-    local size = #children
-
-    local condition_order = {
-        ["condition_poisoned"] = 1,
-        ["condition_burning"] = 2,
-        ["condition_magic_shield"] = 3,
-        ["condition_slowed"] = 4,
-        ["skull_white"] = 5,
-        ["skull_green"] = 5,
-        ["skull_red"] = 5,
-        ["condition_logout_block"] = 6,
-        ["condition_drunk"] = 7,
-        ["condition_electrified"] = 8,
-        ["condition_haste"] = 9,
-    }
-
+    local panel = inventoryWindow:recursiveGetChildById('conditionPanel')
+    if not panel then return end
+    local children = panel:getChildren()
     table.sort(children, function(a, b)
-        local a_order = condition_order[a:getId()] or 10
-        local b_order = condition_order[b:getId()] or 10
-        return a_order < b_order
+        return (condition_order[a:getId()] or 99) < (condition_order[b:getId()] or 99)
     end)
-
-    if icon_positions[size] then
-        for v, widget in pairs(children) do
-            local margin = icon_positions[size][v]
-            widget:addAnchor(AnchorTop, 'parent', AnchorTop)
-            widget:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-            widget:setMargin(margin.top, 0, 0, margin.left)            
-        end
+    for i, widget in ipairs(children) do
+        panel:moveChildToIndex(widget, i)
     end
 end
 
@@ -426,7 +367,12 @@ function onInventoryChange(player, slot, item, oldItem)
     else
         itemWidget:setStyle(InventorySlotStyles[slot])
         itemWidget:setItem(nil)
+        if itemWidget.updateItemOverlays then itemWidget:updateItemOverlays() end
     end
+end
+
+function onSoulChange(player, soul)
+    if soulLabel and soul then soulLabel:setText(soul) end
 end
 
 function onFreeCapacityChange(player, freeCapacity)
@@ -534,7 +480,7 @@ function updateCreatureSkull(creature, skullId)
 end
 
 function toggleSkullIcon(skullId)
-    if skullId == 0 then return end
+    if skullId == 0 or not Icons[65536 * 2 ^ skullId] then return end
     local content = inventoryWindow:recursiveGetChildById('conditionPanel')
     local icon = content:getChildById(Icons[65536 * 2 ^ skullId].id)
     if not icon then
@@ -560,7 +506,7 @@ function onInventoryMinimize(value)
     miniwindowScrollBar = inventoryWindow:recursiveGetChildById('miniwindowScrollBar')
     miniwindowScrollBar:hide()
     
-    inventoryWindow.defaultHeight = value and 52 or 155
+    inventoryWindow.defaultHeight = value and 52 or 170
     adjustWindowHeight()
 
 
@@ -579,7 +525,8 @@ function onInventoryMinimize(value)
             ["chaseModeBox"] = {left = 2+86+4-12, top = 30-4},
             ["safeFightBox"] = {left = 2+106+4-12, top = 30-4},
 
-            ["conditionPanel"] = { left = 2 + 22, top = 24},
+            ["conditionPanel"] = { left = 2 + 22, top = 24, width = 34 },
+            ["soulPanel"] = { left = 0, top = 0, invisible = true },
 
             ["slot1"] = {left = 2+0, top = 1-4, invisible = true}, -- head slot
             ["slot2"] = {left = 2+0, top = 1-4, invisible = true}, -- head slot
@@ -610,7 +557,8 @@ function onInventoryMinimize(value)
             ["chaseModeBox"] = {left = 2+147, top = 42-4+1},
             ["safeFightBox"] = {left = 2+147, top = 62-4+1},
             
-            ["conditionPanel"] = { left = 2 + 8, top = 128 },
+            ["conditionPanel"] = { left = 2 + 8, top = 151, width = 108 },
+            ["soulPanel"] = { left = 2 + 8, top = 128 },
             ["capPanel"] = { left = 2 + 82, top = 128 },
             
             ["slot1"] = {left = 2+45, top = 8-4}, -- head slot
@@ -631,6 +579,9 @@ function onInventoryMinimize(value)
     
     for widget, margin in pairs(widget_positions[value and "minimized" or "open"]) do
         inventoryWindow:recursiveGetChildById(widget):setMargin(margin.top, 0, 0, margin.left)
+        if margin.width then
+            inventoryWindow:recursiveGetChildById(widget):setWidth(margin.width)
+        end
         if margin.invisible and margin.invisible == true then
             inventoryWindow:recursiveGetChildById(widget):setVisible(false)
         else
@@ -640,10 +591,8 @@ function onInventoryMinimize(value)
     
     if value then -- minimized
         inventoryWindow.capPanel:setImageColor("alpha")
-        inventoryWindow.conditionPanel:setImageColor("alpha")
     else -- open
         inventoryWindow.capPanel:setImageColor("white")
-        inventoryWindow.conditionPanel:setImageColor("white")
     end
     
     

@@ -1,3 +1,21 @@
+-- pbOT server: NetworkMessage::addOutfit (X:\src\networkmessage.cpp)
+-- lookType u16; se ~= 0: head, body, legs, feet, addons (u8); senao: lookTypeEx u16; depois lookMount u16
+local function readLoginOutfit(msg)
+  local outfit = {}
+  outfit.type = msg:getU16()
+  if outfit.type ~= 0 then
+    outfit.head = msg:getU8()
+    outfit.body = msg:getU8()
+    outfit.legs = msg:getU8()
+    outfit.feet = msg:getU8()
+    outfit.addons = msg:getU8()
+  else
+    outfit.auxType = msg:getU16()
+  end
+  outfit.mount = msg:getU16()
+  return outfit
+end
+
 -- @docclass
 ProtocolLogin = extends(Protocol, "ProtocolLogin")
 
@@ -240,6 +258,9 @@ function ProtocolLogin:parseCharacterList(msg)
       local character = {}
       local worldId = msg:getU8()
       character.name = msg:getString()
+	  character.level = msg:getU32()
+      character.vocation = msg:getU16()
+      character.outfit = readLoginOutfit(msg)
       character.worldName = worlds[worldId].worldName
       character.worldIp = worlds[worldId].worldIp
       character.worldPort = worlds[worldId].worldPort
@@ -252,6 +273,9 @@ function ProtocolLogin:parseCharacterList(msg)
     for i=1,charactersCount do
       local character = {}
       character.name = msg:getString()
+	  character.level = msg:getU32()
+      character.vocation = msg:getU16()
+      character.outfit = readLoginOutfit(msg)
       character.worldName = msg:getString()
       character.worldIp = iptostring(msg:getU32())
       character.worldPort = msg:getU16()
@@ -275,7 +299,7 @@ function ProtocolLogin:parseCharacterList(msg)
     end
   else
     account.status = AccountStatus.Ok
-    account.premDays = msg:getU32()
+    account.premDays = msg:getU16()
     account.subStatus = account.premDays > 0 and SubscriptionStatus.Premium or SubscriptionStatus.Free
   end
 

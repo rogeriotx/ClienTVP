@@ -14,3 +14,16 @@ vc16/Debug_lib/
 .vscode/*
 *.pdb
 vcpkg*
+
+# pbOT port: sprite 8.00 > 100MB (GitHub), pasta local e backups
+data/things/800/Tibia.spr
+data/things/--772/
+*.bak
+*.tvp772
+*.tvp_orig
+*.pre_debug
+*.old
+*.zip
+Tool/log.txt
+data/images/game/states_tvp772/
+*_tvp772.png

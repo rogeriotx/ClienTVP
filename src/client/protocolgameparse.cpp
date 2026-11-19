@@ -548,6 +548,15 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
             case Proto::GameServerFloorDescription:
                 parseFloorDescription(msg);
                 break;
+            case Proto::GameServerAutoloot:
+                parseAutoloot(msg);
+                break;
+            case Proto::GameServerUpdateContainer: {
+                // pbOT: ProtocolGame::sendUpdateContainer (0x54) -> u8 containerId
+                int containerId = msg->getU8();
+                g_lua.callGlobalField("g_game", "onUpdateContainer", containerId);
+                break;
+            }
             case Proto::GameServerProcessesRequest:
                 parseProcessesRequest(msg);
                 break;
@@ -1283,8 +1292,10 @@ void ProtocolGame::parseOpenContainer(const InputMessagePtr& msg)
     int itemCount = msg->getU8();
 
     std::vector<ItemPtr> items(itemCount);
-    for (int i = 0; i < itemCount; i++)
+    for (int i = 0; i < itemCount; i++) {
         items[i] = getItem(msg);
+        if (g_game.getFeature(Otc::GameItemDurationRarityTier)) items[i]->setLootCategory(msg->getU16()); // pbOT: u16 lootCategory
+    }
 
     g_game.processOpenContainer(containerId, containerItem, name, capacity, hasParent, items, isUnlocked, hasPages, containerSize, firstIndex);
 }
@@ -1301,8 +1312,11 @@ void ProtocolGame::parseContainerAddItem(const InputMessagePtr& msg)
     int slot = 0;
     if (g_game.getFeature(Otc::GameContainerPagination)) {
         slot = msg->getU16(); // slot
+    } else if (g_game.getFeature(Otc::GamePbotProtocol)) {
+        slot = msg->getU8(); // pbOT: sendAddContainerItem slot u8
     }
     ItemPtr item = getItem(msg);
+    if (g_game.getFeature(Otc::GameItemDurationRarityTier)) item->setLootCategory(msg->getU16()); // pbOT: u16 lootCategory
     g_game.processContainerAddItem(containerId, item, slot);
 }
 
@@ -1316,6 +1330,7 @@ void ProtocolGame::parseContainerUpdateItem(const InputMessagePtr& msg)
         slot = msg->getU8();
     }
     ItemPtr item = getItem(msg);
+    if (g_game.getFeature(Otc::GameItemDurationRarityTier)) item->setLootCategory(msg->getU16()); // pbOT: u16 lootCategory
     g_game.processContainerUpdateItem(containerId, slot, item);
 }
 
@@ -1340,6 +1355,7 @@ void ProtocolGame::parseAddInventoryItem(const InputMessagePtr& msg)
 {
     int slot = msg->getU8();
     ItemPtr item = getItem(msg);
+    if (g_game.getFeature(Otc::GameItemDurationRarityTier)) item->setLootCategory(msg->getU16()); // pbOT: u16 lootCategory
     g_game.processInventoryChange(slot, item);
 }
 
@@ -1365,7 +1381,7 @@ void ProtocolGame::parseOpenNpcTrade(const InputMessagePtr& msg)
 
     int listCount;
 
-    if (g_game.getProtocolVersion() >= 986) // tbh not sure from what version
+    if (g_game.getProtocolVersion() >= 986 || g_game.getFeature(Otc::GamePbotProtocol)) // pbOT: sendShop u16
         listCount = msg->getU16();
     else
         listCount = msg->getU8();
@@ -3141,6 +3157,22 @@ void ProtocolGame::parseProgressBar(const InputMessagePtr& msg)
         g_logger.traceError(stdext::format("could not get creature with id %d", id));
 }
 
+void ProtocolGame::parseAutoloot(const InputMessagePtr& msg)
+{
+    // ProtocolGame::sendAutolootItems (pbOT server)
+    bool remove = msg->getU8() == 0x01;
+    int size = msg->getU16();
+    for (int i = 0; i < size; ++i) {
+        std::string name = msg->getString();
+        uint16 clientId = msg->getU16();
+        if (remove)
+            m_localPlayer->removeAutolootItem(clientId);
+        else
+            m_localPlayer->addAutolootItem(clientId, name);
+        m_localPlayer->callLuaField("onUpdateAutoloot", clientId, name, remove);
+    }
+}
+
 void ProtocolGame::parseFeatures(const InputMessagePtr& msg)
 {
     int features = msg->getU16();
@@ -3449,13 +3481,13 @@ CreaturePtr ProtocolGame::getCreature(const InputMessagePtr& msg, int type)
 
             std::string name = g_game.formatCreatureName(msg->getString());
 
-			std::string marketDescription = msg->getString();
+			//std::string marketDescription = msg->getString();
 
             if (creature) {
                 creature->setName(name);
-				if (marketDescription != "") {
-					creature->setText(marketDescription, Color::white);
-				}
+				// if (marketDescription != "") {
+				// 	creature->setText(marketDescription, Color::white);
+				// }
             } else {
                 if (id == m_localPlayer->getId())
                     creature = m_localPlayer;
@@ -3478,9 +3510,9 @@ CreaturePtr ProtocolGame::getCreature(const InputMessagePtr& msg, int type)
                     creature->setId(id);
                     creature->setName(name);
 
-					if (marketDescription != "") {
+					/*if (marketDescription != "") {
 						creature->setText(marketDescription, Color::white);
-					}
+					}*/
 
                     g_map.addCreature(creature);
                 }
@@ -3497,8 +3529,10 @@ CreaturePtr ProtocolGame::getCreature(const InputMessagePtr& msg, int type)
         Otc::Direction direction = (Otc::Direction)msg->getU8();
         Outfit outfit = getOutfit(msg);
 
-        uint8 star = msg->getU8();
-             
+        uint8 star = 0;
+        if (g_game.getFeature(Otc::GameCreatureStarIcon))
+            star = msg->getU8();
+
         Light light;
         light.intensity = msg->getU8();
         light.color = msg->getU8();
@@ -3529,7 +3563,8 @@ CreaturePtr ProtocolGame::getCreature(const InputMessagePtr& msg, int type)
             }
         }
 
-        icon = msg->getU8();
+        if (g_game.getFeature(Otc::GameCreatureStarIcon))
+            icon = msg->getU8();
 
         if (g_game.getFeature(Otc::GameThingMarks)) {
             mark = msg->getU8(); // mark
@@ -3617,25 +3652,31 @@ ItemPtr ProtocolGame::getItem(const InputMessagePtr& msg, int id, bool hasDescri
         msg->getU8(); // mark
     }
 
-    uint8_t subType = msg->getU8();
-    if (subType == 1) {
+    if (item->isStackable() || item->isChargeable()) {
+        item->setCountOrSubType(g_game.getFeature(Otc::GameCountU16) ? msg->getU16() : msg->getU8());
+    }
+    else if (item->isFluidContainer() || item->isSplash()) {
         item->setCountOrSubType(msg->getU8());
-        item->setShowCount(1);
+    }
+    else if (item->rawGetThingType()->isContainer() && (g_game.getFeature(Otc::GameTibia12Protocol) || g_game.getFeature(Otc::GameQuickLootFlags))) {
+        // not sure about this part
+        uint8_t hasQuickLootFlags = msg->getU8();
+        if (hasQuickLootFlags > 0) {
+            item->setQuickLootFlags(msg->getU32()); // quick loot flags
+        }
     }
 
-    if (subType == 2) {
-        item->setCountOrSubType(msg->getU8());
-        item->setShowCount(2);
-    }
-
-    if (subType == 3) {
-        uint32 time = msg->getU32();
-        item->setCountOrSubType(time);
-        item->setShowCount(3);
-    }
-
-    if (subType == 4) {
-        item->setCountOrSubType(msg->getU8());
+    if (g_game.getFeature(Otc::GameItemDurationRarityTier)) {
+        // NetworkMessage::addItem (pbOT server)
+        if (msg->getU8() == 0x01) {
+            uint32 duration = msg->getU32();
+            bool stopped = msg->getU8() != 0;
+            item->setDuration(duration, stopped);
+        }
+        item->setRarityId(msg->getU8());
+        item->setTier(msg->getU8());
+        if (item->getTier() > 0)
+            item->setCustomAttribute(100, item->getTier()); // compat: modulos do old leem tier via getCustomAttribute(100)
     }
 
     if (g_game.getFeature(Otc::GameItemAnimationPhase)) {

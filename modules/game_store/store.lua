@@ -326,7 +326,7 @@ function terminate()
 	disconnect(g_game, { 
 		onGameEnd = onCloseStore
 	})
-	g_keyboard.bindKeyDown('Ctrl+Shift+S')
+	g_keyboard.unbindKeyDown('Ctrl+Shift+S')
 	ProtocolGame.unregisterExtendedJSONOpcode(CS_SHOP_SERVERSIDE, onExtendedJSONOpcode)
 	window:destroy()
 	if transferPointsWindow then transferPointsWindow:destroy() end

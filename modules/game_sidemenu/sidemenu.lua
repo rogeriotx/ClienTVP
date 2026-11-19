@@ -87,6 +87,37 @@ function getBattlepassButton()
     return buttons.battlepass
 end
 
+-- pbOT
+function getTasksButton()
+    return buttons.tasks
+end
+
+function getTasksTrackerButton()
+    return buttons.taskstracker
+end
+
+function getForgeButton()
+    return buttons.forge
+end
+
+function getCraftingButton()
+    return buttons.crafting
+end
+
+-- pbOT: mods (characterstats, guild, marketplace...) adicionam botao aqui,
+-- ja que o topmenu fica oculto durante o jogo no layout do TVP
+function addModuleButton(id, description, icon, callback)
+    if not sidemenuWindow then return nil end
+    local panel = getLeftButtonsPanel()
+    local old = panel:getChildById(id)
+    if old then old:destroy() end
+    local button = addSideButton(id, description, icon, panel)
+    button.callback = function() if callback then callback() end end
+    button.onDestroy = function() scheduleEvent(updateSize, 1) end
+    scheduleEvent(updateSize, 1)
+    return button
+end
+
 function init()
 
     -- g_ui.importStyle('sidemenu')
@@ -108,6 +139,26 @@ function init()
     buttons.bestiary = addSideButton("bestiaryButton", "Bestiary (Ctrl+)", "/images/topbuttons/sidepanel/bestiary", getLeftButtonsPanel())
 	--buttons.dummy = addSideButton("dummyButton", tr('Dummy') .. ' (Ctrl+)', "/images/topbuttons/sidepanel/dummy", getLeftButtonsPanel())
     buttons.battlepass = addSideButton("battlepass", "BattlePass (Ctrl+)", "/images/topbuttons/sidepanel/battlepass", getLeftButtonsPanel())
+
+    -- pbOT: Battlepass/Bestiary dependem do servidor TVP -> ocultos; Tasks/Forge do servidor pbOT
+    buttons.battlepass:hide()
+    buttons.bestiary:hide()
+    buttons.tasks = addSideButton("tasksButton", tr('Tasks'), "/images/topbuttons/sidepanel/tasks", getLeftButtonsPanel())
+    buttons.taskstracker = addSideButton("tasksTrackerButton", tr('Tasks Tracker'), "/images/topbuttons/sidepanel/taskstracker", getLeftButtonsPanel())
+    buttons.forge = addSideButton("forgeButton", tr('Exaltation Forge'), "/images/topbuttons/sidepanel/forge", getLeftButtonsPanel())
+    buttons.crafting = addSideButton("craftingButton", tr('Crafting'), "/images/topbuttons/sidepanel/crafting", getLeftButtonsPanel())
+    buttons.crafting.callback = function()
+        if modules.game_crafting and modules.game_crafting.toggle then modules.game_crafting.toggle() end
+    end
+    buttons.tasks.callback = function()
+        if modules.game_tasks and modules.game_tasks.toggleTasksPanel then modules.game_tasks.toggleTasksPanel() end
+    end
+    buttons.taskstracker.callback = function()
+        if modules.game_tasks and modules.game_tasks.toggleTracker then modules.game_tasks.toggleTracker() end
+    end
+    buttons.forge.callback = function()
+        if modules.game_forge and modules.game_forge.toggle then modules.game_forge.toggle() end
+    end
 
     buttons.hotkeys = addSideButton("hotkeysButton", tr('Hotkeys') .. ' (Ctrl+K)', "/images/topbuttons/sidepanel/hotkeys", getRightButtonsPanel())
 
@@ -183,12 +234,29 @@ function terminate()
     sidemenuWindow:destroy()
 end
 
+-- pbOT: altura cresce conforme o numero de botoes visiveis (5 por linha, celula 20 + 2)
+local function getButtonRows()
+    local visible = 0
+    for _, child in ipairs(getLeftButtonsPanel():getChildren()) do
+        if child:isExplicitlyVisible() then visible = visible + 1 end
+    end
+    return math.max(2, math.ceil(visible / 5))
+end
+
+function updateSize()
+    if not sidemenuWindow or showOptionsButton:isOn() then return end
+    local rows = getButtonRows()
+    getLeftButtonsPanel():setHeight(rows * 22 + 4)
+    sidemenuWindow:setHeight(73 + (rows - 2) * 22)
+end
+
 function enable()
     showOptionsButton:setOn(false)
     getLeftButtonsPanel():setVisible(true)
     getRightButtonsPanel():setVisible(true)
     g_settings.set('SideMenuOption', 2)
     sidemenuWindow:setHeight(73)
+    updateSize()
 end
 
 function disable()

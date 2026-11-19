@@ -101,6 +101,15 @@ public:
     bool isAutoWalking() { return m_autoWalkDestination.isValid(); }
     bool isServerWalking() override { return m_serverWalking; }
     bool isPremium() { return m_premium; }
+
+    // pbOT autoloot (list mirrored from server packet 0x60)
+    void addAutolootItem(uint16 clientId, const std::string& name) { m_autolootItems[clientId] = name; }
+    void removeAutolootItem(uint16 clientId) { m_autolootItems.erase(clientId); }
+    void clearAutolootItems() { m_autolootItems.clear(); }
+    std::map<uint16, std::string> getAutolootItems() { return m_autolootItems; }
+    bool isInAutoLootList(uint16 clientId) { return m_autolootItems.find(clientId) != m_autolootItems.end(); }
+    void addAutoLoot(uint16 clientId, const std::string& name);
+    void removeAutoLoot(uint16 clientId, const std::string& name);
     bool isPendingGame() { return m_pending; }
 
     LocalPlayerPtr asLocalPlayer() { return static_self_cast<LocalPlayer>(); }
@@ -172,6 +181,7 @@ private:
     WalkMatrix m_walkMatrix;
 
     bool m_premium = false;
+    std::map<uint16, std::string> m_autolootItems;
     bool m_known = false;
     bool m_pending = false;
 

@@ -102,8 +102,8 @@ bool SpriteManager::loadSpr(std::string file)
     }
 
     std::string hdModStr = g_configs.getSettings()->getValue("enableHDMode");
-    if (hdModStr == "true" || hdModStr == "1") {
-        m_isHdMod = true;
+    if ((hdModStr == "true" || hdModStr == "1") && m_spritesCountCwm > 0 && m_spriteSizeCwm > 0) {
+        m_isHdMod = true; // HD apenas se existir Tibia*.cwm carregado (things/800 nao tem)
     }
 	m_loaded = true;
     return false;
@@ -372,6 +372,8 @@ int SpriteManager::spriteSize() const
 
 void SpriteManager::setHDMode(bool value)
 {
+    if (value && (m_spritesCountCwm <= 0 || m_spriteSizeCwm <= 0))
+        value = false; // sem .cwm -> evita spriteSize() == 0 (divisao por zero)
     if (m_isHdMod != value) {
         m_isHdMod = value;
         g_things.refreshTextures();

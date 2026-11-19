@@ -111,8 +111,32 @@ CapTitle < GameLabel
   anchors.left: capLabel.left
   margin: 0 0 -4 0
 
+SoulLabel < GameLabel
+  id: soulLabel
+  text-align: center
+  font: verdana-11px-antialised
+  color: #AFAFAF
+  anchors.bottom: soulPanel.bottom
+  anchors.right: soulPanel.right
+  anchors.left: soulPanel.left
+  margin: 0 0 -1 0
+
+SoulTitle < GameLabel
+  id: soulTitle
+  text: Soul:
+  text-align: center
+  color: white
+  font: cipsoftFont
+  anchors.bottom: soulLabel.top
+  anchors.right: soulLabel.right
+  anchors.left: soulLabel.left
+  margin: 0 0 -4 0
+
 ConditionWidget < UIWidget
   size: 9 9
+
+  $!first:
+    margin-left: 2
 
 HeadlessMiniWindow
   id: inventoryWindow
@@ -235,19 +259,30 @@ HeadlessMiniWindow
   CapTitle
   CapLabel
 
+  CapPanel
+    id: soulPanel
+    height: 21
+    width: 34
+    anchors.top: parent.top
+    anchors.left: parent.left
+
+  SoulTitle
+  SoulLabel
+
   PurseButton
     anchors.left: slot3.left
     anchors.top: slot1.top
 
-  FlatPanel
+  Panel
     id: conditionPanel
-    image-source: /images/game/slots/conditionPanel
-    height: 21
-    width: 34
-    padding: 0
-    border-width: 0
+    image-source: /images/game/slots/conditionBar
+    height: 13
+    width: 108
+    padding: 2
     anchors.top: parent.top
     anchors.left: parent.left
+    layout:
+      type: horizontalBox
 
   FightOffensiveBox
     id: fightOffensiveBox

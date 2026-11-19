@@ -689,3 +689,17 @@ bool LocalPlayer::hasSight(const Position& pos)
 {
     return m_position.isInRange(pos, g_map.getAwareRange().left - 1, g_map.getAwareRange().top - 1);
 }
+
+void LocalPlayer::addAutoLoot(uint16 clientId, const std::string& name)
+{
+    if (!g_game.canPerformGameAction())
+        return;
+    g_game.getProtocolGame()->sendUpdateAutoloot(clientId, name, false);
+}
+
+void LocalPlayer::removeAutoLoot(uint16 clientId, const std::string& name)
+{
+    if (!g_game.canPerformGameAction())
+        return;
+    g_game.getProtocolGame()->sendUpdateAutoloot(clientId, name, true);
+}

@@ -48,5 +48,7 @@ Module
     - game_battlepass
     - game_dummy
     - game_marketing
+    - game_buffs
+    - game_marketplace
   @onLoad: init()
   @onUnload: terminate()

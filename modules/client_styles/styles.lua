@@ -1,3 +1,13 @@
+local function safeImportFont(path)
+  local ok, err = pcall(function()
+    g_fonts.importFont(path)
+  end)
+
+  if not ok then
+    g_logger.warning(string.format("Unable to import font '%s': %s", path, tostring(err)))
+  end
+end
+
 function init()
   local files
   local loaded_files = {}
@@ -30,11 +40,14 @@ function init()
   end
 
   if layout:len() > 0 then
-    files = g_resources.listDirectoryFiles('/layouts/' .. layout .. '/fonts')
+    files = {}
+    if g_resources.directoryExists('/layouts/' .. layout .. '/fonts') then
+      files = g_resources.listDirectoryFiles('/layouts/' .. layout .. '/fonts')
+    end
     loaded_files = {}
     for _,file in pairs(files) do
       if g_resources.isFileType(file, 'otfont') then
-        g_fonts.importFont('/layouts/' .. layout .. '/fonts/' .. file)
+        safeImportFont('/layouts/' .. layout .. '/fonts/' .. file)
         loaded_files[file] = true
       end
     end
@@ -43,7 +56,7 @@ function init()
   files = g_resources.listDirectoryFiles('/data/fonts')
   for _,file in pairs(files) do
     if g_resources.isFileType(file, 'otfont') and not loaded_files[file] then
-      g_fonts.importFont('/data/fonts/' .. file)
+      safeImportFont('/data/fonts/' .. file)
     end
   end
 
@@ -55,4 +68,3 @@ end
 
 function terminate()
 end
-

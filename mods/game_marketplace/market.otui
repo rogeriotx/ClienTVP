@@ -1,0 +1,1661 @@
+HistoricLabel < UIWidget
+  height: 25
+  font: verdana-11px-antialised
+  text-align: left
+
+BidWindow < MainWindow
+  id: bidWindow
+  anchors.centerIn: parent
+  !text: tr('Make your bid')
+  size: 280 125
+  visible: false
+  @onEscape: show()
+
+  Item
+    id: item
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin-top: 4
+    margin-left: 4
+    focusable: false
+    virtual: true
+
+    UIWidget
+      id: tierIcon
+      anchors.top: parent.top
+      anchors.right: parent.right
+      margin-top: 1
+      margin-right: 1
+      size: 12 12
+      phantom: true
+      visible: false
+
+  TextEdit
+    id: edit
+    height: 20
+    anchors.left: item.right
+    anchors.right: parent.right
+    anchors.top: prev.top
+    margin-left: 10
+    margin-top: 7
+
+  UIWidget
+    id: price
+    height: 20
+    anchors.left: edit.left
+    anchors.right: edit.right
+    anchors.top: edit.bottom
+    margin-left: 5
+    margin-top: 7
+    focusable: false
+
+  Button
+    id: buttonOk
+    !text: tr('Ok')
+    height: 20
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-bottom: 4
+    margin-left: 6
+    focusable: false
+
+  Button
+    id: buttonCancel
+    !text: tr('Cancel')
+    height: 20
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-bottom: 4
+    margin-right: 6
+    focusable: false
+
+BuyNowWindow < MainWindow
+  !text: tr('Buy Now')
+  size: 280 130
+  visible: false
+  @onEscape: show()
+
+  Item
+    id: item
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin-top: 4
+    margin-left: 4
+    focusable: false
+    virtual: true
+
+    UIWidget
+      id: tierIcon
+      anchors.top: parent.top
+      anchors.right: parent.right
+      margin-top: 1
+      margin-right: 1
+      size: 12 12
+      phantom: true
+      visible: false
+
+  HorizontalScrollBar
+    id: countScrollBar
+    anchors.left: item.right
+    anchors.right: parent.right
+    anchors.top: prev.top
+    margin-left: 10
+    margin-top: 10
+    focusable: false
+
+  UIWidget
+    id: price
+    height: 20
+    anchors.left: countScrollBar.left
+    anchors.right: countScrollBar.right
+    anchors.top: countScrollBar.bottom
+    margin-left: 5
+    margin-top: 7
+    focusable: false
+
+  Button
+    id: buttonOk
+    !text: tr('Ok')
+    height: 20
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-bottom: 6
+    margin-left: 6
+    focusable: false
+
+  Button
+    id: buttonCancel
+    !text: tr('Cancel')
+    height: 20
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-bottom: 6
+    margin-right: 6
+    focusable: false
+
+FulfillBuyOfferWindow < MainWindow
+  !text: tr('Fulfill Buy Offer')
+  size: 280 130
+  visible: false
+  @onEscape: show()
+
+  Item
+    id: item
+    anchors.left: parent.left
+    anchors.top: parent.top
+    margin-top: 4
+    margin-left: 4
+    focusable: false
+    virtual: true
+    selectable: true
+
+    UIWidget
+      id: tierIcon
+      anchors.top: parent.top
+      anchors.right: parent.right
+      margin-top: 1
+      margin-right: 1
+      size: 12 12
+      phantom: true
+      visible: false
+
+  HorizontalScrollBar
+    id: countScrollBar
+    anchors.left: item.right
+    anchors.right: parent.right
+    anchors.top: prev.top
+    margin-left: 10
+    margin-top: 10
+    focusable: false
+
+  UIWidget
+    id: price
+    height: 20
+    anchors.left: countScrollBar.left
+    anchors.right: countScrollBar.right
+    anchors.top: countScrollBar.bottom
+    margin-left: 5
+    margin-top: 7
+    focusable: false
+
+  Button
+    id: buttonOk
+    !text: tr('Ok')
+    height: 20
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    margin-bottom: 6
+    margin-left: 6
+    focusable: false
+
+  Button
+    id: buttonCancel
+    !text: tr('Cancel')
+    height: 20
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-bottom: 6
+    margin-right: 6
+    focusable: false
+
+ItemSearchResultItem < UIWidget
+  height: 30
+  background-color: alpha
+
+  UIItem
+    id: itemWidget
+    size: 30 30
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    virtual: true
+
+  Label
+    id: itemName
+    anchors.left: itemWidget.right
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 5
+    text-align: left
+
+  $focus:
+    border-width: 1
+    border-color: #c9a633
+
+  $hover:
+    border-width: 1
+    border-color: #8b6914
+
+ItemSearchWindow < MainWindow
+  id: itemSearchWindow
+  !text: tr('Search Item')
+  size: 300 350
+  visible: false
+  @onEscape: modules.game_marketplace.closeItemSearch()
+
+  TextEdit
+    id: searchEdit
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 5
+    placeholder: Type item name...
+
+  UIScrollArea
+    id: itemList
+    anchors.top: searchEdit.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: buttonCancel.top
+    margin-top: 5
+    margin-bottom: 5
+    layout: verticalBox
+    vertical-scrollbar: scrollbar
+    background-color: alpha
+    image-border: 2
+
+  VerticalScrollBar
+    id: scrollbar
+    anchors.top: itemList.top
+    anchors.bottom: itemList.bottom
+    anchors.right: parent.right
+    step: 30
+    pixels-scroll: true
+
+  Button
+    id: buttonOk
+    !text: tr('Select')
+    width: 60
+    height: 25
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-bottom: 5
+    @onClick: modules.game_marketplace.selectSearchedItem()
+
+  Button
+    id: buttonCancel
+    !text: tr('Cancel')
+    width: 60
+    height: 25
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    margin-bottom: 5
+    @onClick: modules.game_marketplace.closeItemSearch()
+
+PageButton < Button
+  size: 22 22
+  anchors.verticalCenter: parent.verticalCenter
+  anchors.left: parent.left
+  @onClick: modules.game_marketplace.togglePage(self:getId())
+  $!first:
+    anchors.left: prev.right
+    margin-left: 3
+
+PageWidget < UIWidget
+  id: pageWidget
+  size: 200 30
+  anchors.bottom: parent.bottom
+  anchors.left: parent.left
+  margin-left: 42
+  margin-bottom: -4
+
+  PageButton
+    id: first
+    text: <<
+
+  PageButton
+    id: prev
+    text: <
+
+  UIWidget
+    id: text
+    size: 100 30
+    anchors.top: parent.top
+    anchors.left: prev.right
+    margin-left: 3
+
+  PageButton
+    id: next
+    text: >
+
+  PageButton
+    id: last
+    text: >>
+
+UIWidgetToMarketItem < UIItem
+  anchors.top: parent.top
+  anchors.left: parent.left
+  anchors.bottom: parent.bottom
+  border-width: 0
+  virtual: true
+  phantom: true
+
+  UIWidget
+    id: tierIcon
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 1
+    margin-right: 1
+    size: 12 12
+    phantom: true
+    visible: false
+
+MarketSellItem < UIWidget
+  height: 32
+  background-color: #0a0a0a88
+  border-width: 1
+  border-color: #1a1a1a
+
+  $focus:
+    border-color: #c9a633
+    background-color: #1a150888
+
+  $hover:
+    border-color: #6b5a28
+    background-color: #12100588
+
+  $checked:
+    border-color: #c9a633
+    background-color: #1a150888
+
+  $on !checked:
+    border-color: #c9a633
+
+  UIWidgetToMarketItem
+    id: item
+    width: 45
+    anchors.left: parent.left
+    margin-left: 4
+    text-align: center
+
+  UIWidgetToMarketItem
+    id: name
+    width: 150
+    anchors.left: item.right
+    text-align: left
+    text-offset: 8 0
+
+  UIWidgetToMarketItem
+    id: rarity
+    width: 80
+    anchors.left: name.right
+    text-align: center
+    text-offset: 3 0
+    font: verdana-11px-antialised
+
+  UIWidgetToMarketItem
+    id: amount
+    width: 70
+    anchors.left: rarity.right
+    text-align: center
+
+  UIWidgetToMarketItem
+    id: auction
+    width: 100
+    anchors.left: amount.right
+    text-align: center
+
+  UIWidget
+    id: price
+    width: 150
+    height: 32
+    anchors.left: auction.right
+    anchors.top: parent.top
+    text-align: center
+    text-offset: 35 0
+    phantom: true
+
+    UIItem
+      id: currencyIcon
+      size: 32 32
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 5
+      virtual: true
+      phantom: true
+
+  UIWidgetToMarketItem
+    id: timer
+    width: 100
+    anchors.left: price.right
+    text-align: center
+    text-offset: 3 0
+
+  UIWidgetToMarketItem
+    id: cancel
+    width: 40
+    anchors.left: timer.right
+
+    Button
+      id: button
+      size: 26 26
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin: 3
+      text: x
+      color: #ff4444
+      @onClick: modules.game_marketplace.cancelSellItem(self:getParent():getParent())
+
+MarketBuyOfferItem < UIWidget
+  height: 32
+  background-color: #0a0a0a88
+  border-width: 1
+  border-color: #1a1a1a
+
+  $focus:
+    border-color: #c9a633
+    background-color: #1a150888
+
+  $hover:
+    border-color: #6b5a28
+    background-color: #12100588
+
+  $checked:
+    border-color: #c9a633
+    background-color: #1a150888
+
+  $on !checked:
+    border-color: #c9a633
+
+  UIWidgetToMarketItem
+    id: item
+    width: 45
+    anchors.left: parent.left
+    margin-left: 4
+    text-align: center
+
+  UIWidgetToMarketItem
+    id: name
+    width: 150
+    anchors.left: item.right
+    text-align: left
+    text-offset: 8 0
+
+  UIWidgetToMarketItem
+    id: rarity
+    width: 80
+    anchors.left: name.right
+    text-align: center
+    text-offset: 3 0
+    font: verdana-11px-antialised
+
+  UIWidgetToMarketItem
+    id: filters
+    width: 80
+    anchors.left: rarity.right
+    text-align: center
+    text-offset: 3 0
+    font: verdana-11px-antialised
+
+  UIWidgetToMarketItem
+    id: amount
+    width: 70
+    anchors.left: filters.right
+    text-align: center
+
+  UIWidget
+    id: price
+    width: 150
+    height: 32
+    anchors.left: amount.right
+    anchors.top: parent.top
+    text-align: center
+    text-offset: 35 0
+    phantom: true
+
+    UIItem
+      id: currencyIcon
+      size: 32 32
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 5
+      virtual: true
+      phantom: true
+
+  UIWidgetToMarketItem
+    id: timer
+    width: 100
+    anchors.left: price.right
+    text-align: center
+    text-offset: 3 0
+
+  UIWidgetToMarketItem
+    id: cancel
+    width: 40
+    anchors.left: timer.right
+
+    Button
+      id: button
+      size: 26 26
+      anchors.top: parent.top
+      anchors.left: parent.left
+      margin: 3
+      text: x
+      color: #ff4444
+      @onClick: modules.game_marketplace.cancelBuyOffer(self:getParent():getParent())
+
+MarketItem < UIWidget
+  height: 32
+  background-color: #0a0a0a88
+  border-width: 1
+  border-color: #1a1a1a
+
+  $focus:
+    border-color: #c9a633
+    background-color: #1a150888
+
+  $hover:
+    border-color: #6b5a28
+    background-color: #12100588
+
+  $checked:
+    border-color: #c9a633
+    background-color: #1a150888
+
+  $on !checked:
+    border-color: #c9a633
+
+  UIWidgetToMarketItem
+    id: item
+    width: 45
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    text-align: center
+
+  UIWidgetToMarketItem
+    id: name
+    width: 150
+    anchors.left: item.right
+    anchors.verticalCenter: parent.verticalCenter
+    text-align: left
+    text-offset: 8 0
+
+  UIWidgetToMarketItem
+    id: rarity
+    width: 80
+    anchors.left: name.right
+    anchors.verticalCenter: parent.verticalCenter
+    text-align: center
+    text-offset: 3 0
+    font: verdana-11px-antialised
+
+  UIWidgetToMarketItem
+    id: seller
+    width: 200
+    anchors.left: rarity.right
+    anchors.verticalCenter: parent.verticalCenter
+    text-align: center
+    text-offset: 3 0
+
+  UIWidgetToMarketItem
+    id: amount
+    width: 55
+    anchors.left: seller.right
+    anchors.verticalCenter: parent.verticalCenter
+    text-align: center
+    text-offset: 3 0
+
+  UIWidgetToMarketItem
+    id: auction
+    width: 80
+    anchors.left: amount.right
+    anchors.verticalCenter: parent.verticalCenter
+    text-align: center
+    text-offset: 3 0
+
+  UIWidget
+    id: price
+    width: 110
+    height: 32
+    anchors.left: auction.right
+    anchors.top: parent.top
+    text-align: center
+    text-offset: 35 0
+    phantom: true
+
+    UIItem
+      id: currencyIcon
+      size: 32 32
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 5
+      virtual: true
+      phantom: true
+
+  UIWidgetToMarketItem
+    id: timer
+    width: 90
+    anchors.left: price.right
+    anchors.verticalCenter: parent.verticalCenter
+    text-align: center
+    text-offset: 3 0
+
+MarketBuyOfferListItem < UIWidget
+  height: 32
+  background-color: #0a0a0a88
+  border-width: 1
+  border-color: #1a1a1a
+
+  $focus:
+    border-color: #c9a633
+    background-color: #1a150888
+
+  $hover:
+    border-color: #6b5a28
+    background-color: #12100588
+
+  $checked:
+    border-color: #c9a633
+    background-color: #1a150888
+
+  $on !checked:
+    border-color: #c9a633
+
+  UIWidgetToMarketItem
+    id: item
+    width: 45
+    anchors.left: parent.left
+    margin-left: 4
+    text-align: center
+
+  UIWidgetToMarketItem
+    id: name
+    width: 150
+    anchors.left: item.right
+    text-align: left
+    text-offset: 8 0
+
+  UIWidgetToMarketItem
+    id: rarity
+    width: 80
+    anchors.left: name.right
+    text-align: center
+    text-offset: 3 0
+    font: verdana-11px-antialised
+
+  UIWidgetToMarketItem
+    id: buyer
+    width: 100
+    anchors.left: rarity.right
+    text-align: center
+    text-offset: 3 0
+
+  UIWidgetToMarketItem
+    id: filters
+    width: 80
+    anchors.left: buyer.right
+    text-align: center
+    text-offset: 3 0
+    font: verdana-11px-antialised
+
+  UIWidgetToMarketItem
+    id: amount
+    width: 70
+    anchors.left: filters.right
+    text-align: center
+    text-offset: 3 0
+
+  UIWidget
+    id: price
+    width: 150
+    height: 32
+    anchors.left: amount.right
+    anchors.top: parent.top
+    text-align: center
+    text-offset: 35 0
+    phantom: true
+
+    UIItem
+      id: currencyIcon
+      size: 32 32
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 5
+      virtual: true
+      phantom: true
+
+  UIWidgetToMarketItem
+    id: timer
+    width: 100
+    anchors.left: price.right
+    text-align: center
+    text-offset: 3 0
+
+NavButton < Button
+  height: 38
+  anchors.left: parent.left
+  anchors.right: parent.right
+  margin-left: 8
+  margin-right: 8
+  font: verdana-11px-antialised
+  text-align: center
+  background-color: #0d0d0d
+  border-width: 1
+  border-color: #2a2a2a
+
+  $hover:
+    background-color: #1a1508
+    border-color: #c9a633
+
+  $pressed:
+    background-color: #2a2010
+    border-color: #c9a633
+
+  $on:
+    background-color: #1a1508
+    border-color: #c9a633
+    color: #c9a633
+
+MarketTab < UIButton
+  height: 32
+  anchors.top: parent.top
+  anchors.left: parent.left
+  text-align: center
+  font: verdana-11px-antialised
+  color: #c9a633
+  background-color: #0d0d0d
+  border-width: 1
+  border-color: #2a2a2a
+
+  $hover:
+    background-color: #1a1508
+    border-color: #c9a633
+
+  $pressed:
+    background-color: #2a2010
+
+MainWindow
+  id: market
+  size: 1200 580
+  @onEscape: modules.game_marketplace.hide()
+  anchors.centerIn: parent
+  !text: tr("MARKET RARITY ITEMS")
+
+  Button
+    id: closeButton
+    text: Close
+    size: 70 24
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin-bottom: -1
+    margin-right: 55
+    color: red
+    @onClick: modules.game_marketplace.hide()
+
+  UIWidget
+    id: contentArea
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    anchors.right: cats.left
+    margin-right: 0
+
+  UIWidget
+    id: buyPanel
+    anchors.fill: contentArea
+    visible: false
+
+    MarketTab
+      id: item
+      width: 45
+      anchors.top: parent.top
+      anchors.left: parent.left
+        !text: tr("Item")
+
+    MarketTab
+      id: name
+      width: 150
+      anchors.top: item.top
+      anchors.left: item.right
+      !text: tr("Name")
+
+    MarketTab
+      id: rarity
+      width: 80
+      anchors.top: item.top
+      anchors.left: name.right
+      !text: tr("Rarity")
+
+    MarketTab
+      id: seller
+      width: 200
+      anchors.top: item.top
+      anchors.left: rarity.right
+      !text: tr("Seller")
+
+    MarketTab
+      id: amount
+      width: 55
+      anchors.top: item.top
+      anchors.left: seller.right
+      !text: tr("Amt")
+
+    MarketTab
+      id: auction
+      width: 80
+      anchors.top: item.top
+      anchors.left: amount.right
+      !text: tr("Bid")
+
+    MarketTab
+      id: price
+      width: 110
+      anchors.top: item.top
+      anchors.left: auction.right
+      !text: tr("Price")
+
+    MarketTab
+      id: timer
+      width: 90
+      anchors.top: item.top
+      anchors.left: price.right
+      !text: tr("Timer")
+
+    UIScrollArea
+      id: items
+      layout: verticalBox
+      anchors.top: item.bottom
+      anchors.bottom: pageWidget.top
+      anchors.left: item.left
+      anchors.right: timer.right
+      vertical-scrollbar: buyScrollbar
+      background-color: #05050588
+
+    VerticalScrollBar
+      id: buyScrollbar
+      anchors.top: timer.top
+      anchors.right: parent.right
+      anchors.bottom: items.bottom
+      step: 32
+      pixels-scroll: true
+
+    PageWidget
+
+    Button
+      id: buyButton
+      size: 70 24
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      margin-bottom: -1
+      margin-right: 35
+      text: Buy Now
+      @onClick: modules.game_marketplace.buyItem()
+
+    Button
+      id: bidButton
+      size: 70 24
+      anchors.bottom: parent.bottom
+      anchors.right: buyButton.left
+      margin-right: 5
+      margin-bottom: -1
+      text: Place Bid
+      @onClick: modules.game_marketplace.bidItem()
+
+    Button
+      id: refreshButton
+      size: 70 24
+      anchors.bottom: parent.bottom
+      anchors.right: bidButton.left
+      margin-right: 5
+      margin-bottom: -1
+      text: Refresh
+      @onClick: modules.game_marketplace.getBuyItems()
+
+  UIWidget
+    id: sellPanel
+    anchors.fill: contentArea
+    margin-bottom: 25
+    visible: false
+
+    MarketTab
+      id: item
+      width: 45
+      padding: 2 4
+      anchors.left: parent.left
+      anchors.top: parent.top
+      !text: tr("Item")
+
+    MarketTab
+      id: name
+      width: 150
+      anchors.top: item.top
+      anchors.left: item.right
+      !text: tr("Name")
+
+    MarketTab
+      id: rarity
+      width: 80
+      anchors.top: item.top
+      anchors.left: name.right
+      !text: tr("Rarity")
+
+    MarketTab
+      id: amount
+      width: 70
+      anchors.top: item.top
+      anchors.left: rarity.right
+      !text: tr("Amount")
+
+    MarketTab
+      id: auction
+      width: 100
+      anchors.top: item.top
+      anchors.left: amount.right
+      !text: tr("Auction")
+
+    MarketTab
+      id: price
+      width: 150
+      anchors.top: item.top
+      anchors.left: auction.right
+      !text: tr("Price")
+
+    MarketTab
+      id: timer
+      width: 100
+      anchors.top: item.top
+      anchors.left: price.right
+      !text: tr("Time")
+
+    MarketTab
+      id: cancel
+      width: 50
+      anchors.top: item.top
+      anchors.left: timer.right
+      !text: tr("-")
+
+    UIScrollArea
+      id: items
+      layout: verticalBox
+      background-color: #05050588
+      anchors.top: item.bottom
+      anchors.bottom: parent.bottom
+      anchors.left: item.left
+      anchors.right: cancel.right
+      vertical-scrollbar: sellScrollbar
+
+    VerticalScrollBar
+      id: sellScrollbar
+      anchors.top: timer.top
+      anchors.right: parent.right
+      anchors.bottom: items.bottom
+      step: 15
+      pixels-scroll: true
+
+  UIWidget
+    id: buyOffersPanel
+    anchors.fill: contentArea
+    visible: false
+
+    MarketTab
+      id: item
+      width: 45
+      anchors.top: parent.top
+      anchors.left: parent.left
+      !text: tr("Item")
+
+    MarketTab
+      id: name
+      width: 150
+      anchors.top: item.top
+      anchors.left: item.right
+      !text: tr("Name")
+
+    MarketTab
+      id: rarity
+      width: 80
+      anchors.top: item.top
+      anchors.left: name.right
+      !text: tr("Rarity")
+
+    MarketTab
+      id: buyer
+      width: 100
+      anchors.top: item.top
+      anchors.left: rarity.right
+      !text: tr("Buyer")
+
+    MarketTab
+      id: filters
+      width: 80
+      anchors.top: item.top
+      anchors.left: buyer.right
+      !text: tr("Filters")
+
+    MarketTab
+      id: amount
+      width: 70
+      anchors.top: item.top
+      anchors.left: filters.right
+      !text: tr("Amount")
+
+    MarketTab
+      id: price
+      width: 150
+      anchors.top: item.top
+      anchors.left: amount.right
+      !text: tr("Price")
+
+    MarketTab
+      id: timer
+      width: 100
+      anchors.top: item.top
+      anchors.left: price.right
+      !text: tr("Timer")
+
+    UIScrollArea
+      id: items
+      layout: verticalBox
+      anchors.top: item.bottom
+      anchors.bottom: pageWidget.top
+      anchors.left: item.left
+      anchors.right: timer.right
+      vertical-scrollbar: buyOffersScrollbar
+      background-color: #05050588
+
+    VerticalScrollBar
+      id: buyOffersScrollbar
+      anchors.top: timer.top
+      anchors.right: parent.right
+      anchors.bottom: items.bottom
+      step: 15
+      pixels-scroll: true
+
+    PageWidget
+
+    Button
+      id: fulfillButton
+      size: 70 24
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      text: Fulfill
+      margin-bottom: -1
+      margin-right: 35
+      @onClick: modules.game_marketplace.fulfillBuyOffer()
+
+    Button
+      id: refreshButton
+      size: 70 24
+      margin-bottom: -1
+      anchors.bottom: parent.bottom
+      anchors.right: fulfillButton.left
+      margin-right: 5
+      text: Refresh
+      @onClick: modules.game_marketplace.getBuyOfferItems()
+
+    Button
+      id: createBuyOfferButton
+      size: 100 24
+      margin-bottom: -1
+      anchors.bottom: parent.bottom
+      anchors.right: refreshButton.left
+      margin-right: 5
+      text: + New Offer
+      color: #66dd66
+      @onClick: modules.game_marketplace.createBuyOffer()
+
+  UIWidget
+    id: myBuyOffersPanel
+    anchors.fill: contentArea
+    visible: false
+
+    MarketTab
+      id: item
+      width: 45
+      padding: 2 4
+      anchors.left: parent.left
+      anchors.top: parent.top
+      !text: tr("Item")
+
+    MarketTab
+      id: name
+      width: 150
+      anchors.top: item.top
+      anchors.left: item.right
+      !text: tr("Name")
+
+    MarketTab
+      id: rarity
+      width: 80
+      anchors.top: item.top
+      anchors.left: name.right
+      !text: tr("Rarity")
+
+    MarketTab
+      id: filters
+      width: 80
+      anchors.top: item.top
+      anchors.left: rarity.right
+      !text: tr("Filters")
+
+    MarketTab
+      id: amount
+      width: 70
+      anchors.top: item.top
+      anchors.left: filters.right
+      !text: tr("Amount")
+
+    MarketTab
+      id: price
+      width: 150
+      anchors.top: item.top
+      anchors.left: amount.right
+      !text: tr("Price")
+
+    MarketTab
+      id: timer
+      width: 100
+      anchors.top: item.top
+      anchors.left: price.right
+      !text: tr("Time")
+
+    MarketTab
+      id: cancel
+      width: 50
+      anchors.top: item.top
+      anchors.left: timer.right
+      !text: tr("-")
+
+    UIScrollArea
+      id: items
+      layout: verticalBox
+      background-color: #05050588
+      anchors.top: item.bottom
+      anchors.bottom: createBuyOfferButton.top
+      anchors.left: item.left
+      anchors.right: cancel.right
+      margin-bottom:3
+      vertical-scrollbar: myBuyOffersScrollbar
+
+    VerticalScrollBar
+      id: myBuyOffersScrollbar
+      anchors.top: timer.top
+      anchors.right: parent.right
+      anchors.bottom: items.bottom
+      margin.bottom: 1
+      step: 15
+      pixels-scroll: true
+
+    Button
+      id: createBuyOfferButton
+      size: 100 24
+      anchors.bottom: parent.bottom
+      anchors.right: parent.right
+      margin-bottom: -1
+      margin-right: 35
+      text: + New Offer
+      color: #66dd66
+      @onClick: modules.game_marketplace.createBuyOffer()
+
+  UIWidget
+    id: historicPanel
+    anchors.fill: contentArea
+    margin-bottom: 25
+    visible: false
+
+    UIScrollArea
+      id: list
+      anchors.fill: parent
+      margin-left: 8
+      background-color: #05050588
+      layout: verticalBox
+      vertical-scrollbar: historicScrollbar
+
+    VerticalScrollBar
+      id: historicScrollbar
+      anchors.top: list.top
+      anchors.bottom: list.bottom
+      anchors.right: parent.right
+      step: 28
+      pixels-scroll: true
+
+  UIWidget
+    id: cats
+    background-color: #0a0a0acc
+    border-width: 1
+    border-color: #2a2a2a
+    anchors.top: parent.top
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    width: 185
+    margin-bottom: 25
+
+    Label
+      id: filterTitle
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Filters
+      text-align: center
+      color: #c9a633
+      font: verdana-11px-antialised
+      margin-top: 10
+
+    ComboBox
+      id: comboBox
+      anchors.top: filterTitle.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 8
+      margin-left: 8
+      margin-right: 8
+
+    TextEdit
+      id: searchEdit
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      margin-left: 8
+      margin-right: 8
+      placeholder: Search items...
+
+    HorizontalSeparator
+      height: 2
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 12
+      margin-left: 8
+      margin-right: 8
+      background-color: #2a2a2a
+
+    Label
+      id: navTitle
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Navigation
+      text-align: center
+      color: #c9a633
+      font: verdana-11px-antialised
+      margin-top: 12
+
+    NavButton
+      id: buyTabButton
+      anchors.top: navTitle.bottom
+      margin-top: 10
+      text: Browse Offers
+      !tooltip: tr("Browse items for sale")
+      @onClick: modules.game_marketplace.showBuyPanel()
+
+    NavButton
+      id: sellTabButton
+      anchors.top: prev.bottom
+      margin-top: 4
+      text: My Listings
+      !tooltip: tr('Ctrl+Right click an item and select "Add Market ..." to sell an item.')
+      @onClick: modules.game_marketplace.showSellPanel()
+
+    NavButton
+      id: buyOffersTabButton
+      anchors.top: prev.bottom
+      margin-top: 4
+      text: Buy Requests
+      !tooltip: tr("Browse buy offers from other players")
+      @onClick: modules.game_marketplace.showBuyOffersPanel()
+
+    NavButton
+      id: myBuyOffersTabButton
+      anchors.top: prev.bottom
+      margin-top: 4
+      text: My Requests
+      !tooltip: tr("Create and manage your buy offers")
+      @onClick: modules.game_marketplace.showMyBuyOffersPanel()
+
+    NavButton
+      id: historicTabButton
+      anchors.top: prev.bottom
+      margin-top: 4
+      text: Transaction History
+      !tooltip: tr("Show your History")
+      @onClick: modules.game_marketplace.showHistoricPanel()
+
+createConfirmSellWindow < MainWindow
+  size: 320 340
+  text: List Item for Sale
+
+  Item
+    id: item
+    size: 40 40
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 5
+
+  Label
+    id: name
+    anchors.top: prev.bottom
+    anchors.right: parent.right
+    anchors.left: parent.left
+    text-align: center
+    margin-top: 8
+    color: #c9a633
+
+  Label
+    id: currencyLabel
+    text: Currency:
+    anchors.left: parent.left
+    anchors.top: prev.bottom
+    margin-top: 12
+
+  ComboBox
+    id: currency
+    anchors.top: name.bottom
+    anchors.left: prev.right
+    anchors.right: parent.right
+    margin-left: 8
+    margin-top: 8
+
+  UIWidget
+    id: pricelabel
+    anchors.top: currencyLabel.bottom
+    anchors.left: parent.left
+    !text: tr("Price per unit:")
+    margin-top: 18
+
+  TextEdit
+    id: priceedit
+    anchors.top: currency.bottom
+    anchors.left: pricelabel.right
+    anchors.right: parent.right
+    margin-top: 8
+    margin-left: 8
+    @onTextChange: modules.game_marketplace.onSellPriceChange()
+    @onSetup: self:setValidCharacters('0123456789')
+
+  Label
+    id: totalCost
+    size: 140 22
+    anchors.top: pricelabel.bottom
+    anchors.left: parent.left
+    background-color: #0a0a0a
+    border-width: 1
+    border-color: #2a2a2a
+    margin-top: 12
+    text-align: center
+    text: Total: 0
+
+  Label
+    id: fee
+    height: 22
+    anchors.top: pricelabel.bottom
+    anchors.left: totalCost.right
+    anchors.right: parent.right
+    background-color: #0a0a0a
+    border-width: 1
+    border-color: #2a2a2a
+    text-align: center
+    text: Fee: 0
+    margin-top: 12
+    margin-left: 6
+
+  CheckBox
+    id: bidCheckBox
+    size: 100 22
+    anchors.top: totalCost.bottom
+    anchors.left: parent.left
+    margin-top: 15
+    text-offset: 18 -7
+    !text: tr("Bid minimum:")
+    @onCheckChange: modules.game_marketplace.onSellBidCheckChange()
+
+  TextEdit
+    id: bidEdit
+    height: 22
+    anchors.top: totalCost.bottom
+    anchors.left: bidCheckBox.right
+    anchors.right: parent.right
+    margin-top: 12
+    @onSetup: self:setValidCharacters('0123456789')
+    enabled: false
+
+  HorizontalScrollBar
+    id: amount
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 12
+
+  Label
+    id: limitTime
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    margin-top: 15
+    text: Duration:
+
+  ComboBox
+    id: timebox
+    anchors.top: amount.bottom
+    anchors.left: prev.right
+    anchors.right: parent.right
+    margin-left: 8
+    margin-top: 12
+
+  HorizontalSeparator
+    id: spec
+    height: 2
+    visible: false
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 12
+    background-color: #2a2a2a
+
+  Button
+    id: confirm
+    size: 80 24
+    anchors.top: spec.bottom
+    anchors.right: parent.right
+    color: #66dd66
+    !text: tr("List Item")
+    @onClick: modules.game_marketplace.onConfirmSellItem()
+
+  Button
+    id: close
+    size: 70 24
+    anchors.top: spec.bottom
+    anchors.left: parent.left
+    !text: tr("Cancel")
+    @onClick: self:getParent():hide()
+
+createConfirmBuyOfferWindow < MainWindow
+  size: 380 540
+  text: Create Buy Request
+
+  Label
+    id: searchLabel
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-top: 8
+    text: Search Item:
+    color: #c9a633
+
+  TextEdit
+    id: itemSearch
+    anchors.top: parent.top
+    anchors.left: searchLabel.right
+    anchors.right: parent.right
+    margin-left: 8
+    margin-top: 5
+    placeholder: Type item name...
+
+  UIScrollArea
+    id: searchResults
+    anchors.top: itemSearch.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 150
+    margin-top: 6
+    layout: verticalBox
+    vertical-scrollbar: searchScrollbar
+    background-color: #05050588
+    border-width: 1
+    border-color: #1a1a1a
+
+  VerticalScrollBar
+    id: searchScrollbar
+    anchors.top: searchResults.top
+    anchors.bottom: searchResults.bottom
+    anchors.right: parent.right
+    step: 30
+    pixels-scroll: true
+
+  Item
+    id: item
+    size: 40 40
+    anchors.top: searchResults.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-top: 8
+    virtual: false
+
+  Label
+    id: name
+    anchors.top: prev.bottom
+    anchors.right: parent.right
+    anchors.left: parent.left
+    text-align: center
+    margin-top: 6
+    text: Select an item above
+    color: #888888
+
+  Label
+    id: currencyLabel
+    text: Currency:
+    anchors.left: parent.left
+    anchors.top: prev.bottom
+    margin-top: 10
+
+  ComboBox
+    id: currency
+    anchors.top: name.bottom
+    anchors.left: prev.right
+    anchors.right: parent.right
+    margin-left: 8
+    margin-top: 6
+
+  UIWidget
+    id: pricelabel
+    anchors.top: currencyLabel.bottom
+    anchors.left: parent.left
+    !text: tr("Price per unit:")
+    margin-top: 18
+
+  TextEdit
+    id: priceedit
+    anchors.top: currency.bottom
+    anchors.left: pricelabel.right
+    anchors.right: parent.right
+    margin-top: 8
+    margin-left: 8
+    @onTextChange: modules.game_marketplace.onBuyOfferPriceChange()
+    @onSetup: self:setValidCharacters('0123456789')
+
+  Label
+    id: totalCost
+    size: 150 22
+    anchors.top: pricelabel.bottom
+    anchors.left: parent.left
+    background-color: #0a0a0a
+    border-width: 1
+    border-color: #2a2a2a
+    margin-top: 8
+    text-align: center
+    text: Total: 0
+
+  Label
+    id: fee
+    height: 22
+    anchors.top: pricelabel.bottom
+    anchors.left: totalCost.right
+    anchors.right: parent.right
+    background-color: #0a0a0a
+    border-width: 1
+    border-color: #2a2a2a
+    text-align: center
+    text: Fee: 0
+    margin-top: 8
+    margin-left: 6
+
+  HorizontalScrollBar
+    id: amount
+    anchors.top: fee.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 10
+
+  Label
+    id: limitTime
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    margin-top: 10
+    text: Duration:
+
+  ComboBox
+    id: timebox
+    anchors.top: amount.bottom
+    anchors.left: prev.right
+    anchors.right: parent.right
+    margin-left: 8
+    margin-top: 6
+
+  Label
+    id: rarityLabel
+    anchors.top: timebox.bottom
+    anchors.left: parent.left
+    margin-top: 10
+    text: Rarity Filter:
+    color: #c9a633
+
+  ComboBox
+    id: rarityComboBox
+    anchors.top: timebox.bottom
+    anchors.left: rarityLabel.right
+    anchors.right: parent.right
+    margin-left: 8
+    margin-top: 6
+
+  Label
+    id: tierLabel
+    anchors.top: rarityComboBox.bottom
+    anchors.left: parent.left
+    margin-top: 10
+    text: Tier Filter:
+    color: #c9a633
+
+  ComboBox
+    id: tierComboBox
+    anchors.top: rarityComboBox.bottom
+    anchors.left: tierLabel.right
+    anchors.right: parent.right
+    margin-left: 8
+    margin-top: 6
+
+  HorizontalSeparator
+    id: spec
+    height: 2
+    anchors.top: tierComboBox.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 10
+    background-color: #2a2a2a
+
+  Button
+    id: confirm
+    size: 90 24
+    anchors.top: spec.bottom
+    anchors.right: parent.right
+    margin-top: 7
+    color: #66dd66
+    !text: tr("Create Offer")
+    @onClick: modules.game_marketplace.onConfirmBuyOffer()
+
+  Button
+    id: close
+    size: 70 24
+    anchors.top: spec.bottom
+    anchors.left: parent.left
+    margin-top: 7
+    !text: tr("Cancel")
+    @onClick: self:getParent():hide()
+
+

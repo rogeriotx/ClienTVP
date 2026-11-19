@@ -91,7 +91,7 @@ function init()
 end
 
 function terminate()
-  if battleButton == nil then
+  if battleWindow == nil then
     return
   end
   
@@ -99,14 +99,18 @@ function terminate()
   
   g_keyboard.unbindKeyDown('Ctrl+B')
   battleWindow:destroy()
-  mouseWidget:destroy()
+  battleWindow = nil
+  if mouseWidget then
+    mouseWidget:destroy()
+    mouseWidget = nil
+  end
 	
   disconnect(LocalPlayer, {
     onPositionChange = onPlayerPositionChange
   })
   disconnect(Creature, {
-    onAppear = onCreatureAppear,
-    onDisappear = onCreatureDisappear
+    onAppear = updateSquare,
+    onDisappear = disappearSquare,
   })  
   disconnect(g_game, { 
     onAttackingCreatureChange = updateSquare,

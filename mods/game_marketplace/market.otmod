@@ -1,0 +1,10 @@
+Module
+  name: game_marketplace
+  description: Trade market with custom rich tooltip
+  author: Cblade
+  website: https://otveterans.net/
+  sandboxed: true
+  version: 3.3
+  scripts: [ market ]
+  @onLoad: init()
+  @onUnload: terminate()

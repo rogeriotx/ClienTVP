@@ -1,0 +1,55 @@
+ItemDetailsWindow < MainWindow
+  id: itemDetailsWindow
+  !text: tr('Item Details')
+  size: 350 400
+  @onEscape: self:destroy()
+
+  Label
+    id: itemName
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 5
+    text-align: center
+    font: verdana-11px-rounded
+    color: #FFD700
+    height: 20
+
+  UIWidget
+    id: separator1
+    anchors.top: itemName.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 3
+    margin-bottom: 3
+    height: 2
+    background-color: #FFD700
+
+  TextList
+    id: attributesList
+    anchors.top: separator1.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: closeButton.top
+    margin-top: 5
+    margin-bottom: 10
+    padding: 5
+    focusable: false
+    vertical-scrollbar: attributesScrollBar
+
+  VerticalScrollBar
+    id: attributesScrollBar
+    anchors.top: attributesList.top
+    anchors.bottom: attributesList.bottom
+    anchors.right: attributesList.right
+    step: 14
+    pixels-scroll: true
+
+  Button
+    id: closeButton
+    !text: tr('Close')
+    width: 60
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    margin-bottom: 5
+    @onClick: self:getParent():destroy()

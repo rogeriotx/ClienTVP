@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.28)
+project(TVP_Ravenor_Client)
+
 # framework flags
 # FRAMEWORK_SOUND
 # FRAMEWORK_GRAPHICS

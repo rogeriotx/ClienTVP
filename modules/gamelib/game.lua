@@ -116,3 +116,70 @@ end
 if not G.currentRsa then
   g_game.setRsa(OTSERV_RSA)
 end
+
+-- ===== pbOT: helpers do old_pbOT_Client (crafting/forge/containers) =====
+function g_game.updateRarityFrames(widget, id)
+  local rarityId = widget:getChildById("rarityId")
+  if not rarityId then
+    return false
+  end
+  if id == 0 then
+    rarityId:hide()
+    return true
+  end
+
+  rarityId:setImageClip(((id - 1) * 38) .. " 0 32 32")
+  rarityId:show()
+end
+
+function g_game.updateTierIcon(widget, tier)
+  local tierIcon = widget:getChildById("tierIcon")
+  
+  if not tierIcon then
+    return true
+  end
+
+  if not tier or tier <= 0 then
+    tierIcon:hide()
+    return true
+  end
+
+  local image
+  if tier == 1 then
+    image = '/images/ui/tier/t1'
+  elseif tier == 2 then
+    image = '/images/ui/tier/t2'
+  elseif tier == 3 then
+    image = '/images/ui/tier/t3'
+  elseif tier == 4 then
+    image = '/images/ui/tier/t4'
+  elseif tier == 5 then
+    image = '/images/ui/tier/t5'
+  elseif tier == 6 then
+    image = '/images/ui/tier/t6'
+  elseif tier == 7 then
+    image = '/images/ui/tier/t7'
+  elseif tier == 8 then
+    image = '/images/ui/tier/t8'
+  elseif tier == 9 then
+    image = '/images/ui/tier/t9'
+  elseif tier == 10 then
+    image = '/images/ui/tier/t10'  
+  end
+
+  tierIcon:setImageSource(image)
+  tierIcon:show()
+  
+  return true
+end
+
+OR, XOR, AND = 1, 3, 4
+
+function g_game.bitoper(a, b, oper)
+    local r, m, s = 0, 2 ^ 31
+    repeat
+        s, a, b = a + b + m, a % m, b % m
+        r, m = r + m * oper % (s - a - b), m / 2
+    until m < 1
+    return r ~= 0
+end

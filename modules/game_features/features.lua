@@ -12,36 +12,39 @@ function updateFeatures(version)
       return
     end
     
-    g_game.enableFeature(GameAnimatedTextCustomFont)
-
-    -- you can add custom features here, list of them is in the modules\gamelib\const.lua
-    --g_game.enableFeature(GameOldInformationBar) -- by enabling this, will mess with roulette system item display
+    -- ===== pbOT server (TFS 8.00 custom, X:\src) =====
+    -- Somente features que NAO alteram o protocolo ou que o servidor realmente envia.
+    -- Espelha modules/game_features do old_pbOT_Client.
     g_game.enableFeature(GameExtendedOpcode)
-    --g_game.enableFeature(GameMinimapLimitedToSingleFloor) -- it will generate minimap only for current floor
-    g_game.enableFeature(GameSpritesAlphaChannel)
-    g_game.enableFeature(GameSpritesU32)
-    g_game.enableFeature(GameTileAddThingWithStackpos)
-    g_game.enableFeature(GameClientPing)
-	g_game.enableFeature(GameWingsAndAura)
-    g_game.enableFeature(GameWingOffset)
-    g_game.enableFeature(GameDrawAuraOnTop)
-    g_game.enableFeature(GameOutfitShaders)
-    g_game.enableFeature(GameDontMergeAnimatedText)
-    --g_game.enableFeature(GameBlueNpcNameColor)
-	g_game.enableFeature(GameNameOnNpcTrade)
-	g_game.enableFeature(GameDoublePlayerGoodsMoney)
-	g_game.enableFeature(GameNewWalking)
-    g_game.enableFeature(GameItemCustomAttributes) -- it will receive custom item attributes
     g_game.enableFeature(GamePurseSlot)
-	g_game.enableFeature(GameForceAllowItemHotkeys)
-    --g_game.enableFeature(GameContainerPagination)
-    
+    g_game.enableFeature(GameUnjustifiedPoints)
+    g_game.enableFeature(GamePlayerMarket)
+    g_game.enableFeature(GameCreatureWalkthrough)   -- AddCreature: byte unpass
+    g_game.enableFeature(GameCreatureEmblems)       -- AddCreature: emblem quando !known
+    g_game.enableFeature(GamePlayerMounts)          -- AddOutfit: lookMount u16
+    g_game.enableFeature(GameNameOnNpcTrade)
+    -- GameTileAddThingWithStackpos: NAO - servidor nao envia stackpos no 0x6A (sendAddTileItem/sendAddCreature)
+    g_game.enableFeature(GamePremiumExpiration)     -- sendBasicData (0x9F) manda u32
+    g_game.enableFeature(GameItemDurationRarityTier) -- addItem: duracao/raridade/tier
+    g_game.enableFeature(GamePbotProtocol)          -- sendShop u16, compra amount u8, 0x70 com slot u8
+    g_game.enableFeature(GameDoublePlayerGoodsMoney) -- sendSaleItemList: dinheiro u64
+    g_game.enableFeature(GameForceAllowItemHotkeys) -- local
+    g_game.enableFeature(GameSpritesU32)            -- things/800/Tibia.otfi: extended = true
+
+    -- render/local only (TVP engine)
+    g_game.enableFeature(GameDontMergeAnimatedText)
+
+    -- NAO habilitar com este servidor (quebram o protocolo):
+    -- GameAnimatedTextCustomFont, GameWingsAndAura, GameWingOffset, GameDrawAuraOnTop,
+    -- GameOutfitShaders, GameItemCustomAttributes, GameNewWalking, GameCreatureStarIcon,
+    -- GameSpritesAlphaChannel (things/800/Tibia.otfi: transparency = false), GameClientPing
+
     if DEVLOPMENT_MODE then
         g_game.enableFeature(GameBot)
     else
         g_game.enableFeature(GameNoDebug)
     end
-    
+
     if(version >= 770) then
         g_game.enableFeature(GameLooktypeU16)
         g_game.enableFeature(GameMessageStatements)

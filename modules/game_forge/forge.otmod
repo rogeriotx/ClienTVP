@@ -1,0 +1,10 @@
+Module
+  name: game_forge
+  description: Exaltation Forge system
+  author: custom
+  sandboxed: true
+  autoload: true
+  autoload-priority: 800
+  scripts: [ forge ]
+  @onLoad: init()
+  @onUnload: terminate()

@@ -36,6 +36,37 @@ void ProtocolGame::send(const OutputMessagePtr& outputMessage, bool rawPacket)
     Protocol::send(outputMessage, rawPacket);
 }
 
+void ProtocolGame::sendUpdateAutoloot(uint16 clientId, const std::string& name, bool remove)
+{
+    OutputMessagePtr msg(new OutputMessage);
+    msg->addU8(Proto::ClientUpdateAutoloot);
+    msg->addU16(clientId);
+    msg->addString(name);
+    msg->addU8(remove ? 0x01 : 0x00);
+    send(msg);
+}
+
+void ProtocolGame::sendAddLootCategory(const Position& pos, uint16 clientId, uint8 stackpos, uint16 categoryFlags)
+{
+    OutputMessagePtr msg(new OutputMessage);
+    msg->addU8(Proto::ClientAddLootCategory);
+    addPosition(msg, pos);
+    msg->addU16(clientId);
+    msg->addU8(stackpos);
+    msg->addU16(categoryFlags);
+    send(msg);
+}
+
+void ProtocolGame::sendRemoveLootCategory(const Position& pos, uint16 clientId, uint8 stackpos)
+{
+    OutputMessagePtr msg(new OutputMessage);
+    msg->addU8(Proto::ClientRemoveLootCategory);
+    addPosition(msg, pos);
+    msg->addU16(clientId);
+    msg->addU8(stackpos);
+    send(msg);
+}
+
 void ProtocolGame::sendExtendedOpcode(uint8 opcode, const std::string& buffer)
 {
     g_game.enableBotCall();
@@ -391,7 +422,10 @@ void ProtocolGame::sendBuyItem(int itemId, int subType, int amount, bool ignoreC
     msg->addU8(Proto::ClientBuyItem);
     msg->addU16(itemId);
     msg->addU8(subType);
-    msg->addU16(amount);
+    if (g_game.getFeature(Otc::GamePbotProtocol))
+        msg->addU8(amount); // pbOT: parsePlayerPurchase amount u8
+    else
+        msg->addU16(amount);
     msg->addU8(ignoreCapacity ? 0x01 : 0x00);
     msg->addU8(buyWithBackpack ? 0x01 : 0x00);
     send(msg);

@@ -282,6 +282,8 @@ void Client::registerLuaFunctions()
     g_lua.bindSingletonFunction("g_game", "editText", &Game::editText, &g_game);
     g_lua.bindSingletonFunction("g_game", "editList", &Game::editList, &g_game);
     g_lua.bindSingletonFunction("g_game", "requestQuestLog", &Game::requestQuestLog, &g_game);
+    g_lua.bindSingletonFunction("g_game", "addLootCategory", &Game::addLootCategory, &g_game);
+    g_lua.bindSingletonFunction("g_game", "removeLootCategory", &Game::removeLootCategory, &g_game);
     g_lua.bindSingletonFunction("g_game", "requestQuestLine", &Game::requestQuestLine, &g_game);
     g_lua.bindSingletonFunction("g_game", "equipItem", &Game::equipItem, &g_game);
     g_lua.bindSingletonFunction("g_game", "equipItemId", &Game::equipItemId, &g_game);
@@ -695,6 +697,16 @@ void Client::registerLuaFunctions()
     g_lua.bindClassMemberFunction<Item>("getMarketData", &Item::getMarketData);
     g_lua.bindClassMemberFunction<Item>("getClothSlot", &Item::getClothSlot);
     g_lua.bindClassMemberFunction<Item>("getTooltip", &Item::getTooltip);
+    g_lua.bindClassMemberFunction<Item>("getRarityId", &Item::getRarityId);
+    g_lua.bindClassMemberFunction<Item>("setRarityId", &Item::setRarityId);
+    g_lua.bindClassMemberFunction<Item>("getTier", &Item::getTier);
+    g_lua.bindClassMemberFunction<Item>("setTier", &Item::setTier);
+    g_lua.bindClassMemberFunction<Item>("getDuration", &Item::getDuration);
+    g_lua.bindClassMemberFunction<Item>("getDurationLeft", &Item::getDurationLeft);
+    g_lua.bindClassMemberFunction<Item>("isDurationStopped", &Item::isDurationStopped);
+    g_lua.bindClassMemberFunction<Item>("isDurationRunning", &Item::isDurationRunning);
+    g_lua.bindClassMemberFunction<Item>("getLootCategory", &Item::getLootCategory);
+    g_lua.bindClassMemberFunction<Item>("setLootCategory", &Item::setLootCategory);
     g_lua.bindClassMemberFunction<Item>("setTooltip", &Item::setTooltip);
     g_lua.bindClassMemberFunction<Item>("getQuickLootFlags", &Item::getQuickLootFlags);
     g_lua.bindClassMemberFunction<Item>("setQuickLootFlags", &Item::setQuickLootFlags);
@@ -702,8 +714,8 @@ void Client::registerLuaFunctions()
     g_lua.bindClassMemberFunction<Item>("getShader", &Item::getShader);
     g_lua.bindClassMemberFunction<Item>("setCustomAttribute", &Item::setCustomAttribute);
     g_lua.bindClassMemberFunction<Item>("getCustomAttribute", &Item::getCustomAttribute);
-	g_lua.bindClassMemberFunction<Item>("getShowCount", &Item::getShowCount);
-	g_lua.bindClassMemberFunction<Item>("setShowCount", &Item::setShowCount);
+	//g_lua.bindClassMemberFunction<Item>("getShowCount", &Item::getShowCount);
+	//g_lua.bindClassMemberFunction<Item>("setShowCount", &Item::setShowCount);
 
     g_lua.registerClass<Effect, Thing>();
     g_lua.bindClassStaticFunction<Effect>("create", []{ return EffectPtr(new Effect); });
@@ -779,6 +791,10 @@ void Client::registerLuaFunctions()
     g_lua.bindClassMemberFunction<LocalPlayer>("getVocation", &LocalPlayer::getVocation);
     g_lua.bindClassMemberFunction<LocalPlayer>("getBlessings", &LocalPlayer::getBlessings);
     g_lua.bindClassMemberFunction<LocalPlayer>("isPremium", &LocalPlayer::isPremium);
+    g_lua.bindClassMemberFunction<LocalPlayer>("getAutolootItems", &LocalPlayer::getAutolootItems);
+    g_lua.bindClassMemberFunction<LocalPlayer>("isInAutoLootList", &LocalPlayer::isInAutoLootList);
+    g_lua.bindClassMemberFunction<LocalPlayer>("addAutoLoot", &LocalPlayer::addAutoLoot);
+    g_lua.bindClassMemberFunction<LocalPlayer>("removeAutoLoot", &LocalPlayer::removeAutoLoot);
     g_lua.bindClassMemberFunction<LocalPlayer>("isKnown", &LocalPlayer::isKnown);
     g_lua.bindClassMemberFunction<LocalPlayer>("isPreWalking", &LocalPlayer::isPreWalking);
     g_lua.bindClassMemberFunction<LocalPlayer>("hasSight", &LocalPlayer::hasSight);

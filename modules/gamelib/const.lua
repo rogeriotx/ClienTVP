@@ -213,8 +213,11 @@ GameDontMergeAnimatedText = 124
 GameMissionId = 125
 GameItemCustomAttributes = 126
 GameAnimatedTextCustomFont = 127
+GameItemDurationRarityTier = 128
+GameCreatureStarIcon = 129
+GamePbotProtocol = 130
 
-LastGameFeature = 130
+LastGameFeature = 131
         
 TextColors = {
   red       = '#f55e5e', --'#c83200'
@@ -403,3 +406,19 @@ ChannelEvent = {
 }
 
 -- @}
+
+-- pbOT server: loot categories (ProtocolGame 0x5E/0x5F, lootCategory u16 nos itens)
+LOOT_CATEGORY_NONE = 0
+LOOT_CATEGORY_GOLD = 1
+LOOT_CATEGORY_FIRST = LOOT_CATEGORY_GOLD
+LOOT_CATEGORY_VALUABLES = 2
+LOOT_CATEGORY_EQUIPMENT = 3
+LOOT_CATEGORY_POTIONS = 4
+LOOT_CATEGORY_AMMUNITION = 5
+LOOT_CATEGORY_CREATURE_PRODUCTS = 6
+LOOT_CATEGORY_FOOD = 7
+LOOT_CATEGORY_SPECIAL = 8
+LOOT_CATEGORY_MISC = 9
+LOOT_CATEGORY_LAST = LOOT_CATEGORY_MISC
+LOOT_CATEGORY_DELETE = 0xFFFE
+LOOT_CATEGORY_COPY = 0xFFFF

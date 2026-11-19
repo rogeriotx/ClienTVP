@@ -267,6 +267,7 @@ UIWidget
   
   FlatPanel
     id: tooltipItem
+    visible: false
     anchors.bottom: bottomSplitter.top
     anchors.right: gameRightPanels.left
     margin: 10

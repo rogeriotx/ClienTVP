@@ -18,7 +18,8 @@ GameServerOpcodes = {
     GameServerExtendedOpcode            = 50,
 
     -- NOTE: add any custom opcodes in this range
-	GameServerLootStatistics			= 51,
+	GameServerLootStatistics			= 51, -- extended opcode (TVP)
+	GameServerGuildWarKills			= 51, -- pbOT: opcode normal (game_guildmanagement)
     -- 51 - 99
 
     -- original tibia ONLY

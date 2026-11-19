@@ -1,0 +1,196 @@
+Panel
+  CityWarMiniPanel
+    id: opponent
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    width: 250
+    !text: tr('Opponent and Arena')
+    layout:
+      type: verticalBox
+      spacing: 3
+
+    CityWarFieldLabel
+      !text: tr('Enemy guild')
+
+    ComboBox
+      id: enemyGuild
+      height: 20
+
+    CityWarHint
+      !text: tr('Only guilds at guild war with yours.')
+
+    Button
+      id: refreshButton
+      height: 20
+      margin-top: 2
+      !text: tr('Refresh list')
+      @onClick: modules.game_citywar.refresh()
+
+    CityWarFieldLabel
+      margin-top: 8
+      !text: tr('City (arena)')
+
+    ComboBox
+      id: city
+      height: 20
+
+    CityWarHint
+      !text: tr('Closed copy: only registered players enter.')
+
+    CityWarFieldLabel
+      margin-top: 8
+      !text: tr('Fixed stats (equal for all)')
+
+    ComboBox
+      id: fixedLevel
+      height: 20
+      !tooltip: tr('When joining the arena, level, HP/MP, magic level and skills become the same for everyone of the same vocation. Players use their own items and supplies. Everything goes back when leaving.')
+
+    Label
+      id: rulesInfo
+      height: 150
+      margin-top: 8
+      color: #dfb382
+      text-wrap: true
+      text-align: topLeft
+      !text: tr('How it works:\n- Each guild enters on its own side.\n- No XP/item loss on death, unless Death penalty is on.\n- Ends at the frag limit or when time runs out.\n- Winner takes both buy-ins; draw refunds.\n- Empty arena: 10 min = W.O.; both guilds 5 min = draw.\n- Fixed stats: given on join, removed on leave.')
+
+  CityWarMiniPanel
+    id: rules
+    anchors.top: parent.top
+    anchors.left: opponent.right
+    anchors.right: parent.right
+    anchors.bottom: summary.top
+    margin-left: 10
+    margin-bottom: 6
+    !text: tr('War Rules')
+    layout:
+      type: verticalBox
+      spacing: 2
+
+    CityWarFieldLabel
+      !text: tr('Duration')
+
+    HorizontalScrollBar
+      id: duration
+      minimum: 30
+      maximum: 120
+      step: 30
+      value: 60
+      show-value: true
+
+    CityWarFieldLabel
+      id: fragLabel
+      margin-top: 4
+      !text: tr('Frag limit (kills to win)')
+
+    HorizontalScrollBar
+      id: fragLimit
+      minimum: 5
+      maximum: 500
+      step: 5
+      value: 50
+      show-value: true
+
+    CityWarFieldLabel
+      margin-top: 4
+      !text: tr('Players per team')
+
+    HorizontalScrollBar
+      id: teamSize
+      minimum: 2
+      maximum: 50
+      step: 1
+      value: 15
+      show-value: true
+
+    CheckBox
+      id: maxLevelEnabled
+      height: 16
+      margin-top: 4
+      !text: tr('Maximum level')
+      !tooltip: tr('Players above this level cannot join the war.')
+
+    HorizontalScrollBar
+      id: maxLevel
+      minimum: 50
+      maximum: 2000
+      step: 10
+      value: 300
+      show-value: true
+
+    CityWarFieldLabel
+      margin-top: 4
+      !text: tr('Magic Wall')
+
+    ComboBox
+      id: mwMode
+      height: 20
+
+    HorizontalScrollBar
+      id: mwLimit
+      minimum: 1
+      maximum: 50
+      step: 1
+      value: 5
+      show-value: true
+
+    CheckBox
+      id: ueAllowed
+      height: 16
+      margin-top: 4
+      checked: true
+      !text: tr('Allow UE / area spells')
+      !tooltip: tr('Blocks Ultimate Explosion and Poison Storm when unchecked.')
+
+    CheckBox
+      id: deathPenalty
+      height: 16
+      margin-top: 4
+      checked: false
+      color: #FF6060
+      !text: tr('Death penalty (lose XP and items)')
+      !tooltip: tr('Optional. When checked, dying in the arena is a real death: the player loses experience and items, goes to the temple and leaves the arena (can join again). The lost XP goes to the enemies who damaged him. With fixed stats the loss is calculated on the real level. Unchecked = no loss.')
+
+    CityWarFieldLabel
+      margin-top: 4
+      !text: tr('XP penalty (goes to the killers)')
+
+    ComboBox
+      id: xpPenalty
+      height: 20
+      !tooltip: tr('Dying does not drop items, but the player loses this percentage of his real experience, and all of it goes to the enemies who damaged him (split by damage). With fixed stats it is applied when leaving the arena.')
+
+    CityWarFieldLabel
+      margin-top: 4
+      !text: tr('Buy-in (paid from the guild bank)')
+
+    HorizontalScrollBar
+      id: buyIn
+      minimum: 0
+      maximum: 10000000
+      step: 50000
+      value: 0
+      show-value: true
+
+  Label
+    id: summary
+    anchors.left: opponent.right
+    anchors.right: parent.right
+    anchors.bottom: sendButton.top
+    margin-left: 10
+    margin-bottom: 6
+    height: 14
+    color: #9f9f9f
+    text-align: center
+
+  Button
+    id: sendButton
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    width: 110
+    height: 22
+    color: #FF4040
+    !text: tr('Send Invite')
+    @onClick: modules.game_citywar.sendInvite()
