@@ -30,15 +30,18 @@ function updateFeatures(version)
     g_game.enableFeature(GameDoublePlayerGoodsMoney) -- sendSaleItemList: dinheiro u64
     g_game.enableFeature(GameForceAllowItemHotkeys) -- local
     g_game.enableFeature(GameSpritesU32)            -- things/800/Tibia.otfi: extended = true
-
+    g_game.enableFeature(GameNewWalking)
+    
     -- render/local only (TVP engine)
     g_game.enableFeature(GameDontMergeAnimatedText)
 
     -- NAO habilitar com este servidor (quebram o protocolo):
     -- GameAnimatedTextCustomFont, GameWingsAndAura, GameWingOffset, GameDrawAuraOnTop,
-    -- GameOutfitShaders, GameItemCustomAttributes, GameNewWalking, GameCreatureStarIcon,
+    -- GameOutfitShaders, GameItemCustomAttributes, GameCreatureStarIcon,
     -- GameSpritesAlphaChannel (things/800/Tibia.otfi: transparency = false), GameClientPing
 
+    -- GameNewWalking: NAO ligar aqui. O servidor liga via pacote 0x43 (sendFeatures) quando
+    -- detecta o OTCv8 no login; ligar estatico quebra servidores sem suporte.
     if DEVLOPMENT_MODE then
         g_game.enableFeature(GameBot)
     else
