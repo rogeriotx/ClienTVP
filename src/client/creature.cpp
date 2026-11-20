@@ -1025,9 +1025,15 @@ uint16 Creature::getStepDuration(bool ignoreDiagonal, Otc::Direction dir)
             groundSpeed = 150;
     }
 
+    // diagonal custa 3x, igual ao servidor (creature.cpp: getStepDurationWithCost(3))
+    int cost = 1;
+    if (!ignoreDiagonal && (m_lastStepDirection == Otc::NorthWest || m_lastStepDirection == Otc::NorthEast ||
+                            m_lastStepDirection == Otc::SouthWest || m_lastStepDirection == Otc::SouthEast))
+        cost = 3;
+
     int interval = 1000;
     if (groundSpeed > 0 && speed > 0)
-        interval = 1000 * groundSpeed;
+        interval = 1000 * groundSpeed * cost;
 
     if (g_game.getFeature(Otc::GameNewSpeedLaw) && hasSpeedFormula()) {
         int formulatedSpeed = 1;
@@ -1042,23 +1048,20 @@ uint16 Creature::getStepDuration(bool ignoreDiagonal, Otc::Direction dir)
     if (g_game.getClientVersion() >= 900 && !g_game.getFeature(Otc::GameNewWalking))
         interval = std::ceil((float)interval / (float)g_game.getServerBeat()) * g_game.getServerBeat();
 
-    float factor = 3;
-
+    // mesmo arredondamento do servidor: para cima em multiplos de 50ms, minimo 50ms
+    interval = std::max<int>(50, ((interval + 49) / 50) * 50);
     interval = std::max<int>(interval, g_game.getServerBeat());
-
-    if (!ignoreDiagonal && (m_lastStepDirection == Otc::NorthWest || m_lastStepDirection == Otc::NorthEast ||
-                            m_lastStepDirection == Otc::SouthWest || m_lastStepDirection == Otc::SouthEast))
-        groundSpeed *= factor;
 
     if (!isServerWalking() && g_game.getFeature(Otc::GameSlowerManualWalking)) {
         interval += 25;
     }
     if (isServerWalking() && g_game.getFeature(Otc::GameNewWalking) && m_stepDuration > 0) // just use server value
     {
-        interval = m_stepDuration;
+        // o servidor envia a duracao do passo reto (getStepDuration()); a diagonal custa 3x
+        interval = m_stepDuration * cost;
     }
 
-    return std::max<int32>(g_game.getServerBeat(), 50 * ((50 + 1000 * groundSpeed / speed - 1) / 50)) - 20;;
+    return std::min<int>(interval, 0xFFFF);
 }
 
 Point Creature::getDisplacement()

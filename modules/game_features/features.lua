@@ -54,7 +54,8 @@ function updateFeatures(version)
         g_game.enableFeature(GameLoginPacketEncryption)
         g_game.enableFeature(GamePlayerAddons)
         g_game.enableFeature(GameNewOutfitProtocol)
-        g_game.enableFeature(GameFasterAnimations)
+        -- GameFasterAnimations: NAO ligar. Dobra o ciclo das pernas por tile e em speed alta
+        -- troca o frame a cada 20ms (pisca/"ghost"). O old_pbOT_Client nao usa.
     end
 
     if(version >= 780) then
