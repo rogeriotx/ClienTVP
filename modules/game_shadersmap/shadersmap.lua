@@ -83,6 +83,11 @@ function toggleShader()
    if not player then return end
 
    local pos = player:getPosition()
+   if not pos then
+       -- login: mapa ainda nao chegou; tenta de novo sem matar o ciclo
+       toggleShaderEvent = scheduleEvent(toggleShader, SHADER_CONFIG.checkInterval)
+       return
+   end
    local toPlay = nil
 
 

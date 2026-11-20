@@ -251,8 +251,14 @@ function checkCreatures()
     return
   end
   
+  -- durante o login o local player ainda nao tem posicao (mapa nao chegou)
+  local playerPos = player:getPosition()
+  if not playerPos then
+    return
+  end
+
   local dimension = modules.game_interface.getMapPanel():getVisibleDimension()
-  local spectators = g_map.getSpectatorsInRangeEx(player:getPosition(), false, math.floor(dimension.width / 2), math.floor(dimension.width / 2), math.floor(dimension.height / 2), math.floor(dimension.height / 2))
+  local spectators = g_map.getSpectatorsInRangeEx(playerPos, false, math.floor(dimension.width / 2), math.floor(dimension.width / 2), math.floor(dimension.height / 2), math.floor(dimension.height / 2))
   local maxCreatures = battlePanel:getChildCount()
   
   local creatures = {}
