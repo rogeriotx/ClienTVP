@@ -5,6 +5,8 @@ Objetivo: usar o layout do cliente TVP (OTCv8 com fonte, layout `retro`) com o s
 Build: `MSBuild vc16\otclient.vcxproj /p:Configuration=OpenGL /p:Platform=Win32` (vcpkg `x86-windows-static`).
 Servidor em `init.lua`: `192.168.100.254:7171:800`.
 
+Repositorio: https://github.com/rogeriotx/ClienTVP - branch `port/pbot-800` (a partir de `main` em `b8bcf7c`). PR: https://github.com/rogeriotx/ClienTVP/pull/new/port/pbot-800
+
 ## Fase 1 - Protocolo (C++ `src/client`)
 | Ponto | Ajuste |
 |---|---|
@@ -46,3 +48,5 @@ Servidor em `init.lua`: `192.168.100.254:7171:800`.
 - Sem modulo de cliente: inspect (107), pontos (89), dungeons (109).
 - Servidor: `addItem(ITEM_BAG, 1)` sem byte de tier (`protocolgame.cpp`); `missile id 41` invalido em algum script.
 - `data/things/800/Tibia.spr` (136 MB) fora do git - copiar do old_pbOT_Client.
+- Abrir PR de `port/pbot-800` para `main`.
+- `run_ravenor.sh` (script wine de outro usuario) nao versionado.
