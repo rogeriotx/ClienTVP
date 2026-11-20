@@ -9,6 +9,7 @@ local defaultOptions = {
   cacheMap = g_app.isMobile(),
   classicControl = false,
   smartWalk = false,
+  recordCam = false, -- grava cada login em records/ (CAM)
   dash = false,
   raritySelect = 3,
   autoChaseOverride = true,

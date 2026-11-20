@@ -1,5 +1,5 @@
 OptionPanel
-  size: 237 335
+  size: 237 360
   text: General Options
 
   OptionCheckBoxBackground
@@ -53,7 +53,13 @@ OptionPanel
       id: openContainerInNewWindow
       !text: tr('Smart Open Container')
       !tooltip: tr('Open container in new window (Shift + Right Click)')
-  
+
+  OptionCheckBoxBackground
+    OptionCheckBox
+      id: recordCam
+      !text: tr('Record CAM')
+      !tooltip: tr('Record each login to the records folder (takes effect on next login)')
+
   OptionsLabel
     id: hotkeyDelayLabel
     margin-top: 10
