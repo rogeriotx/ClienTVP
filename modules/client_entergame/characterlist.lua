@@ -379,11 +379,13 @@ function CharacterList.create(characters, account, otui)
         end
       end
 
-      update_premium(account.premDays)
+      -- o servidor envia premDays em DIAS; o contador trabalha em segundos
+      local premSeconds = account.premDays * 86400
+      update_premium(premSeconds)
       updatePremiumCycle = cycleEvent(function()
-        account.premDays = account.premDays - 1
-        update_premium(account.premDays)
-        if account.premDays < 1 then
+        premSeconds = premSeconds - 1
+        update_premium(premSeconds)
+        if premSeconds < 1 then
           removeEvent(updatePremiumCycle)
         end
       end, 1000)

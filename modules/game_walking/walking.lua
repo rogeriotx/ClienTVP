@@ -17,6 +17,9 @@ autoFinishNextServerWalk = 0
 turnKeys = {}
 
 function elevationStep(playerTile, toTile) -- returns true or false for if the player can step
+  if not playerTile or not toTile then -- tile fora da area conhecida: deixa o autowalk/servidor decidir
+    return true
+  end
   if toTile:getElevation() >= (playerTile:getElevation() + 2) then
     return false
   else
