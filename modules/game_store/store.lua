@@ -452,116 +452,177 @@ function changeImagesUrl(url)
 	IMAGES_URL = url
 end
 
+-- Pesquisa da store: catalogo atual e texto pesquisado (minusculo, sem espacos nas pontas)
+local currentStoreIndex = {}
+local searchText = ''
+local ignoreSearchChange = false
+
+local function closeHistory()
+	if transferHistory:isVisible() then
+		transferHistory:setVisible(false)
+		window.btnHistory:setOn(false)
+	end
+end
+
+local function createProductRow(store, product)
+	local player = g_game.getLocalPlayer()
+	local row = g_ui.createWidget('RowStore', listProduct)
+
+	local offerBox = row:getChildById('boxOffer')
+
+	local outfit = offerBox:getChildById('outfit')
+	local image = offerBox:getChildById('image')
+	local item = offerBox:getChildById('item')
+
+	row.store = store
+	row.product = product
+	row.type = product.type
+
+	if product.type == 1 or product.type == 2 then
+		row:getChildById('lblName'):setText("x"..product.count.." "..product.name)
+	else
+		row:getChildById('lblName'):setText(product.name)
+	end
+
+	local price = product.price
+
+	row:getChildById('lblName'):setTextAlign(AlignCenter)
+	row:getChildById('lblName'):setMarginRight(10)
+
+	if product.addons then
+		for _, addon in pairs(product.addons) do
+			price = price + addon.price
+		end
+	end
+
+	row:getChildById('lblPrice'):setText(formatNumbers(price))
+
+	if getCoinsBalance() < product.price then
+		row:getChildById('lblPrice'):setColor("#d33c3c")
+	end
+
+	if product.type == 3 then
+		local looktype = product.sexId.male
+		if PLAYER_GENDER == 0 then
+			looktype = product.sexId.female
+		end
+
+		outfit:setVisible(true)
+		outfit:setAnimate(true)
+		outfit:setOutfit({
+			type = looktype,
+			auxType = 0,
+			addons = 3,
+			head = player:getOutfit().head,
+			body = player:getOutfit().body,
+			legs = player:getOutfit().legs,
+			feet = player:getOutfit().feet
+		})
+
+		image:setVisible(false)
+		item:setVisible(false)
+	elseif product.type == 1 then
+		item:setVisible(true)
+
+		item:setItemId(product.clientId)
+
+		outfit:setVisible(false)
+		image:setVisible(false)
+	else
+		local productImage = product.image and product.image[1]
+		if productImage then
+			image:setVisible(true)
+			image:setImageSource("images/"..productImage)
+
+			outfit:setVisible(false)
+			item:setVisible(false)
+		end
+	end
+	return row
+end
+
+-- Limpa o campo de pesquisa sem disparar a busca
+function clearSearch()
+	searchText = ''
+	local searchEdit = window and window:recursiveGetChildById('searchStore')
+	if searchEdit and searchEdit:getText() ~= '' then
+		ignoreSearchChange = true
+		searchEdit:setText('')
+		ignoreSearchChange = false
+	end
+end
+
+local function openCategory(index)
+	local category = listCategory:getChildByIndex(index) or listCategory:getFirstChild()
+	if category then
+		listCategory:focusChild(category)
+		category.onClick(category)
+	end
+end
+
+-- Mostra as ofertas de todas as categorias cujo nome contem o texto pesquisado
+local function applySearch(query)
+	listProduct:destroyChildren()
+	listCategory:focusChild(nil)
+	for index, store in ipairs(currentStoreIndex) do
+		for _, product in ipairs(store.offers or {}) do
+			if tostring(index) == product.category_id and product.name:lower():find(query, 1, true) then
+				createProductRow(store, product)
+			end
+		end
+	end
+	closeHistory()
+	listProduct:focusChild(listProduct:getFirstChild())
+end
+
+function onSearchChange(text)
+	if ignoreSearchChange then
+		return
+	end
+
+	searchText = (text or ''):gsub('^%s+', ''):gsub('%s+$', ''):lower()
+	if searchText == '' then
+		openCategory(lastCategoryIndex)
+	else
+		applySearch(searchText)
+	end
+end
+
 function getStoreCategories(buffer)
 	clearCategories()
 
-	local player = g_game.getLocalPlayer()
 	local storeIndex = buffer[1]
+	currentStoreIndex = storeIndex
 	for i, store in ipairs(storeIndex) do
 		local category = g_ui.createWidget('MenuCategoryStore', listCategory)
 			category.index  = i
-			
+
 			category:setIcon("images/"..store.icon)
 
 			category:setText(tr(storeIndex[i].name))
-	
-		category.onClick = function(self)	
+
+		category.onClick = function(self)
 			lastCategoryIndex = self.index
+			clearSearch()
 			listProduct:destroyChildren()
 
-			local storeProducts = store.offers
-			if storeProducts then
-				for i, product in ipairs(storeProducts) do
-					if tostring(self.index) == product.category_id then
-						local row = g_ui.createWidget('RowStore', listProduct)
-
-						local offerBox = row:getChildById('boxOffer')
-
-						local outfit = offerBox:getChildById('outfit')
-						local image = offerBox:getChildById('image')
-						local item = offerBox:getChildById('item')
-
-						row.store = store
-						row.product = product		  
-						row.type = product.type		
-						
-						if product.type == 1 or product.type == 2 then
-							row:getChildById('lblName'):setText("x"..product.count.." "..product.name)
-						else
-							row:getChildById('lblName'):setText(product.name)
-						end
-					
-						local price = product.price
-
-						row:getChildById('lblName'):setTextAlign(AlignCenter)
-						row:getChildById('lblName'):setMarginRight(10)
-						
-						if product.addons then
-							for _, addon in pairs(product.addons) do
-								price = price + addon.price
-							end
-						end
-
-						row:getChildById('lblPrice'):setText(formatNumbers(price))
-						
-						if getCoinsBalance() < product.price then
-							row:getChildById('lblPrice'):setColor("#d33c3c")
-						end
-						
-						if product.type == 3 then
-							local looktype = product.sexId.male
-							if PLAYER_GENDER == 0 then
-								looktype = product.sexId.female
-							end
-				
-							outfit:setVisible(true)
-							outfit:setAnimate(true)
-							outfit:setOutfit({
-								type = looktype,
-								auxType = 0,
-								addons = 3,
-								head = player:getOutfit().head,
-								body = player:getOutfit().body,
-								legs = player:getOutfit().legs,
-								feet = player:getOutfit().feet
-							})
-				
-							image:setVisible(false)
-							item:setVisible(false)
-						elseif product.type == 1 then
-							item:setVisible(true)
-				
-							item:setItemId(product.clientId)
-				
-							outfit:setVisible(false)
-							image:setVisible(false)
-						else
-							local productImage = product.image and product.image[1]
-							if productImage then
-								image:setVisible(true)
-								image:setImageSource("images/"..productImage)
-				
-								outfit:setVisible(false)
-								item:setVisible(false)
-							end
-						end
-
-					end
+			for _, product in ipairs(store.offers or {}) do
+				if tostring(self.index) == product.category_id then
+					createProductRow(store, product)
 				end
 			end
-			
-			if transferHistory:isVisible() then
-				transferHistory:setVisible(false)
-				window.btnHistory:setOn(false)
-			end
-			
-			listProduct:focusChild(listProduct:getFirstChild())  
+
+			closeHistory()
+			listProduct:focusChild(listProduct:getFirstChild())
 		end
 	end
-	
-	local category = listCategory:getChildByIndex(lastCategoryIndex) or listCategory:getFirstChild()
-	listCategory:focusChild(category)
-	category.onClick(category)
+
+	-- a store e reenviada pelo servidor apos compras: mantem a pesquisa ou a categoria aberta
+	if searchText ~= '' then
+		applySearch(searchText)
+	else
+		openCategory(lastCategoryIndex)
+	end
 	storeDataSent = true
 end
 
@@ -587,6 +648,7 @@ function onCloseStore()
 	transferPointsWindow:setVisible(false)
 	changeNameWindow:setVisible(false)
 	changeNameProduct = nil
+	clearSearch()
 
 	if acceptWindow then
 		acceptWindow:destroy()
