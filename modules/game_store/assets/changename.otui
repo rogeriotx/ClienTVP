@@ -1,0 +1,65 @@
+StoreWindowWidget
+  id: changeNameWindow
+  size: 278 140
+  visible: false
+  @onEscape: changeNameCancel()
+  @onEnter: changeNameAccept()
+  !text: tr('Name Change')
+
+  Label
+    id: descriptionText
+    !text: tr('Enter the new name for your character. You will be logged out after the change.')
+    text-wrap: true
+    text-vertical-auto-resize: true
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 7
+
+  Label
+    id: newNameLabel
+    !text: tr('New name:')
+    anchors.top: descriptionText.bottom
+    anchors.left: parent.left
+    text-auto-resize: true
+    margin: 7
+    margin-top: 10
+
+  TextEdit
+    id: newNameValue
+    anchors.verticalCenter: newNameLabel.verticalCenter
+    anchors.left: prev.right
+    anchors.right: parent.right
+    margin-left: 10
+    margin-right: 7
+    height: 16
+    max-length: 15
+    text-offset: 1 1
+    padding: 1 0 0 2
+
+  HorizontalSeparator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: closeButton.top
+    margin-bottom: 7
+    margin-left: -5
+    margin-right: -5
+
+  StoreButtonWidget
+    id: closeButton
+    width: 43
+    margin-right: -5
+    margin-bottom: -3
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    !text: tr('Cancel')
+    @onClick: changeNameCancel()
+
+  StoreButtonWidget
+    id: buttonOk
+    anchors.right: closeButton.left
+    anchors.bottom: prev.bottom
+    margin-right: 11
+    !text: tr('Change')
+    width: 52
+    @onClick: changeNameAccept()

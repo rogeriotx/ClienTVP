@@ -2,10 +2,12 @@ COMMAND_BUYITEM = '!shop'
 WEBSITE_GETCOINS = 'https://ravenor.online/account/store'
 COINS_OPCODE = 52
 
-local window, listCategory, listProduct, coinBalance, acceptWindow, transferPointsWindow, withdrawWindow, changeNamePrice
+local window, listCategory, listProduct, coinBalance, acceptWindow, transferPointsWindow, withdrawWindow, changeNameWindow, changeNameProduct
+local OFFER_TYPE_NAMECHANGE = 5
 local CS_SHOP_CLIENTSIDE, CS_SHOP_SERVERSIDE = 202, 203
 local WEBSITE_GETCOINS = "https://ravenor.online/account/store"
 local PLAYER_GENDER = 0
+local lastCategoryIndex = 1 -- categoria aberta; mantida quando o servidor reenvia a store
 
 -- Reddington special check
 local function formatNumbers(number)
@@ -45,8 +47,11 @@ function init()
 	
 	withdrawWindow = g_ui.displayUI('assets/withdrawpoints')
 	withdrawWindow:setVisible(false)
-	
-	transferHistory:setVisible(false)			
+
+	changeNameWindow = g_ui.displayUI('assets/changename')
+	changeNameWindow:setVisible(false)
+
+	transferHistory:setVisible(false)		
 	ProtocolGame.registerExtendedJSONOpcode(CS_SHOP_SERVERSIDE, onExtendedJSONOpcode)
 	
 	local addons = {}
@@ -227,7 +232,7 @@ function init()
 			image:setVisible(false)
 			--Not Outfit Offer:
 		else
-			local productImage = product.image[1]
+			local productImage = product.image and product.image[1]
 			if productImage then
 		
 				offerBox:setSize({width = 96, height = 96 })
@@ -285,14 +290,18 @@ function init()
 				return true
 			end
 
+			if product.type == OFFER_TYPE_NAMECHANGE then
+				return openChangeNameWindow(product)
+			end
+
 			local acceptFunc = function()
 				local unformatted = coinBalance:getText():gsub(',', '')
 				local balanceInfo = tonumber(unformatted)
 				if balanceInfo >= product.price then
 					if (product.type == 3) then
-						sendAction("buyItem", {name = product.name})
+						sendAction("buyItem", {name = product.name, price = product.price})
 					else
-						sendAction("buyItem", {name = product.name})
+						sendAction("buyItem", {name = product.name, price = product.price})
 					end
 					
 					if acceptWindow then
@@ -331,6 +340,7 @@ function terminate()
 	window:destroy()
 	if transferPointsWindow then transferPointsWindow:destroy() end
 	if withdrawWindow then withdrawWindow:destroy() end
+	if changeNameWindow then changeNameWindow:destroy() end
 end
 
 function getCoinsWebsite()
@@ -456,6 +466,7 @@ function getStoreCategories(buffer)
 			category:setText(tr(storeIndex[i].name))
 	
 		category.onClick = function(self)	
+			lastCategoryIndex = self.index
 			listProduct:destroyChildren()
 
 			local storeProducts = store.offers
@@ -525,7 +536,7 @@ function getStoreCategories(buffer)
 							outfit:setVisible(false)
 							image:setVisible(false)
 						else
-							local productImage = product.image[1]
+							local productImage = product.image and product.image[1]
 							if productImage then
 								image:setVisible(true)
 								image:setImageSource("images/"..productImage)
@@ -548,8 +559,9 @@ function getStoreCategories(buffer)
 		end
 	end
 	
-	listCategory:focusChild(listCategory:getFirstChild())  
-	listCategory:getFirstChild().onClick(listCategory:getFirstChild())
+	local category = listCategory:getChildByIndex(lastCategoryIndex) or listCategory:getFirstChild()
+	listCategory:focusChild(category)
+	category.onClick(category)
 	storeDataSent = true
 end
 
@@ -573,7 +585,9 @@ function onCloseStore()
 	window:hide()
 	modules.game_sidemenu.getStoreButton():setOn(false)
 	transferPointsWindow:setVisible(false)
-	
+	changeNameWindow:setVisible(false)
+	changeNameProduct = nil
+
 	if acceptWindow then
 		acceptWindow:destroy()
 		acceptWindow = nil
@@ -781,6 +795,62 @@ function withdrawCancel()
 	withdrawWindow:setVisible(false)
 	transferHistory:setVisible(false)
 	window.btnHistory:setOn(false)
+	window:setVisible(true)
+	modules.game_sidemenu.getStoreButton():setOn(true)
+end
+
+function openChangeNameWindow(product)
+	changeNameProduct = product
+	window:hide()
+	modules.game_sidemenu.getStoreButton():setOn(false)
+
+	local value = changeNameWindow:getChildById('newNameValue')
+	value:setText('')
+	changeNameWindow:setVisible(true)
+	changeNameWindow:raise()
+	changeNameWindow:focus()
+	value:focus()
+end
+
+function changeNameAccept()
+	local product = changeNameProduct
+	if not product or acceptWindow then
+		return true
+	end
+
+	local newName = changeNameWindow:getChildById('newNameValue'):getText():gsub('^%s+', ''):gsub('%s+$', '')
+	if newName:len() < 3 or newName:len() > 15 then
+		displayErrorBox(window:getText(), tr('The length of your new name must be between 3 and 15 characters.'))
+		return true
+	end
+
+	if getCoinsBalance() < product.price then
+		displayErrorBox(window:getText(), tr("You don't have enough coins"))
+		return true
+	end
+
+	local cancelFunc = function() resetAllWidgetOpacity(acceptWindow) acceptWindow:destroy() acceptWindow = nil end
+	local acceptFunc = function()
+		sendAction("buyItem", {name = product.name, newName = newName, price = product.price})
+		resetAllWidgetOpacity(acceptWindow)
+		acceptWindow:destroy()
+		acceptWindow = nil
+		changeNameCancel()
+	end
+
+	acceptWindow = displayGeneralBox(tr('Confirmation of Purchase'),
+		'Do you want to change your name to "' .. newName .. '" for ' .. formatNumbers(product.price) .. ' coins?', {
+		{text=tr('Cancel'), callback=cancelFunc},
+		{text=tr('Buy'), callback=acceptFunc},
+		anchor=AnchorHorizontalCenter
+	}, acceptFunc, cancelFunc)
+	acceptWindow:lock()
+end
+
+function changeNameCancel()
+	changeNameProduct = nil
+	changeNameWindow:getChildById('newNameValue'):setText('')
+	changeNameWindow:setVisible(false)
 	window:setVisible(true)
 	modules.game_sidemenu.getStoreButton():setOn(true)
 end
