@@ -390,7 +390,8 @@ function startUseWith(thing, subType)
   mouseGrabberWidget:grabMouse()
   g_mouse.pushCursor('target')
 
-  if thing:getId() == 5111 then
+  -- Dummy Ticket (server ID 7650 = client ID 7648): mostra em azul a area onde o dummy pode ser invocado
+  if thing:getId() == 7648 then
     ticketArea = true
   end
 
@@ -429,6 +430,10 @@ function onMouseMove()
   
   -- Obtém o tile em que o mouse está
   local clickedWidget = gameRootPanel:recursiveGetChildByPos(mousePos, false)
+  if not clickedWidget or clickedWidget:getClassName() ~= 'UIGameMap' then
+    return
+  end
+
   local tile = clickedWidget:getTile(mousePos)
   if not tile then return end
 
