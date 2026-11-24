@@ -88,6 +88,12 @@ MiniWindow
       SkillValueLabel
 
     SkillButton
+      id: soul
+      SkillNameLabel
+        !text: tr('Soul Points')
+      SkillValueLabel
+
+    SkillButton
       id: speed
       SkillNameLabel
         !text: tr('Speed')
@@ -98,6 +104,13 @@ MiniWindow
       SkillNameLabel
         !text: tr('Capacity')
       SkillValueLabel
+
+    SkillButton
+      id: stamina
+      SkillNameLabel
+        !text: tr('Stamina')
+      SkillValueLabel
+      SkillPercentPanel
 
     SkillButton
       id: regenerationTime
