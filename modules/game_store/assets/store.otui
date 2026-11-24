@@ -126,6 +126,7 @@ RowStore < StoreLightFlatPanelWidget
     UIItem
       id: item
       virtual: true
+      &noRarityFrame: true
       size: 64 64
       padding: 8
       anchors.centerIn: parent
@@ -347,6 +348,7 @@ StoreWindowWidget
       UIItem
         id: item
         virtual: true
+        &noRarityFrame: true
         phantom: true
         size: 64 64
         padding: 8

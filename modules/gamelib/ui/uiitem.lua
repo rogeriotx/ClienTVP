@@ -181,8 +181,9 @@ function UIItem:updateItemOverlays()
 end
 
 function UIItem:updateItemRarity()
-  local imageSource = getItemRarityImage(self:getItem())
-  self:setImageSource(imageSource)
+  if not self.noRarityFrame then -- &noRarityFrame: true no otui = sem fundo de slot (ex.: game_store)
+    self:setImageSource(getItemRarityImage(self:getItem()))
+  end
   self:updateItemOverlays()
   if not self.contador then
     contador = contador + 1
