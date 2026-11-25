@@ -143,7 +143,11 @@ HeadlessMiniWindow
   height: 68
   !text: tr('Inventory')
   font: verdana-11px-antialised
-  color: #8F8F8F
+  color: #9F9F9F
+  icon-rect: 4 2 13 13
+  icon-clip: 0 0 16 16
+  text-offset: 19 1
+  text-align: topLeft
   &save: true
   &autoOpen: 4
   &forceOpen: true
