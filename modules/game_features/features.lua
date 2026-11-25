@@ -6,6 +6,20 @@ function terminate()
   disconnect(g_game, { onClientVersionChange = updateFeatures })
 end
 
+-- Le uma flag booleana do data/things/<version>/Tibia.otfi (gerado pelo Object Builder).
+function otfiFlag(version, key)
+    local path = '/things/' .. version .. '/Tibia.otfi'
+    if not g_resources.fileExists(path) then
+        return false
+    end
+    local ok, contents = pcall(g_resources.readFileContents, path)
+    if not ok or not contents then
+        return false
+    end
+    local value = contents:match('\n%s*' .. key:gsub('%-', '%%-') .. '%s*:%s*(%a+)')
+    return value == 'true'
+end
+
 function updateFeatures(version)
     g_game.resetFeatures()
     if version <= 0 then
@@ -34,6 +48,19 @@ function updateFeatures(version)
     
     -- render/local only (TVP engine)
     g_game.enableFeature(GameDontMergeAnimatedText)
+
+    -- GameEnhancedAnimations: duracao por frame no Tibia.dat (Object Builder: "Improved Animations").
+    -- So liga quando o Tibia.otfi da versao diz frame-durations: true. Se o dat nao tiver
+    -- os bytes de animator, o loadDat quebra (thingtype.cpp le o animator quando a feature esta on).
+    if otfiFlag(version, 'frame-durations') then
+        g_game.enableFeature(GameEnhancedAnimations)
+    end
+
+    -- GameIdleAnimations: frame groups (idle/andando) nas criaturas (Object Builder: "Frame Groups").
+    -- Mesma regra: so liga quando o Tibia.otfi diz frame-groups: true, senao o loadDat quebra.
+    if otfiFlag(version, 'frame-groups') then
+        g_game.enableFeature(GameIdleAnimations)
+    end
 
     -- NAO habilitar com este servidor (quebram o protocolo):
     -- GameAnimatedTextCustomFont, GameWingsAndAura, GameWingOffset, GameDrawAuraOnTop,
