@@ -64,6 +64,16 @@ void Outfit::draw(Point dest, Otc::Direction direction, uint walkAnimationPhase,
 
     int animationPhase = walkAnimationPhase;
 
+    // Montado, o passo segue o ciclo da montaria (creature.cpp). Se o personagem tem menos
+    // passos (outfit 8.0 com 2), distribui os dele ao longo do ciclo em vez de pedir frame inexistente.
+    if (m_mount > 0 && walkAnimationPhase > 0 && m_category == ThingCategoryCreature) {
+        int riderSteps = type->getMovingAnimationPhases();
+        auto mountType = g_things.rawGetThingType(m_mount, ThingCategoryCreature);
+        int mountSteps = mountType ? mountType->getMovingAnimationPhases() : 0;
+        if (riderSteps > 0 && mountSteps > riderSteps)
+            animationPhase = 1 + ((int)(walkAnimationPhase - 1) * riderSteps) / mountSteps;
+    }
+
     auto wingBounce = [&] {
         int maxoffset = 4;
         uint floatingTicks = 8;

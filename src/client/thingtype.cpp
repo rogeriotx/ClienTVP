@@ -133,6 +133,17 @@ void ThingType::serialize(const FileStreamPtr& fin)
     }
 }
 
+int ThingType::getMovingAnimationPhases()
+{
+    if (!m_animator)
+        return std::max<int>(0, m_animationPhases - 1);
+    // Com frame groups o total inclui o grupo Idle; o Moving inteiro sao passos.
+    // Outfit com um grupo so (Object Builder junta parado+passos): o frame 0 e o parado.
+    int movingPhases = m_animator->getAnimationPhases();
+    bool hasIdleGroup = g_game.getFeature(Otc::GameIdleAnimations) && m_animationPhases > movingPhases;
+    return hasIdleGroup ? movingPhases : movingPhases - 1;
+}
+
 void ThingType::unserialize(uint16 clientId, ThingCategory category, const FileStreamPtr& fin)
 {
     m_null = false;

@@ -529,14 +529,10 @@ void Creature::onDeath()
 
 int Creature::getWalkAnimationPhases()
 {
-    if (!getAnimator())
-        return getAnimationPhases();
-    // Com frame groups o total inclui o grupo Idle; so soma o frame parado quando ele existe.
-    // Outfit com um grupo so (Object Builder junta parado+passos) usa o total do animator,
-    // senao o ultimo passo cai num frame inexistente e a criatura pisca andando.
-    int movingPhases = getAnimator()->getAnimationPhases();
-    bool hasIdleGroup = g_game.getFeature(Otc::GameIdleAnimations) && getAnimationPhases() > movingPhases;
-    return movingPhases + (hasIdleGroup ? 1 : 0);
+    // parado + passos; ThingType::getMovingAnimationPhases trata frame groups
+    // (so conta o frame parado separado quando existe grupo Idle, senao a criatura pisca andando)
+    ThingType* type = rawGetThingType();
+    return type ? type->getMovingAnimationPhases() + 1 : getAnimationPhases();
 }
 
 void Creature::updateWalkAnimation(uint8 totalPixelsWalked)
@@ -546,22 +542,28 @@ void Creature::updateWalkAnimation(uint8 totalPixelsWalked)
         return;
 
     int footAnimPhases = getWalkAnimationPhases() - 1;
-    // TODO, should be /2 for <= 810
-    // pernas no ritmo do passo real (diagonal inclusa): um ciclo por tile
+
+    // Montado, quem anda e a montaria: o ciclo segue os passos dela (8 nas montarias 10.x).
+    // Antes usava o menor entre outfit e montaria; com outfit 8.0 (2 passos) a montaria so
+    // alternava os frames 1 e 2 e ficava tremula. Outfit.cpp ajusta o personagem a esse ciclo.
+    if (m_outfit.getMount() != 0) {
+        ThingType* mountType = g_things.rawGetThingType(m_outfit.getMount(), m_outfit.getCategory());
+        if (mountType && mountType->getMovingAnimationPhases() > 0)
+            footAnimPhases = mountType->getMovingAnimationPhases();
+    }
+
+    // pernas no ritmo do passo real (diagonal inclusa).
+    // GameFasterAnimations (dois ciclos por tile) so para animacoes curtas, como os 2 passos
+    // dos outfits 8.0; com 4+ frames seria 16 frames por tile e o limite de 20 ms acelerava tudo.
+    bool fasterCycle = g_game.getFeature(Otc::GameFasterAnimations) && footAnimPhases <= 2;
     uint16 footDelay = getStepDuration() / 2;
     if (footAnimPhases > 0) {
-        footDelay = ((getStepDuration() + 20) / (g_game.getFeature(Otc::GameFasterAnimations) ? footAnimPhases * 2 : footAnimPhases));
+        footDelay = ((getStepDuration() + 20) / (fasterCycle ? footAnimPhases * 2 : footAnimPhases));
     }
     if (!g_game.getFeature(Otc::GameFasterAnimations))
         footDelay += 10;
     if (footDelay < 20)
         footDelay = 20;
-
-    // Since mount is a different outfit we need to get the mount animation phases
-    if (m_outfit.getMount() != 0) {
-        ThingType* type = g_things.rawGetThingType(m_outfit.getMount(), m_outfit.getCategory());
-        footAnimPhases = std::min<int>(footAnimPhases, type->getAnimationPhases() - 1);
-    }
 
     if (footAnimPhases == 0) {
         m_walkAnimationPhase = 0;
