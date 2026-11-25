@@ -100,6 +100,10 @@ void Outfit::draw(Point dest, Otc::Direction direction, uint walkAnimationPhase,
             } else {
                 animationPhase = idleAnimator->getPhase();
             }
+        } else if (type->isAnimateAlways() && !ui && type->getAnimator() && g_game.getFeature(Otc::GameEnhancedAnimations)) {
+            // criatura que anima sempre (voando etc.): usa a duracao de cada frame do dat,
+            // como itens e efeitos; antes era 1000 ms / frames e ignorava o Object Builder
+            animationPhase = type->getAnimator()->getPhase();
         } else if (type->isAnimateAlways() || ui) {
             int phases = type->getAnimator() ? type->getAnimator()->getAnimationPhases() : type->getAnimationPhases();
             if (ui && phases < 4) {
