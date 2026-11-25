@@ -1381,7 +1381,7 @@ void ProtocolGame::parseOpenNpcTrade(const InputMessagePtr& msg)
 
     int listCount;
 
-    if (g_game.getProtocolVersion() >= 986 || g_game.getFeature(Otc::GamePbotProtocol)) // pbOT: sendShop u16
+    if (g_game.getProtocolVersion() >= 986) // pbOT: sendShop u8 (igual ao old pbOT client)
         listCount = msg->getU16();
     else
         listCount = msg->getU8();
