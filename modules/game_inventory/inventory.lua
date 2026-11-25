@@ -506,7 +506,7 @@ function onInventoryMinimize(value)
     miniwindowScrollBar = inventoryWindow:recursiveGetChildById('miniwindowScrollBar')
     miniwindowScrollBar:hide()
     
-    inventoryWindow.defaultHeight = value and 52 or 170
+    inventoryWindow.defaultHeight = value and 64 or 170
     adjustWindowHeight()
 
 
@@ -514,8 +514,8 @@ function onInventoryMinimize(value)
         ["minimized"] = {
             ["minimizeButton"] = {left = 2+8, top = 8-4},
             ["lockButton"] = {left = 2+8, top = 21-4},
-            ["capPanel"] = {left = 2+22, top = 4},
-            ["conditionpluscap"] = {left = 2+22, top = 8-4},
+            ["capPanel"] = {left = 2+22, top = 3, height = 19},
+            ["conditionpluscap"] = {left = 2+22, top = 3, height = 38},
 
             ["fightOffensiveBox"] = {left = 2+66+4-12, top = 8-4},
             ["fightBalancedBox"] = {left = 2+86+4-12, top = 8-4},
@@ -525,8 +525,8 @@ function onInventoryMinimize(value)
             ["chaseModeBox"] = {left = 2+86+4-12, top = 30-4},
             ["safeFightBox"] = {left = 2+106+4-12, top = 30-4},
 
-            ["conditionPanel"] = { left = 2 + 22, top = 24, width = 34 },
-            ["soulPanel"] = { left = 0, top = 0, invisible = true },
+            ["conditionPanel"] = { left = 2 + 22, top = 49, width = 96 },
+            ["soulPanel"] = { left = 2 + 22, top = 22, height = 19 },
 
             ["slot1"] = {left = 2+0, top = 1-4, invisible = true}, -- head slot
             ["slot2"] = {left = 2+0, top = 1-4, invisible = true}, -- head slot
@@ -558,8 +558,8 @@ function onInventoryMinimize(value)
             ["safeFightBox"] = {left = 2+147, top = 62-4+1},
             
             ["conditionPanel"] = { left = 2 + 8, top = 151, width = 108 },
-            ["soulPanel"] = { left = 2 + 8, top = 128 },
-            ["capPanel"] = { left = 2 + 82, top = 128 },
+            ["soulPanel"] = { left = 2 + 8, top = 128, height = 21 },
+            ["capPanel"] = { left = 2 + 82, top = 128, height = 21 },
             
             ["slot1"] = {left = 2+45, top = 8-4}, -- head slot
             ["slot2"] = {left = 2+8, top = 22-4}, -- neck slot
@@ -582,6 +582,9 @@ function onInventoryMinimize(value)
         if margin.width then
             inventoryWindow:recursiveGetChildById(widget):setWidth(margin.width)
         end
+        if margin.height then
+            inventoryWindow:recursiveGetChildById(widget):setHeight(margin.height)
+        end
         if margin.invisible and margin.invisible == true then
             inventoryWindow:recursiveGetChildById(widget):setVisible(false)
         else
@@ -591,8 +594,10 @@ function onInventoryMinimize(value)
     
     if value then -- minimized
         inventoryWindow.capPanel:setImageColor("alpha")
+        inventoryWindow.soulPanel:setImageColor("alpha")
     else -- open
         inventoryWindow.capPanel:setImageColor("white")
+        inventoryWindow.soulPanel:setImageColor("white")
     end
     
     
