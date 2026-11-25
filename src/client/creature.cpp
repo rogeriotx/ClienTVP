@@ -531,7 +531,12 @@ int Creature::getWalkAnimationPhases()
 {
     if (!getAnimator())
         return getAnimationPhases();
-    return getAnimator()->getAnimationPhases() + (g_game.getFeature(Otc::GameIdleAnimations) ? 1 : 0);
+    // Com frame groups o total inclui o grupo Idle; so soma o frame parado quando ele existe.
+    // Outfit com um grupo so (Object Builder junta parado+passos) usa o total do animator,
+    // senao o ultimo passo cai num frame inexistente e a criatura pisca andando.
+    int movingPhases = getAnimator()->getAnimationPhases();
+    bool hasIdleGroup = g_game.getFeature(Otc::GameIdleAnimations) && getAnimationPhases() > movingPhases;
+    return movingPhases + (hasIdleGroup ? 1 : 0);
 }
 
 void Creature::updateWalkAnimation(uint8 totalPixelsWalked)
