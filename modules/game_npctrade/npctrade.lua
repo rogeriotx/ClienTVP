@@ -45,6 +45,41 @@ sellAllWithDelayEvent = nil
 
 local isHalloween = false
 
+-- Medal of Honour: % de bonus de venda enviado pelo servidor (opcode 111)
+local SELL_BONUS_OPCODE = 111
+local SELL_BONUS_COLOR = '#00C000'
+local sellBonusPercent = 0
+local priceLabelColor = nil
+
+function getSellBonus(baseValue)
+  if sellBonusPercent <= 0 or baseValue <= 0 then
+    return 0
+  end
+  return math.floor(baseValue * sellBonusPercent / 100)
+end
+
+local function hasSellBonus()
+  return getCurrentTradeType() == SELL and sellBonusPercent > 0
+end
+
+local function updatePriceLabelColor()
+  if hasSellBonus() then
+    priceLabel:setColor(SELL_BONUS_COLOR)
+  elseif priceLabelColor then
+    priceLabel:setColor(priceLabelColor)
+  end
+end
+
+local function onSellBonusOpcode(protocol, opcode, buffer)
+  local percent = tonumber(buffer) or 0
+  if percent == sellBonusPercent then return end
+  sellBonusPercent = percent
+  if npcWindow and npcWindow:isVisible() and getCurrentTradeType() == SELL then
+    refreshTradeItems()
+    refreshPlayerGoods()
+  end
+end
+
 function init()
   npcWindow = g_ui.displayUI('npctrade')
   npcWindow:setVisible(false)
@@ -58,6 +93,7 @@ function init()
   itemLabel = setupPanel:recursiveGetChildById('itemLabel')
   nameLabel = setupPanel:recursiveGetChildById('name')
   priceLabel = setupPanel:recursiveGetChildById('price')
+  priceLabelColor = priceLabel:getColor()
   moneyLabel = setupPanel:recursiveGetChildById('money')
   weightDesc = setupPanel:recursiveGetChildById('weightDesc')
   weightLabel = setupPanel:recursiveGetChildById('weight')
@@ -94,12 +130,15 @@ function init()
   connect(LocalPlayer, { onFreeCapacityChange = onFreeCapacityChange,
                          onInventoryChange = onInventoryChange } )
 
+  ProtocolGame.registerExtendedOpcode(SELL_BONUS_OPCODE, onSellBonusOpcode)
+
   initialized = true
   clearSelectedItem()
 end
 
 function terminate()
   initialized = false
+  ProtocolGame.unregisterExtendedOpcode(SELL_BONUS_OPCODE)
   npcWindow:destroy()
   if confirmWindow then
   confirmWindow:destroy()
@@ -171,6 +210,7 @@ function onQuantityValueChange(quantity)
   if selectedItem then
     weightLabel:setText(string.format('%.2f', selectedItem.weight*quantity) .. ' ' .. WEIGHT_UNIT)
     priceLabel:setText(formatCurrency(getItemPrice(selectedItem)))
+    updatePriceLabelColor()
   end
 end
 
@@ -402,8 +442,11 @@ function getItemPrice(item, single)
         return item.price*amount + math.ceil(amount/20)*20
       end
     end
+    return item.price*amount
   end
-  return item.price*amount
+  -- venda: mesmo calculo do servidor (callbackOnSell), bonus sobre o total
+  local baseValue = item.price*amount
+  return baseValue + getSellBonus(baseValue)
 end
 
 function getSellQuantity(item)
@@ -435,6 +478,12 @@ function refreshItem(item)
   nameLabel:setText(item.name)
   weightLabel:setText(string.format('%.2f', item.weight) .. ' ' .. WEIGHT_UNIT)
   priceLabel:setText(formatCurrency(getItemPrice(item)))
+  updatePriceLabelColor()
+  if hasSellBonus() then
+    priceLabel:setTooltip(tr('Medal of Honour: +%d%% sell bonus', sellBonusPercent))
+  else
+    priceLabel:removeTooltip()
+  end
 
   if getCurrentTradeType() == BUY then
     local capacityMaxCount = math.floor(playerFreeCapacity / item.weight)
@@ -584,8 +633,13 @@ function refreshTradeItems()
         itemBox.weight:setText(weight)
     end
     itemBox.gold:setItemSubType(1)
-    local price = formatCurrency(item.price)
-    itemBox.price:setText(price)
+    if hasSellBonus() then
+      itemBox.price:setText(formatCurrency(item.price + getSellBonus(item.price)))
+      itemBox.price:setColor(SELL_BONUS_COLOR)
+      itemBox.price:setTooltip(tr('Medal of Honour: +%d%% (base %s)', sellBonusPercent, formatCurrency(item.price)))
+    else
+      itemBox.price:setText(formatCurrency(item.price))
+    end
 
     local itemWidget = itemBox:getChildById('item')
     itemWidget:setItem(item.ptr)
