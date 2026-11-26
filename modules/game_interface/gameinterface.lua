@@ -87,7 +87,8 @@ function init()
   end)
 
   connect(LocalPlayer, {
-    onPositionChange = onMouseMove
+    onPositionChange = onMouseMove,
+    onUpdateAutoloot = onUpdateAutoloot
   })
 
   if g_game.isOnline() then
@@ -125,8 +126,10 @@ function terminate()
   })
 
   disconnect(LocalPlayer, {
-    onPositionChange = onMouseMove
+    onPositionChange = onMouseMove,
+    onUpdateAutoloot = onUpdateAutoloot
   })
+  closeAutolootWindow()
 
   disconnect(gameMapPanel, { onGeometryChange = updateSize })
   connect(gameMapPanel, { onGeometryChange = updateSize, onVisibleDimensionChange = updateSize })
@@ -387,7 +390,8 @@ function startUseWith(thing, subType)
   mouseGrabberWidget:grabMouse()
   g_mouse.pushCursor('target')
 
-  if thing:getId() == 5111 then
+  -- Dummy Ticket (server ID 7650 = client ID 7648): mostra em azul a area onde o dummy pode ser invocado
+  if thing:getId() == 7648 then
     ticketArea = true
   end
 
@@ -426,6 +430,10 @@ function onMouseMove()
   
   -- Obtém o tile em que o mouse está
   local clickedWidget = gameRootPanel:recursiveGetChildByPos(mousePos, false)
+  if not clickedWidget or clickedWidget:getClassName() ~= 'UIGameMap' then
+    return
+  end
+
   local tile = clickedWidget:getTile(mousePos)
   if not tile then return end
 
@@ -556,6 +564,28 @@ function createThingMenu(menuPosition, lookThing, useThing, creatureThing, uiite
       end
     end
 
+    -- pbOT: loot category (containers) e autoloot
+    local localPlayer = g_game.getLocalPlayer()
+    if useThing:isContainer() and not useThing:isNotMoveable() and useThing:isPickupable() then
+      menu:addSeparator()
+      if useThing:getLootCategory() ~= 0 then
+        menu:addOption(tr('Edit loot category'), function() modules.game_containers.onLootCategory(useThing) end)
+        menu:addOption(tr('Remove loot category'), function() modules.game_containers.onRemoveLootCategory(useThing) end)
+        menu:addOption(tr('Pass loot category'), function() g_game.addLootCategory(useThing, LOOT_CATEGORY_COPY) end)
+      else
+        menu:addOption(tr('Add loot category'), function() modules.game_containers.onLootCategory(useThing) end)
+      end
+    end
+    if localPlayer and useThing:isPickupable() then
+      menu:addSeparator()
+      if localPlayer:isInAutoLootList(useThing:getId()) then
+        menu:addOption(tr('Remove from auto loot list'), function() localPlayer:removeAutoLoot(useThing:getId(), "") end)
+      else
+        menu:addOption(tr('Add to auto loot list'), function() localPlayer:addAutoLoot(useThing:getId(), "") end)
+      end
+      menu:addOption(tr('Open auto loot list'), function() openAutolootWindow() end)
+    end
+
     if useThing:isRotateable() then
       menu:addOption(tr('Rotate'), function() g_game.rotate(useThing) end)
     end
@@ -575,7 +605,12 @@ function createThingMenu(menuPosition, lookThing, useThing, creatureThing, uiite
     menu:addSeparator()
     menu:addOption(tr('Trade with ...'), function() startTradeWith(lookThing) end)
   end
-  if uiitem then
+
+  -- pbOT: marketplace (mods/game_marketplace)
+  if modules.game_marketplace and lookThing and not lookThing:isCreature() and not lookThing:isNotMoveable() and lookThing:isPickupable() then
+    menu:addOption(tr('Add Market ...'), function() modules.game_marketplace.selectItemToSell(lookThing) end)
+  end
+  if uiitem and modules.game_itemtooltip then -- link de item depende do servidor TVP
     uiitem = gameRootPanel:recursiveGetChildByPos(menuPosition, false)
     menu:addOption(tr('Get item link'), function() modules.game_itemtooltip.requestLinked(uiitem) end)
   end
@@ -1577,4 +1612,72 @@ end
 
 function isChatVisible()
   return gameBottomPanel:getHeight() >= 5
+end
+
+-- ===== pbOT: janela de autoloot (portado do old_pbOT_Client) =====
+local autolootWindow, autolootItemsList, autolootAcceptButton, autolootTextEdit = nil, nil, nil, nil
+
+function onUpdateAutoloot(localPlayer, id, name, remove)
+  if not autolootItemsList then return end
+  local widget = autolootItemsList:getChildById(tostring(id))
+  if remove then
+    if widget then widget:destroy() end
+  elseif not widget then
+    widget = g_ui.createWidget('AutolootItem', autolootItemsList)
+    widget.name = name
+    widget:setId(tostring(id))
+    widget:getChildById('item'):setItemId(id)
+    widget:getChildById('name'):setText(name)
+  end
+  if autolootTextEdit then autolootTextEdit:clearText() end
+end
+
+function openAutolootWindow()
+  if autolootWindow then autolootWindow:raise() autolootWindow:focus() return end
+  autolootWindow = g_ui.displayUI('auto_loot_window')
+  autolootItemsList = autolootWindow:getChildById('itemsList')
+  autolootAcceptButton = autolootWindow:getChildById('addButton')
+  autolootTextEdit = autolootWindow:getChildById('textEdit')
+  local localPlayer = g_game.getLocalPlayer()
+  if localPlayer then
+    for id, name in pairs(localPlayer:getAutolootItems()) do
+      onUpdateAutoloot(localPlayer, id, name, false)
+    end
+  end
+  autolootTextEdit:focus()
+end
+
+function closeAutolootWindow()
+  if not autolootWindow then return end
+  autolootWindow:destroy()
+  autolootWindow, autolootItemsList, autolootAcceptButton, autolootTextEdit = nil, nil, nil, nil
+end
+
+function updateAutolootTextEdit(self)
+  if autolootAcceptButton then autolootAcceptButton:setEnabled(self:getText() ~= '') end
+end
+
+function updateAutolootSearch(self)
+  if not autolootItemsList then return end
+  local text = self:getText():lower()
+  for _, widget in pairs(autolootItemsList:getChildren()) do
+    widget:setVisible(text == '' or (widget.name or ''):lower():find(text, 1, true) ~= nil)
+  end
+end
+
+function addToAutolootList()
+  if not autolootWindow then return end
+  local localPlayer = g_game.getLocalPlayer()
+  local text = autolootTextEdit:getText()
+  if text == '' or not localPlayer then return end
+  if tonumber(text) then
+    localPlayer:addAutoLoot(tonumber(text), '') -- client id
+  else
+    localPlayer:addAutoLoot(0, text) -- nome do item
+  end
+end
+
+function removeFromAutolootList(widget)
+  local localPlayer = g_game.getLocalPlayer()
+  if localPlayer then localPlayer:removeAutoLoot(tonumber(widget:getId()), '') end
 end

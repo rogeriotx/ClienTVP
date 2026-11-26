@@ -21,7 +21,7 @@ HotkeyListLabel < UILabel
 MainWindow
   id: hotkeysWindow
   !text: tr('Hotkey Options')
-  size: 236 356
+  size: 330 446
   padding-bottom: 10
   padding-left: 18
   padding-right: 18
@@ -172,69 +172,59 @@ MainWindow
   Item
     id: itemPreview
     anchors.left: parent.left
-    anchors.top: prev.bottom
-    margin-top: 10
+    anchors.top: sendBackground.bottom
+    margin-top: 12
     virtual: true
-    visible: false
 
   Button
     id: selectObjectButton
     !text: tr('Select object')
-    width: 128
+    width: 110
     enabled: false
     anchors.left: prev.right
     anchors.top: prev.top
-    margin-left: 10
+    margin-left: 8
     @onClick: modules.game_hotkeys.startChooseItem()
-    visible: false
 
   Button
     id: clearObjectButton
     !text: tr('Clear object')
-    width: 128
     enabled: false
     anchors.left: prev.left
     anchors.right: prev.right
     anchors.top: prev.bottom
     margin-top: 2
     @onClick: modules.game_hotkeys.clearObject()
-    visible: false
 
   ButtonBox
     id: useOnSelf
     !text: tr('Use on yourself')
-    width: 128
     enabled: false
     anchors.left: selectObjectButton.right
     anchors.right: parent.right
     anchors.top: selectObjectButton.top
     checked: false
-    margin-left: 10
-    visible: false
+    margin-left: 8
 
   ButtonBox
     id: useOnTarget
     !text: tr('Use on target')
-    width: 128
     enabled: false
     anchors.left: prev.left
     anchors.right: parent.right
     anchors.top: prev.bottom
     checked: false
     margin-top: 2
-    visible: false
 
   ButtonBox
     id: useWith
     !text: tr('With crosshair')
-    width: 128
     enabled: false
     anchors.left: prev.left
     anchors.right: parent.right
     anchors.top: prev.bottom
     checked: false
     margin-top: 2
-    visible: false
 
   HorizontalSeparator
     id: separator2

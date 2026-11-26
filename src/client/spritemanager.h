@@ -66,7 +66,7 @@ public:
 
 private:
 	static constexpr float REFERENCE_SPRITE_SIZE = 32.0f;
-    static constexpr const char* PATH_SPRITES = "/data/things/772/Tibia";
+    static constexpr const char* PATH_SPRITES = "/data/things/800/Tibia"; // pbOT server 8.00
     bool loadCasualSpr(std::string file);
     bool loadCwmSpr(std::string file);
 
@@ -78,8 +78,8 @@ private:
     int m_spritesCountCwm;
     int m_spritesCountCasual;
     int m_spritesOffset;
-    int m_spriteSizeCwm;
-    int m_spriteSizeCasual;
+    int m_spriteSizeCwm = 0;
+    int m_spriteSizeCasual = 32;
     FileStreamPtr m_spritesFile;
     std::vector<std::vector<uint8_t>> m_sprites;
     std::unordered_map<uint32, std::string> m_cachedData;

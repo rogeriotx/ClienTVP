@@ -1,0 +1,1444 @@
+ForgeItemEntry < Panel
+  size: 34 34
+  background: #00000066
+  border-width: 1
+  border-color: #555555
+  focusable: true
+
+  UIItem
+    id: entryItem
+    anchors.centerIn: parent
+    size: 32 32
+    virtual: true
+    phantom: true
+    focusable: false
+
+  UIWidget
+    id: entryTierBadge
+    anchors.top: parent.top
+    anchors.right: parent.right
+    size: 18 18
+    visible: false
+
+  Label
+    id: entryCount
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    font: verdana-11px-rounded
+    color: #ffffff
+    visible: false
+
+ForgeHistoryRow < Panel
+  height: 32
+  layout: horizontalBox
+  spacing: 2
+
+  Label
+    id: historyDate
+    width: 130
+    font: verdana-9px
+    color: #c0c0c0
+    text-align: left
+
+  Label
+    id: historyAction
+    width: 80
+    font: verdana-9px
+    color: #c0c0c0
+    text-align: left
+
+  Label
+    id: historyDetail
+    width: 270
+    font: verdana-9px
+    color: #c0c0c0
+    text-align: left
+    text-wrap: true
+
+ForgeResourceBg < Panel
+  height: 20
+  layout: horizontalBox
+  spacing: 2
+
+ForgeInfoBg < Panel
+  width: 66
+  height: 20
+  image-source: /modules/game_forge/images/info-bg
+  image-size: 66 20
+  layout: horizontalBox
+  spacing: 2
+
+MainWindow
+  text: Exaltation Forge
+  size: 500 490
+
+  Panel
+    id: tabBar
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 34
+    layout: horizontalBox
+    spacing: 0
+
+    UIWidget
+      id: btnTab_fusion
+      size: 116 34
+      image-source: /modules/game_forge/images/fusionButton
+      image-size: 116 34
+      image-clip: 0 0 116 34
+      @onClick: modules.game_forge.selectTab("fusion")
+      $on:
+        image-clip: 0 34 116 34
+
+    UIWidget
+      id: btnTab_transfer
+      size: 116 34
+      image-source: /modules/game_forge/images/transferButton
+      image-size: 116 34
+      image-clip: 0 0 116 34
+      @onClick: modules.game_forge.selectTab("transfer")
+      $on:
+        image-clip: 0 34 116 34
+
+    UIWidget
+      id: btnTab_conversion
+      size: 116 34
+      image-source: /modules/game_forge/images/conversionButton
+      image-size: 116 34
+      image-clip: 0 0 116 34
+      @onClick: modules.game_forge.selectTab("conversion")
+      $on:
+        image-clip: 0 34 116 34
+
+    UIWidget
+      id: btnTab_history
+      size: 118 34
+      image-source: /modules/game_forge/images/historyButton
+      image-size: 118 34
+      image-clip: 0 0 118 34
+      @onClick: modules.game_forge.selectTab("history")
+      $on:
+        image-clip: 0 34 118 34
+
+  HorizontalSeparator
+    id: tabSep
+    anchors.top: tabBar.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 2
+
+  Panel
+    id: fusionPanel
+    anchors.top: tabSep.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: footerSep.top
+    margin-top: 4
+    visible: true
+
+    Panel
+      id: fusionTop
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 115
+      image-source: /modules/game_forge/images/window-upper
+      image-size: 466 115
+      image-border: 30
+
+      Label
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        margin-top: 6
+        text: Select Item For Fusion
+        font: verdana-9px
+        color: #c0c0c0
+
+      ScrollablePanel
+        id: fusionItemList
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        margin-top: 20
+        margin-left: 4
+        margin-bottom: 4
+        width: 155
+        image-source: /modules/game_forge/images/scrollarea
+        image-size: 155 80
+        image-border: 1
+        layout:
+          type: grid
+          cell-size: 34 34
+          cell-spacing: 1
+          num-columns: 4
+        vertical-scrollbar: fusionListScrollbar
+
+      VerticalScrollBar
+        id: fusionListScrollbar
+        anchors.top: fusionItemList.top
+        anchors.bottom: fusionItemList.bottom
+        anchors.right: fusionItemList.right
+        step: 35
+        pixels-scroll: true
+
+      Panel
+        id: fusionArrowsPanel
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        margin-bottom: 14
+        height: 25
+        width: 58
+        layout: horizontalBox
+        spacing: 6
+
+        UIWidget
+          size: 14 25
+          image-source: /modules/game_forge/images/arrows/icon-arrow-rightlarge
+          image-size: 14 25
+
+        UIWidget
+          size: 14 25
+          image-source: /modules/game_forge/images/arrows/icon-arrow-rightlarge
+          image-size: 14 25
+
+        UIWidget
+          size: 14 25
+          image-source: /modules/game_forge/images/arrows/icon-arrow-rightlarge
+          image-size: 14 25
+
+      Panel
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        margin-bottom: 6
+        height: 16
+        width: 110
+        layout: horizontalBox
+        spacing: 4
+
+        UIButton
+          id: btnConvergenceFusion
+          size: 14 14
+          checkable: true
+          background: #1a1a1a
+          border-width: 2
+          border-color: #c8a000
+          margin-top: 1
+          @onClick: modules.game_forge.toggleConvergenceFusion()
+          $on:
+            border-color: #f0c040
+
+          Label
+            id: convergenceCheck
+            anchors.centerIn: parent
+            text: x
+            font: verdana-9px
+            color: #f0c040
+            visible: false
+
+        Label
+          text: Convergence
+          font: verdana-9px
+          color: #c0c0c0
+          margin-top: 1
+
+      Panel
+        id: fusionSelectedSlot
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        margin-right: 10
+        size: 66 66
+        image-source: /modules/game_forge/images/item66
+        image-size: 66 66
+
+        UIItem
+          id: fusionSelectedItem
+          anchors.centerIn: parent
+          size: 62 62
+          virtual: true
+          phantom: true
+
+        UIWidget
+          id: fusionSelectedBadge
+          anchors.top: parent.top
+          anchors.right: parent.right
+          size: 16 16
+          visible: false
+
+      ScrollablePanel
+        id: convergenceItemList
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-top: 20
+        margin-right: 4
+        margin-bottom: 4
+        width: 155
+        image-source: /modules/game_forge/images/scrollarea
+        image-size: 155 80
+        image-border: 1
+        visible: false
+        layout:
+          type: grid
+          cell-size: 34 34
+          cell-spacing: 1
+          num-columns: 4
+        vertical-scrollbar: convergenceListScrollbar
+
+      VerticalScrollBar
+        id: convergenceListScrollbar
+        anchors.top: convergenceItemList.top
+        anchors.bottom: convergenceItemList.bottom
+        anchors.right: convergenceItemList.right
+        step: 35
+        pixels-scroll: true
+        visible: false
+
+    Panel
+      id: fusionBottom
+      anchors.top: fusionTop.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 115
+      margin-top: 4
+      image-source: /modules/game_forge/images/window-upper
+      image-size: 466 115
+      image-border: 30
+
+      Label
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        margin-top: 6
+        text: Further Items Needed For Fusion
+        font: verdana-9px
+        color: #c0c0c0
+
+      Panel
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 10
+        width: 66
+        height: 88
+
+        Panel
+          anchors.top: parent.top
+          anchors.horizontalCenter: parent.horizontalCenter
+          size: 66 66
+          image-source: /modules/game_forge/images/item66
+          image-size: 66 66
+
+          UIItem
+            id: fusionSlot1Item
+            anchors.centerIn: parent
+            size: 62 62
+            virtual: true
+            phantom: true
+
+          UIWidget
+            id: slot1TierBadge
+            anchors.top: parent.top
+            anchors.right: parent.right
+            size: 16 16
+            visible: false
+
+        ForgeInfoBg
+          anchors.top: prev.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 2
+
+          Label
+            id: fusionSlot1CountLabel
+            text: 0 / 1
+            font: verdana-9px
+            color: #d33c3c
+            margin-left: 4
+
+      Panel
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 84
+        width: 66
+        height: 88
+
+        Panel
+          anchors.top: parent.top
+          anchors.horizontalCenter: parent.horizontalCenter
+          size: 66 66
+          image-source: /modules/game_forge/images/item66
+          image-size: 66 66
+
+          UIItem
+            item-id: 7634
+            anchors.centerIn: parent
+            size: 62 62
+            virtual: true
+            phantom: true
+
+        ForgeInfoBg
+          anchors.top: prev.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 2
+
+          Label
+            id: dustCostLabel
+            text: 100
+            font: verdana-9px
+            color: #d33c3c
+            margin-left: 4
+
+          UIWidget
+            size: 9 6
+            margin-left: 2
+            image-source: /modules/game_forge/images/icon-currency-dust
+            image-size: 9 6
+
+      Panel
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 140
+        height: 88
+
+        Label
+          anchors.top: parent.top
+          anchors.left: parent.left
+          text: Success Rate:
+          font: verdana-9px
+          color: #c0c0c0
+
+        Label
+          id: successRateLabel
+          anchors.top: parent.top
+          anchors.right: parent.right
+          text: 50%
+          font: verdana-9px
+          color: #d33c3c
+
+        Panel
+          anchors.top: prev.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 20
+          margin-top: 2
+          layout: horizontalBox
+          spacing: 2
+
+          UIButton
+            id: btnImproveChance
+            text: Improve to 65%
+            font: verdana-9px
+            width: 90
+            height: 18
+            image-source: /modules/game_forge/images/button
+            image-size: 107 21
+            image-border: 3
+            @onClick: modules.game_forge.toggleImproveChance()
+
+          Panel
+            width: 28
+            height: 18
+            image-source: /modules/game_forge/images/cardBg
+            image-size: 52 20
+            layout: horizontalBox
+
+            Label
+              id: improveCostLabel
+              text: 1
+              font: verdana-9px
+              color: #c0c0c0
+              margin-left: 2
+
+            UIWidget
+              size: 9 9
+              image-source: /modules/game_forge/images/icon-currency-exaltedcore
+              image-size: 9 9
+
+        Label
+          anchors.top: prev.bottom
+          anchors.left: parent.left
+          text: Tier Loss:
+          font: verdana-9px
+          color: #c0c0c0
+          margin-top: 4
+
+        Label
+          id: tierLossLabel
+          anchors.top: prev.top
+          anchors.right: parent.right
+          text: 100%
+          font: verdana-9px
+          color: #d33c3c
+
+        Panel
+          anchors.top: prev.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 20
+          margin-top: 2
+          layout: horizontalBox
+          spacing: 2
+
+          UIButton
+            id: btnReduceLoss
+            text: Reduce to 50%
+            font: verdana-9px
+            width: 90
+            height: 18
+            image-source: /modules/game_forge/images/button
+            image-size: 107 21
+            image-border: 3
+            @onClick: modules.game_forge.toggleReduceLoss()
+
+          Panel
+            width: 28
+            height: 18
+            image-source: /modules/game_forge/images/cardBg
+            image-size: 52 20
+            layout: horizontalBox
+
+            Label
+              id: reduceCostLabel
+              text: 1
+              font: verdana-9px
+              color: #c0c0c0
+              margin-left: 2
+
+            UIWidget
+              size: 9 9
+              image-source: /modules/game_forge/images/icon-currency-exaltedcore
+              image-size: 9 9
+
+      UIWidget
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: prev.left
+        margin-right: 4
+        size: 14 25
+        image-source: /modules/game_forge/images/arrows/icon-arrow-rightlarge
+        image-size: 14 25
+
+      Panel
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        margin-right: 10
+        width: 128
+        height: 96
+
+        UIButton
+          id: btnFusion
+          anchors.top: parent.top
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 46
+          image-source: /modules/game_forge/images/bigger-button
+          image-size: 128 66
+          image-clip: 0 0 128 66
+          enabled: false
+          @onClick: modules.game_forge.doFusion()
+          $pressed:
+            image-clip: 0 66 128 66
+          $disabled:
+            opacity: 0.5
+
+          Panel
+            anchors.centerIn: parent
+            height: 34
+            width: 76
+            layout: horizontalBox
+            spacing: 4
+
+            UIItem
+              id: fusionBtnItem1
+              size: 34 34
+              virtual: true
+              phantom: true
+
+            UIWidget
+              size: 15 7
+              image-source: /modules/game_forge/images/arrows/icon-arrows
+              image-size: 15 7
+
+            UIItem
+              id: fusionBtnItem2
+              size: 34 34
+              virtual: true
+              phantom: true
+              image-color: #000000ff
+
+        UIButton
+          id: btnFusionAction
+          anchors.top: btnFusion.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 0
+          visible: false
+
+        ForgeInfoBg
+          anchors.top: btnFusion.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 20
+          margin-top: 2
+          image-source: /modules/game_forge/images/balanceBg
+          image-size: 130 20
+
+          Label
+            id: costLabel
+            text: ???
+            font: verdana-9px
+            color: #d33c3c
+            margin-left: 4
+            width: 108
+
+          UIWidget
+            size: 10 10
+            image-source: /images/game/prey/prey_gold
+            image-size: 10 10
+
+    Panel
+      id: resultPanel
+      anchors.top: fusionBottom.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 50
+      margin-top: 4
+      visible: false
+
+      Label
+        id: resultLabel
+        anchors.centerIn: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin: 4
+        font: verdana-11px-rounded
+        color: #44ad25
+        text-wrap: true
+        text-align: center
+
+    Panel
+      id: descriptionPanel
+      anchors.top: fusionBottom.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin-top: 4
+      image-source: /images/ui/miniwindow
+      image-border: 4
+      image-border-top: 4
+
+      Label
+        id: descriptionLabel
+        anchors.fill: parent
+        margin: 4
+        font: verdana-11px-rounded
+        color: #c0c0c0
+        text-align: center
+        text-wrap: true
+        text: Select an item to fuse.
+
+  Panel
+    id: transferPanel
+    anchors.top: tabSep.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: footerSep.top
+    margin-top: 4
+    visible: false
+
+    Panel
+      id: transferTop
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 115
+      image-source: /modules/game_forge/images/window-upper
+      image-size: 466 115
+      image-border: 30
+
+      Label
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        margin-top: 6
+        text: Select Items for the Transfer
+        font: verdana-9px
+        color: #c0c0c0
+
+      ScrollablePanel
+        id: transferDonorList
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        margin-top: 20
+        margin-left: 4
+        margin-bottom: 4
+        width: 155
+        image-source: /modules/game_forge/images/scrollarea
+        image-size: 155 80
+        image-border: 1
+        layout:
+          type: grid
+          cell-size: 34 34
+          cell-spacing: 1
+          num-columns: 4
+        vertical-scrollbar: transferDonorScrollbar
+
+      VerticalScrollBar
+        id: transferDonorScrollbar
+        anchors.top: transferDonorList.top
+        anchors.bottom: transferDonorList.bottom
+        anchors.right: transferDonorList.right
+        step: 35
+        pixels-scroll: true
+
+      Panel
+        id: transferArrowsPanel
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: transferDonorList.right
+        margin-left: 8
+        margin-bottom: 14
+        height: 25
+        width: 58
+        layout: horizontalBox
+        spacing: 6
+
+        UIWidget
+          size: 14 25
+          image-source: /modules/game_forge/images/arrows/icon-arrow-rightlarge
+          image-size: 14 25
+
+        UIWidget
+          size: 14 25
+          image-source: /modules/game_forge/images/arrows/icon-arrow-rightlarge
+          image-size: 14 25
+
+        UIWidget
+          size: 14 25
+          image-source: /modules/game_forge/images/arrows/icon-arrow-rightlarge
+          image-size: 14 25
+
+      Panel
+        anchors.bottom: parent.bottom
+        anchors.left: transferDonorList.right
+        margin-left: 8
+        margin-bottom: 6
+        height: 16
+        width: 110
+        layout: horizontalBox
+        spacing: 4
+
+        UIButton
+          id: btnConvergenceTransfer
+          size: 14 14
+          checkable: true
+          background: #1a1a1a
+          border-width: 2
+          border-color: #c8a000
+          margin-top: 1
+          @onClick: modules.game_forge.toggleConvergenceTransfer()
+          $on:
+            border-color: #f0c040
+
+          Label
+            id: convergenceTransferCheck
+            anchors.centerIn: parent
+            text: x
+            font: verdana-9px
+            color: #f0c040
+            visible: false
+
+        Label
+          text: Convergence
+          font: verdana-9px
+          color: #c0c0c0
+          margin-top: 1
+
+      ScrollablePanel
+        id: transferReceiverList
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin-top: 20
+        margin-right: 4
+        margin-bottom: 4
+        width: 155
+        image-source: /modules/game_forge/images/scrollarea
+        image-size: 155 80
+        image-border: 1
+        layout:
+          type: grid
+          cell-size: 34 34
+          cell-spacing: 1
+          num-columns: 4
+        vertical-scrollbar: transferReceiverScrollbar
+
+      VerticalScrollBar
+        id: transferReceiverScrollbar
+        anchors.top: transferReceiverList.top
+        anchors.bottom: transferReceiverList.bottom
+        anchors.right: transferReceiverList.right
+        step: 35
+        pixels-scroll: true
+
+    Panel
+      id: transferBottom
+      anchors.top: transferTop.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 115
+      margin-top: 4
+      image-source: /modules/game_forge/images/window-upper
+      image-size: 466 115
+      image-border: 30
+
+      Label
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        margin-top: 6
+        text: Transfer Requirements
+        font: verdana-9px
+        color: #c0c0c0
+
+      Panel
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 10
+        width: 66
+        height: 88
+
+        Panel
+          anchors.top: parent.top
+          anchors.horizontalCenter: parent.horizontalCenter
+          size: 66 66
+          image-source: /modules/game_forge/images/item66
+          image-size: 66 66
+
+          UIItem
+            id: slot1
+            anchors.centerIn: parent
+            size: 62 62
+            virtual: true
+            phantom: true
+
+        ForgeInfoBg
+          anchors.top: prev.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 2
+
+          Label
+            id: slot1CountLabel
+            text: 0 / 1
+            font: verdana-9px
+            color: #d33c3c
+            margin-left: 4
+
+      Panel
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 84
+        width: 66
+        height: 88
+
+        Panel
+          anchors.top: parent.top
+          anchors.horizontalCenter: parent.horizontalCenter
+          size: 66 66
+          image-source: /modules/game_forge/images/item66
+          image-size: 66 66
+
+          UIItem
+            item-id: 7634
+            anchors.centerIn: parent
+            size: 62 62
+            virtual: true
+            phantom: true
+
+        ForgeInfoBg
+          anchors.top: prev.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 2
+
+          Label
+            id: transferDustLabel
+            text: 100
+            font: verdana-9px
+            color: #d33c3c
+            margin-left: 4
+
+          UIWidget
+            size: 9 6
+            margin-left: 2
+            image-source: /modules/game_forge/images/icon-currency-dust
+            image-size: 9 6
+
+      Panel
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: 158
+        width: 66
+        height: 88
+
+        Panel
+          anchors.top: parent.top
+          anchors.horizontalCenter: parent.horizontalCenter
+          size: 66 66
+          image-source: /modules/game_forge/images/item66
+          image-size: 66 66
+
+          UIItem
+            item-id: 7636
+            anchors.centerIn: parent
+            size: 62 62
+            virtual: true
+            phantom: true
+
+        ForgeInfoBg
+          anchors.top: prev.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 2
+
+          Label
+            id: transferCoresLabel
+            text: ???
+            font: verdana-9px
+            color: #d33c3c
+            margin-left: 4
+
+          UIWidget
+            size: 9 9
+            margin-left: 2
+            image-source: /modules/game_forge/images/icon-currency-exaltedcore
+            image-size: 9 9
+
+      UIWidget
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        size: 14 25
+        image-source: /modules/game_forge/images/arrows/icon-arrow-rightlarge
+        image-size: 14 25
+
+      Panel
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        margin-right: 10
+        width: 128
+        height: 96
+
+        UIButton
+          id: btnTransfer
+          anchors.top: parent.top
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 46
+          image-source: /modules/game_forge/images/bigger-button
+          image-size: 128 66
+          image-clip: 0 0 128 66
+          enabled: false
+          @onClick: modules.game_forge.doTransfer()
+          $pressed:
+            image-clip: 0 66 128 66
+          $disabled:
+            opacity: 0.5
+
+          Panel
+            anchors.centerIn: parent
+            height: 34
+            width: 76
+            layout: horizontalBox
+            spacing: 4
+
+            UIItem
+              id: transferBtnItem1
+              size: 34 34
+              virtual: true
+              phantom: true
+
+            UIWidget
+              size: 15 7
+              image-source: /modules/game_forge/images/arrows/icon-arrows
+              image-size: 15 7
+
+            UIItem
+              id: transferBtnItem2
+              size: 34 34
+              virtual: true
+              phantom: true
+
+        UIButton
+          id: btnTransferAction
+          anchors.top: btnTransfer.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 0
+          visible: false
+
+        ForgeInfoBg
+          anchors.top: btnTransfer.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          height: 20
+          margin-top: 2
+          image-source: /modules/game_forge/images/balanceBg
+          image-size: 130 20
+
+          Label
+            id: transferCostLabel
+            text: ???
+            font: verdana-9px
+            color: #d33c3c
+            margin-left: 6
+
+          UIWidget
+            size: 10 10
+            margin-left: 2
+            image-source: /images/game/prey/prey_gold
+            image-size: 10 10
+
+    Panel
+      id: resultPanel
+      anchors.top: transferBottom.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 50
+      margin-top: 4
+      visible: false
+
+      Label
+        id: resultLabel
+        anchors.centerIn: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin: 4
+        font: verdana-11px-rounded
+        color: #44ad25
+        text-wrap: true
+        text-align: center
+
+  Panel
+    id: conversionPanel
+    anchors.top: tabSep.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: footerSep.top
+    margin-top: 4
+    visible: false
+
+    Panel
+      anchors.top: parent.top
+      anchors.horizontalCenter: parent.horizontalCenter
+      width: 310
+      height: 253
+      layout: horizontalBox
+      spacing: 8
+
+      Panel
+        width: 151
+        height: 253
+
+        Panel
+          width: 151
+          height: 18
+          image-source: /modules/game_forge/images/conversion-column-header
+          image-size: 151 18
+
+          Label
+            anchors.centerIn: parent
+            text: Convert Dust
+            font: verdana-9px
+            color: #c0c0c0
+
+        Panel
+          anchors.top: prev.bottom
+          anchors.left: parent.left
+          width: 151
+          height: 235
+          image-source: /modules/game_forge/images/conversion-column
+          image-size: 151 235
+          image-border: 2
+
+          Panel
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            margin-top: 8
+            size: 66 66
+            image-source: /modules/game_forge/images/item66
+            image-size: 66 66
+
+            UIItem
+              item-id: 7634
+              anchors.centerIn: parent
+              size: 62 62
+              virtual: true
+              phantom: true
+
+          ForgeInfoBg
+            anchors.top: prev.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            margin-top: 2
+
+            Label
+              id: dustConvCostLabel
+              text: 60
+              font: verdana-9px
+              color: #d33c3c
+              margin-left: 4
+
+            UIWidget
+              size: 9 6
+              margin-left: 2
+              image-source: /modules/game_forge/images/icon-currency-dust
+              image-size: 9 6
+
+          UIWidget
+            anchors.top: prev.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            margin-top: 8
+            size: 25 14
+            image-source: /modules/game_forge/images/arrows/icon-arrow-downlarge
+            image-size: 25 14
+
+          UIButton
+            id: btnConvertDust
+            anchors.top: prev.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin-top: 8
+            margin-left: 10
+            margin-right: 10
+            height: 66
+            image-source: /modules/game_forge/images/bigger-button
+            image-size: 128 66
+            image-clip: 0 0 128 66
+            @onClick: modules.game_forge.doConvertDust()
+            $pressed:
+              image-clip: 0 66 128 66
+            $disabled:
+              opacity: 0.5
+
+            UIItem
+              item-id: 7635
+              anchors.centerIn: parent
+              size: 62 62
+              virtual: true
+              phantom: true
+
+          Label
+            anchors.top: prev.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            margin-top: 4
+            text: Generate 3
+            font: verdana-9px
+            color: #c0c0c0
+            text-align: center
+
+      Panel
+        width: 151
+        height: 253
+
+        Panel
+          width: 151
+          height: 18
+          image-source: /modules/game_forge/images/conversion-column-header
+          image-size: 151 18
+
+          Label
+            anchors.centerIn: parent
+            text: Convert Slivers
+            font: verdana-9px
+            color: #c0c0c0
+
+        Panel
+          anchors.top: prev.bottom
+          anchors.left: parent.left
+          width: 151
+          height: 235
+          image-source: /modules/game_forge/images/conversion-column
+          image-size: 151 235
+          image-border: 2
+
+          Panel
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            margin-top: 8
+            size: 66 66
+            image-source: /modules/game_forge/images/item66
+            image-size: 66 66
+
+            UIItem
+              item-id: 7635
+              anchors.centerIn: parent
+              size: 62 62
+              virtual: true
+              phantom: true
+
+          ForgeInfoBg
+            anchors.top: prev.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            margin-top: 2
+
+            Label
+              id: sliverConvCostLabel
+              text: 50
+              font: verdana-9px
+              color: #d33c3c
+              margin-left: 4
+
+            UIWidget
+              size: 9 9
+              margin-left: 2
+              image-source: /modules/game_forge/images/icon-currency-sliver
+              image-size: 9 9
+
+          UIWidget
+            anchors.top: prev.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            margin-top: 8
+            size: 25 14
+            image-source: /modules/game_forge/images/arrows/icon-arrow-downlarge
+            image-size: 25 14
+
+          UIButton
+            id: btnConvertSlivers
+            anchors.top: prev.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            margin-top: 8
+            margin-left: 10
+            margin-right: 10
+            height: 66
+            image-source: /modules/game_forge/images/bigger-button
+            image-size: 128 66
+            image-clip: 0 0 128 66
+            @onClick: modules.game_forge.doConvertSlivers()
+            $pressed:
+              image-clip: 0 66 128 66
+            $disabled:
+              opacity: 0.5
+
+            UIItem
+              item-id: 7636
+              anchors.centerIn: parent
+              size: 62 62
+              virtual: true
+              phantom: true
+
+          Label
+            anchors.top: prev.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            margin-top: 4
+            text: Generate 1
+            font: verdana-9px
+            color: #c0c0c0
+            text-align: center
+
+    Panel
+      id: resultPanel
+      anchors.top: prev.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      margin-top: 8
+      width: 310
+      height: 50
+      visible: false
+
+      Label
+        id: resultLabel
+        anchors.centerIn: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin: 4
+        font: verdana-11px-rounded
+        color: #44ad25
+        text-wrap: true
+        text-align: center
+
+  Panel
+    id: historyPanel
+    anchors.top: tabSep.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: footerSep.top
+    margin-top: 4
+    visible: false
+
+    Panel
+      id: historyHeader
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 20
+      background-color: #363636
+      layout: horizontalBox
+
+      Label
+        text: Date
+        width: 145
+        font: verdana-9px
+        color: #c0c0c0
+        margin-left: 2
+
+      Label
+        text: Action
+        width: 85
+        font: verdana-9px
+        color: #c0c0c0
+
+      Label
+        text: Details
+        font: verdana-9px
+        color: #c0c0c0
+
+    ScrollablePanel
+      id: historyList
+      anchors.top: historyHeader.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: historyNav.top
+      background-color: #404040
+      layout: verticalBox
+      vertical-scrollbar: historyScrollbar
+
+    VerticalScrollBar
+      id: historyScrollbar
+      anchors.top: historyList.top
+      anchors.bottom: historyList.bottom
+      anchors.right: historyList.right
+      step: 34
+      pixels-scroll: true
+
+    Panel
+      id: historyNav
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 22
+      layout: horizontalBox
+      spacing: 4
+
+      Button
+        id: btnHistoryPrev
+        text: < Prev
+        width: 60
+        @onClick: modules.game_forge.historyPrevPage()
+
+      Label
+        id: historyPageLabel
+        text: 1/1
+        font: verdana-9px
+        color: #dfdfdf
+
+      Button
+        id: btnHistoryNext
+        text: Next >
+        width: 60
+        @onClick: modules.game_forge.historyNextPage()
+
+  HorizontalSeparator
+    id: footerSep
+    anchors.bottom: footer.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 2
+
+  Panel
+    id: footer
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 22
+    layout: horizontalBox
+    spacing: 2
+
+    Panel
+      width: 140
+      height: 20
+      image-source: /modules/game_forge/images/balanceBg
+      image-size: 130 20
+      layout: horizontalBox
+      spacing: 2
+
+      Label
+        id: moneyCount
+        text: 0
+        font: verdana-9px
+        color: #c0c0c0
+        margin-left: 6
+        width: 120
+
+      UIWidget
+        size: 10 10
+        image-source: /images/game/prey/prey_gold
+        image-size: 10 10
+        margin-right: 4
+
+    Panel
+      width: 90
+      height: 20
+      image-source: /modules/game_forge/images/cardBg
+      image-size: 52 20
+      layout: horizontalBox
+      spacing: 2
+
+      Label
+        id: dustCount
+        text: 0/100
+        font: verdana-9px
+        color: #c0c0c0
+        margin-left: 4
+        width: 68
+
+      UIWidget
+        size: 9 6
+        image-source: /modules/game_forge/images/icon-currency-dust
+        image-size: 9 6
+        margin-right: 4
+
+    Panel
+      width: 55
+      height: 20
+      image-source: /modules/game_forge/images/cardBg
+      image-size: 52 20
+      layout: horizontalBox
+      spacing: 2
+
+      Label
+        id: sliversCount
+        text: 0
+        font: verdana-9px
+        color: #c0c0c0
+        margin-left: 4
+        width: 36
+
+      UIWidget
+        size: 9 9
+        image-source: /modules/game_forge/images/icon-currency-sliver
+        image-size: 9 9
+        margin-right: 4
+
+    Panel
+      width: 55
+      height: 20
+      image-source: /modules/game_forge/images/cardBg
+      image-size: 52 20
+      layout: horizontalBox
+      spacing: 2
+
+      Label
+        id: coresCount
+        text: 0
+        font: verdana-9px
+        color: #c0c0c0
+        margin-left: 4
+        width: 36
+
+      UIWidget
+        size: 9 9
+        image-source: /modules/game_forge/images/icon-currency-exaltedcore
+        image-size: 9 9
+
+    Label
+      id: errorLabel
+      font: verdana-9px
+      color: #d33c3c
+      visible: false
+
+    Button
+      text: Close
+      width: 60
+      @onClick: modules.game_forge.hide()

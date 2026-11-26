@@ -283,6 +283,8 @@ public:
 
     // questlog related
     void requestQuestLog();
+    void addLootCategory(const ItemPtr& item, uint16 categoryFlags);
+    void removeLootCategory(const ItemPtr& item);
     void requestQuestLine(int questId);
 
     // 870 only
@@ -476,8 +478,8 @@ private:
     int m_coins;
     int m_transferableCoins;
 
-	Position* marketPosInit;
-	Position* marketPosEnd;
+	//Position* marketPosInit;
+	//Position* marketPosEnd;
 
     bool m_showRealDirection = false;
     bool m_ignoreServerDirection = true;

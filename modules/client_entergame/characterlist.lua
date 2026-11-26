@@ -14,6 +14,7 @@ local autoReconnectEvent
 local lastLogout = 0
 local camdate = ""
 local playRecord = false
+local CAM_CLIENT_VERSION = 800 -- versao do protocolo do servidor pbOT (gravacoes sao reproduzidas com ela)
 local updatePremiumCycle
 
 -- private functions
@@ -33,8 +34,13 @@ local function tryLogin(charInfo, tries)
   end
 
   CharacterList.hide()
-  camdate = os.date(" - %Y-%m-%d-%H_%M_%S." .. charInfo.worldName:lower() .. ".record")
-  g_game.loginWorld(G.account, G.password, charInfo.worldName, charInfo.worldHost, charInfo.worldPort, charInfo.characterName, G.authenticatorToken, G.sessionKey, charInfo.characterName .. camdate)
+  -- grava o CAM somente se a opcao "Record CAM" estiver ligada (string vazia = nao grava)
+  local recordTo = ""
+  if g_settings.getBoolean('recordCam', false) then
+    camdate = os.date(" - %Y-%m-%d-%H_%M_%S." .. charInfo.worldName:lower() .. ".record")
+    recordTo = charInfo.characterName .. camdate
+  end
+  g_game.loginWorld(G.account, G.password, charInfo.worldName, charInfo.worldHost, charInfo.worldPort, charInfo.characterName, G.authenticatorToken, G.sessionKey, recordTo)
   g_logger.info("Login to " .. charInfo.worldHost .. ":" .. charInfo.worldPort)
   loadBox = displayCancelBox(tr('Please wait'), tr('Connecting to game server...'))
   connect(loadBox, { onCancel = function()
@@ -373,11 +379,13 @@ function CharacterList.create(characters, account, otui)
         end
       end
 
-      update_premium(account.premDays)
+      -- o servidor envia premDays em DIAS; o contador trabalha em segundos
+      local premSeconds = account.premDays * 86400
+      update_premium(premSeconds)
       updatePremiumCycle = cycleEvent(function()
-        account.premDays = account.premDays - 1
-        update_premium(account.premDays)
-        if account.premDays < 1 then
+        premSeconds = premSeconds - 1
+        update_premium(premSeconds)
+        if premSeconds < 1 then
           removeEvent(updatePremiumCycle)
         end
       end, 1000)
@@ -448,7 +456,7 @@ function CharacterList.createCamList()
   widget.characterName = "### Cams ###"
   widget.worldName = "Record" -- Don't change
   widget.worldHost = "127.0.0.1"
-  widget.worldPort = 772 -- Set as pprotocol for recordings 
+  widget.worldPort = CAM_CLIENT_VERSION -- versao usada para reproduzir as gravacoes
 
   for _, file in ipairs(g_resources.listDirectoryFiles("/records", false, true)) do
     if g_resources.isFileType(file:lower(), 'record') then
@@ -459,7 +467,7 @@ function CharacterList.createCamList()
       widget.characterName = file
       widget.worldName = "Record" -- Don't change
       widget.worldHost = "127.0.0.1"
-      widget.worldPort = 772 -- Set as pprotocol for recordings 
+      widget.worldPort = CAM_CLIENT_VERSION -- versao usada para reproduzir as gravacoes
 
       connect(widget, { onDoubleClick = function () CharacterList.doLogin() return true end } )
     end

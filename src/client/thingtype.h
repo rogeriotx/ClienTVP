@@ -206,6 +206,8 @@ public:
     int getAnimationPhases() { return m_animationPhases; }
     AnimatorPtr getAnimator() { return m_animator; }
     AnimatorPtr getIdleAnimator() { return m_idleAnimator; }
+    // frames de caminhada de um outfit, sem o frame parado (fases de passo 1..N)
+    int getMovingAnimationPhases();
     Point getDisplacement() { return m_displacement; }
     int getDisplacementX() { return getDisplacement().x; }
     int getDisplacementY() { return getDisplacement().y; }

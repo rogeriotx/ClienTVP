@@ -5,7 +5,7 @@ OptionCheckBoxBackground2 < OptionCheckBoxBackground
 
 
 OptionPanel
-  size: 296 289
+  size: 296 323
   text: Console Options
 
   OptionCheckBoxBackground2
@@ -27,6 +27,11 @@ OptionPanel
     OptionCheckBox
       id: showTimestampsInConsole
       !text: tr('Show Timestamps in Console')
+
+  OptionCheckBoxBackground2
+    OptionCheckBox
+      id: showLevelsInConsole
+      !text: tr('Show Levels in Console')
 
   OptionCheckBoxBackground2
     OptionCheckBox

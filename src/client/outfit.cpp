@@ -64,6 +64,16 @@ void Outfit::draw(Point dest, Otc::Direction direction, uint walkAnimationPhase,
 
     int animationPhase = walkAnimationPhase;
 
+    // Montado, o passo segue o ciclo da montaria (creature.cpp). Se o personagem tem menos
+    // passos (outfit 8.0 com 2), distribui os dele ao longo do ciclo em vez de pedir frame inexistente.
+    if (m_mount > 0 && walkAnimationPhase > 0 && m_category == ThingCategoryCreature) {
+        int riderSteps = type->getMovingAnimationPhases();
+        auto mountType = g_things.rawGetThingType(m_mount, ThingCategoryCreature);
+        int mountSteps = mountType ? mountType->getMovingAnimationPhases() : 0;
+        if (riderSteps > 0 && mountSteps > riderSteps)
+            animationPhase = 1 + ((int)(walkAnimationPhase - 1) * riderSteps) / mountSteps;
+    }
+
     auto wingBounce = [&] {
         int maxoffset = 4;
         uint floatingTicks = 8;
@@ -90,6 +100,10 @@ void Outfit::draw(Point dest, Otc::Direction direction, uint walkAnimationPhase,
             } else {
                 animationPhase = idleAnimator->getPhase();
             }
+        } else if (type->isAnimateAlways() && !ui && type->getAnimator() && g_game.getFeature(Otc::GameEnhancedAnimations)) {
+            // criatura que anima sempre (voando etc.): usa a duracao de cada frame do dat,
+            // como itens e efeitos; antes era 1000 ms / frames e ignorava o Object Builder
+            animationPhase = type->getAnimator()->getPhase();
         } else if (type->isAnimateAlways() || ui) {
             int phases = type->getAnimator() ? type->getAnimator()->getAnimationPhases() : type->getAnimationPhases();
             if (ui && phases < 4) {

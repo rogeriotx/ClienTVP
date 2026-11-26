@@ -34,6 +34,11 @@ PopupMenuSeparator < UIWidget
   height: 2
   phantom: true
 
+PopupMenuLabel < Label
+  text-offset: 2 0
+  height: 18
+  color: #aaaaaa
+
 PopupMenu < UIPopupMenu
   width: 50
   image-source: /images/ui/menubox

@@ -1,0 +1,50 @@
+// Botao flutuante "Join War" no canto inferior direito do mapa.
+// Aparece quando a guild esta numa War Private e o jogador esta fora da arena.
+Button
+  id: cityWarQuickJoin
+  size: 200 46
+  anchors.bottom: parent.bottom
+  anchors.right: parent.right
+  margin-bottom: 12
+  margin-right: 12
+  image-color: #ffb0b0
+  visible: false
+  focusable: false
+  !tooltip: tr('Join the War Private arena.\nYou must be in a protection zone (temple or depot) and out of battle.')
+  @onClick: modules.game_citywar.quickJoin()
+
+  $hover:
+    image-color: #ffffff
+
+  UIWidget
+    id: icon
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    size: 32 32
+    image-source: /images/guild_management/war
+    image-smooth: true
+    phantom: true
+
+  Label
+    id: title
+    anchors.top: parent.top
+    anchors.left: icon.right
+    anchors.right: parent.right
+    margin-left: 6
+    font: verdana-11px-rounded
+    color: #FF6060
+    text-align: left
+    phantom: true
+    !text: tr('JOIN WAR')
+
+  Label
+    id: info
+    anchors.top: title.bottom
+    anchors.left: icon.right
+    anchors.right: parent.right
+    margin-left: 6
+    margin-top: 2
+    font: verdana-9px
+    color: #dfdfdf
+    text-align: left
+    phantom: true

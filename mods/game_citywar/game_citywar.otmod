@@ -1,0 +1,10 @@
+Module
+  name: game_citywar
+  description: War Private (Anti-Entrosa) - configuracao e acompanhamento da war entre guilds
+  author: pbOT
+  website: None
+  sandboxed: true
+  autoload: true
+  scripts: [ citywar ]
+  @onLoad: init()
+  @onUnload: terminate()

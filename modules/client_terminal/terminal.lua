@@ -205,7 +205,7 @@ function terminate()
 end
 
 function hideButton()
-  --terminalButton:hide()
+  terminalButton:hide()
 end
 
 function popWindow()
@@ -269,7 +269,7 @@ function hide()
 end
 
 function disable()
-  --terminalButton:hide()
+  terminalButton:hide()
   g_keyboard.unbindKeyDown('Ctrl+T')
   disabled = true
 end

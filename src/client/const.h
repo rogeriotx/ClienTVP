@@ -495,8 +495,11 @@ namespace Otc
         GameMissionId = 125,
         GameItemCustomAttributes = 126,
         GameAnimatedTextCustomFont = 127,
+        GameItemDurationRarityTier = 128, // pbOT server: item duration flag (+u32 +u8), rarity u8, tier u8
+        GameCreatureStarIcon = 129, // TVP server: extra star/icon bytes on creature packet
+        GamePbotProtocol = 130, // pbOT server: npc trade list u16, buy amount u8, 0x70 with slot u8
 
-        LastGameFeature = 130
+        LastGameFeature = 131
     };
 
     enum PathFindResult {

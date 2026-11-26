@@ -578,7 +578,7 @@ void Game::loginWorld(const std::string& account, const std::string& password, c
     m_characterName = characterName;
     m_worldName = worldName;
 
-	g_lua.callGlobalField("g_game", "onLoadConfig", characterName);
+//	g_lua.callGlobalField("g_game", "onLoadConfig", characterName);
 }
 
 void Game::playRecord(const std::string& file)
@@ -1378,6 +1378,20 @@ void Game::reportRuleViolation(const std::string& target, int reason, int action
 void Game::debugReport(const std::string& a, const std::string& b, const std::string& c, const std::string& d)
 {
     m_protocolGame->sendDebugReport(a, b, c, d);
+}
+
+void Game::addLootCategory(const ItemPtr& item, uint16 categoryFlags)
+{
+    if (!canPerformGameAction() || !item)
+        return;
+    m_protocolGame->sendAddLootCategory(item->getPosition(), item->getId(), item->getStackPos(), categoryFlags);
+}
+
+void Game::removeLootCategory(const ItemPtr& item)
+{
+    if (!canPerformGameAction() || !item)
+        return;
+    m_protocolGame->sendRemoveLootCategory(item->getPosition(), item->getId(), item->getStackPos());
 }
 
 void Game::requestQuestLog()

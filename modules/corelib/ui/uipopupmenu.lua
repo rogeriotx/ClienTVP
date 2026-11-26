@@ -128,3 +128,12 @@ end
 
 connect(rootWidget, { onGeometryChange = onRootGeometryUpdate })
 connect(g_game, { onGameEnd = onGameEnd } )
+
+-- pbOT: portado do old_pbOT_Client (usado por game_guildmanagement)
+function UIPopupMenu:addText(text)
+  local optionWidget = g_ui.createWidget(self:getStyleName() .. "Label", self)
+  optionWidget:setText(text)
+  local width = optionWidget:getTextSize().width + optionWidget:getMarginLeft() + optionWidget:getMarginRight() + 15
+
+  self:setWidth(math.max(self:getWidth(), width))
+end

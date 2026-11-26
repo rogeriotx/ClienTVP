@@ -88,7 +88,7 @@ public:
     void setId(uint32 id);
     void setOtbId(uint16 id);
     void setCountOrSubType(int value) { m_countOrSubType = value; }
-    void setShowCount(int value) { m_showCount = value; }
+    //void setShowCount(int value) { m_showCount = value; }
     void setCount(int count) { m_countOrSubType = count; }
     void setSubType(int subType) { m_countOrSubType = subType; }
     void setColor(const Color& c) { m_color = c; }
@@ -97,7 +97,7 @@ public:
     void setShader(const std::string& str) { m_shader = str; }
 
     int getCountOrSubType() { return m_countOrSubType; }
-    int getShowCount() { return m_showCount; }
+   // int getShowCount() { return m_showCount; }
     int getSubType();
     int getCount();
     uint32 getId() { return m_clientId; }
@@ -108,6 +108,30 @@ public:
     std::string getTooltip() { return m_tooltip; }
     uint32 getQuickLootFlags() { return m_quickLootFlags; }
     std::string getShader() { return m_shader; }
+
+    // pbOT server attributes
+    void setRarityId(uint8 rarity) { m_rarity = rarity; }
+    uint8 getRarityId() { return m_rarity; }
+    void setTier(uint8 tier) { m_tier = tier; }
+    uint8 getTier() { return m_tier; }
+    // duration: ms restantes enviados pelo servidor; stopTime = so decai quando equipado
+    void setDuration(uint32 durationMs, bool stopTime) { m_duration = durationMs; m_durationStopped = stopTime; m_durationReceivedAt = stdext::millis(); }
+    uint32 getDuration() { return m_duration; } // ms, valor recebido
+    bool isDurationStopped() { return m_durationStopped; }
+    bool isDurationRunning() {
+        if (m_duration == 0) return false;
+        if (!m_durationStopped) return true;
+        Position pos = getPosition(); // itens stopTime so decaem num slot do inventario
+        return pos.x == 0xFFFF && pos.y > 0 && pos.y < 0x40;
+    }
+    int64 getDurationLeft() { // segundos restantes (contagem regressiva no cliente)
+        if (m_duration == 0) return 0;
+        int64 ms = m_duration;
+        if (isDurationRunning()) ms -= (stdext::millis() - m_durationReceivedAt);
+        return ms > 0 ? ms / 1000 : 0;
+    }
+    void setLootCategory(uint16 category) { m_lootCategory = category; }
+    uint16 getLootCategory() { return m_lootCategory; }
 
     void unserializeItem(const BinaryTreePtr& in);
     void serializeItem(const OutputBinaryTreePtr& out);
@@ -169,8 +193,8 @@ public:
 private:
     uint16 m_clientId;
     uint16 m_serverId;
-    uint32 m_countOrSubType;
-    uint16 m_showCount;
+    uint16 m_countOrSubType;
+   // uint16 m_showCount;
     stdext::packed_storage<uint8> m_attribs;
     ItemVector m_containerItems;
     Color m_color;
@@ -179,6 +203,12 @@ private:
     std::string m_shader;
 
     uint32 m_quickLootFlags;
+    uint8 m_rarity = 0;
+    uint8 m_tier = 0;
+    uint32 m_duration = 0;
+    bool m_durationStopped = false;
+    ticks_t m_durationReceivedAt = 0;
+    uint16 m_lootCategory = 0;
     uint8 m_phase;
     ticks_t m_lastPhase;
 

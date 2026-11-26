@@ -6,6 +6,8 @@ function init()
     onLevelChange = onLevelChange,
     onHealthChange = onHealthChange,
     onManaChange = onManaChange,
+    onSoulChange = onSoulChange,
+    onStaminaChange = onStaminaChange,
     onFreeCapacityChange = onFreeCapacityChange,
     onTotalCapacityChange = onTotalCapacityChange,
     -- onOfflineTrainingChange = onOfflineTrainingChange,
@@ -53,6 +55,8 @@ function terminate()
     onLevelChange = onLevelChange,
     onHealthChange = onHealthChange,
     onManaChange = onManaChange,
+    onSoulChange = onSoulChange,
+    onStaminaChange = onStaminaChange,
     onFreeCapacityChange = onFreeCapacityChange,
     onTotalCapacityChange = onTotalCapacityChange,
     -- onOfflineTrainingChange = onOfflineTrainingChange,
@@ -283,7 +287,9 @@ function refresh()
   onLevelChange(player, player:getLevel(), player:getLevelPercent())
   onHealthChange(player, player:getHealth(), player:getMaxHealth())
   onManaChange(player, player:getMana(), player:getMaxMana())
+  onSoulChange(player, player:getSoul())
   onFreeCapacityChange(player, player:getFreeCapacity())
+  onStaminaChange(player, player:getStamina())
   onMagicLevelChange(player, player:getMagicLevel(), player:getMagicLevelPercent())
   -- onOfflineTrainingChange(player, player:getOfflineTrainingTime())
   onRegenerationChange(player, player:getRegenerationTime())
@@ -304,9 +310,9 @@ function refresh()
   local contentsPanel = skillsWindow:getChildById('contentsPanel')
   skillsWindow:setContentMinimumHeight(44)
   if hasAdditionalSkills then
-    skillsWindow:setContentMaximumHeight(480)
+    skillsWindow:setContentMaximumHeight(520)
   else
-    skillsWindow:setContentMaximumHeight(312)
+    skillsWindow:setContentMaximumHeight(350)
   end
   skillsWindow:setup()
   load_skills_content()
@@ -399,6 +405,39 @@ end
 function onManaChange(localPlayer, mana, maxMana)
   setSkillValue('mana', mana)
   checkAlert('mana', mana, maxMana, 30)
+end
+
+function onSoulChange(localPlayer, soul)
+  setSkillValue('soul', soul)
+end
+
+function onStaminaChange(localPlayer, stamina)
+  local stamina_row = skillsWindow:recursiveGetChildById('stamina')
+  if not g_game.getFeature(GamePlayerStamina) then
+    stamina_row:hide()
+    return
+  end
+  stamina_row:show()
+
+  local hours = math.floor(stamina / 60)
+  local minutes = stamina % 60
+  if minutes < 10 then
+    minutes = '0' .. minutes
+  end
+  local percent = math.floor(100 * stamina / (42 * 60)) -- max 42 horas
+
+  setSkillValue('stamina', hours .. ':' .. minutes)
+
+  local left = tr('You have %s hours and %s minutes left', hours, minutes)
+  if stamina > 2400 then
+    setSkillPercent('stamina', percent, left .. '\n' .. tr('If you are premium player, you will gain 50%% more experience'), '#00C000')
+  elseif stamina > 840 then
+    setSkillPercent('stamina', percent, left, 'orange')
+  elseif stamina > 0 then
+    setSkillPercent('stamina', percent, left .. '\n' .. tr('You gain only 50%% experience and you may not gain loot from monsters'), '#C00000')
+  else
+    setSkillPercent('stamina', percent, left .. '\n' .. tr('You may not receive experience and loot from monsters'), 'black')
+  end
 end
 
 function onFreeCapacityChange(localPlayer, freeCapacity)

@@ -9,18 +9,17 @@ BAD_FILES = {"lam", "engine.spr", "LanEngine.key", "LanEngine.dll", "opengl32.dl
 BAD_PROCESSES = {"NinjaRipper.exe", "injhelper.exe", "ripdump.exe"}
 BAD_DLLS = {"intruder.dll", "d3dx8d.dll", "d3dwrap.dll"}
 
--- If you don't use updater or other service, set it to updater = ""
+-- ======================
+-- SERVICES (DESATIVADOS EM DEV)
+-- ======================
+
 Services = {
-  website = "https://ravenor.online", -- currently not used
-  updater = "http://109.104.155.200/updater.php", -- Comentado: EMAC / Descomentado: Versão antiga
---   stats = "",
---   crash = "http://otclient.ovh/api/crash.php",
---   feedback = "http://otclient.ovh/api/feedback.php",
---   status = "http://otclient.ovh/api/status.php"
-  accessAccountWebsite = "https://ravenor.online/account/login"
+  website = "",
+  updater = "",
+  accessAccountWebsite = ""
 }
 
-discordInviteLink = "https://discord.gg/KxPKE6Sh"
+discordInviteLink = ""
 
 --g_proxy.addProxy("proxy-us01.ravenor.online", 7162, 0)
 --g_proxy.addProxy("proxy-us02.ravenor.online", 7162, 0)
@@ -28,31 +27,31 @@ discordInviteLink = "https://discord.gg/KxPKE6Sh"
 --g_proxy.addProxy("proxy-uk01.ravenor.online", 7162, 0)
 math.randomseed(os.time())
 
-local proxyId = math.random(1,9)
-vpsPort = tonumber(6580 + proxyId)
-g_proxy.addProxy("p01.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p02.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p03.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p04.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p05.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p06.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p07.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p08.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p09.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p10.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p11.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p12.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p13.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p14.ravenor.online", vpsPort, 0)
-g_proxy.addProxy("p15.ravenor.online", vpsPort, 0)
+-- local proxyId = math.random(1,9)
+-- vpsPort = tonumber(6580 + proxyId)
+-- g_proxy.addProxy("p01.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p02.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p03.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p04.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p05.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p06.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p07.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p08.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p09.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p10.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p11.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p12.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p13.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p14.ravenor.online", vpsPort, 0)
+-- g_proxy.addProxy("p15.ravenor.online", vpsPort, 0)
 
 -- g_proxy.addProxy("5.188.238.75", 7171, 0)
 
 -- Servers accept http login url, websocket login url or ip:port:version
 Servers = {
-  -- TS = "23.95.79.111:7162:772" --TesteServer
+   TS = "192.168.100.254:7171:800" --pbOT (TFS 8.00)
   --Ravenor = "5.188.238.75:443:772", --Oficial
-  Proxy = "127.0.0.1:17171:772"
+  --Proxy = "127.0.0.1:17171:772"
 }
 
 --Server = "ws://otclient.ovh:3000/"

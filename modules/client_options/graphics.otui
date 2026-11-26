@@ -1,5 +1,5 @@
 OptionPanel
-  size: 236 379
+  size: 236 470
   text: Graphics Options
   
   OptionCheckBoxBackground
@@ -33,6 +33,12 @@ OptionPanel
     OptionCheckBox
       id: floorFading
       !text: tr('Enable floor fading')
+
+  OptionCheckBoxBackground
+
+    OptionCheckBox
+      id: enableLights
+      !text: tr('Enable Lights')
   
   OptionCheckBoxBackground
 
@@ -68,6 +74,19 @@ OptionPanel
     id: currentFrameRateLabel
     margin-top: 4
     !text: tr('Current Framerate: %s', 'max')
+
+  OptionsLabel
+    id: ambientLightLabel
+    margin-top: 12
+    @onSetup: |
+      local value = modules.client_options.getOption('ambientLight')
+      self:setText(tr('Ambient Light: %s%%', value))
+
+  OptionScrollbar
+    id: ambientLight
+    margin-top: 5
+    minimum: 0
+    maximum: 100
 
   padding: 0
 

@@ -131,6 +131,9 @@ ignoredChannels = {}
 filters = {}
 
 floatingMode = false
+local consoleInitEvent = nil
+local consoleInitAttempts = 0
+local consoleConnectionsInitialized = false
 
 local communicationSettings = {
     useIgnoreList = true,
@@ -142,30 +145,86 @@ local communicationSettings = {
     whitelistedPlayers = {}
 }
 
-function init()
-    connect(g_game, {
-        onTalk = onTalk,
-        onChannelList = onChannelList,
-        onOpenChannel = onOpenChannel,
-        onCloseChannel = onCloseChannel,
-        onChannelEvent = onChannelEvent,
-        onOpenPrivateChannel = onOpenPrivateChannel,
-        onOpenOwnPrivateChannel = onOpenOwnPrivateChannel,
-        onRuleViolationChannel = onRuleViolationChannel,
-        onRuleViolationRemove = onRuleViolationRemove,
-        onRuleViolationCancel = onRuleViolationCancel,
-        onRuleViolationLock = onRuleViolationLock,
-        onGameStart = online,
-        onGameEnd = offline
-    })
+local function setupConsolePanel()
+    local bottomPanel = modules.game_interface and
+                            modules.game_interface.getBottomPanel and
+                            modules.game_interface.getBottomPanel()
+    if not bottomPanel then
+        return false
+    end
 
-    consolePanel = g_ui.loadUI('console',
-                               modules.game_interface.getBottomPanel())
-                       .consolePanel
+    local consoleRootPanel = g_ui.loadUI('console', bottomPanel)
+    consolePanel = consoleRootPanel and
+                       (consoleRootPanel:getChildById('consolePanel') or
+                           consoleRootPanel.consolePanel or consoleRootPanel)
+    if not consolePanel then
+        return false
+    end
+
     consoleTextEdit = consolePanel:getChildById('consoleTextEdit')
     consoleContentPanel = consolePanel:getChildById('consoleContentPanel')
     consoleTabBar = consolePanel:getChildById('consoleTabBar')
+    if not consoleTextEdit or not consoleContentPanel or not consoleTabBar then
+        if consoleRootPanel then
+            consoleRootPanel:destroy()
+        end
+        consolePanel = nil
+        consoleTextEdit = nil
+        consoleContentPanel = nil
+        consoleTabBar = nil
+        return false
+    end
+
     consoleTabBar:setContentWidget(consoleContentPanel)
+    return true
+end
+
+local function scheduleConsoleInitRetry()
+    if consoleInitEvent then
+        removeEvent(consoleInitEvent)
+    end
+
+    consoleInitAttempts = consoleInitAttempts + 1
+    if consoleInitAttempts > 20 then
+        g_logger.error('Unable to initialize game_console for the current layout.')
+        return
+    end
+
+    consoleInitEvent = scheduleEvent(function()
+        consoleInitEvent = nil
+        if setupConsolePanel() then
+            init()
+        else
+            scheduleConsoleInitRetry()
+        end
+    end, 50)
+end
+
+function init()
+    if not consoleConnectionsInitialized then
+        connect(g_game, {
+            onTalk = onTalk,
+            onChannelList = onChannelList,
+            onOpenChannel = onOpenChannel,
+            onCloseChannel = onCloseChannel,
+            onChannelEvent = onChannelEvent,
+            onOpenPrivateChannel = onOpenPrivateChannel,
+            onOpenOwnPrivateChannel = onOpenOwnPrivateChannel,
+            onRuleViolationChannel = onRuleViolationChannel,
+            onRuleViolationRemove = onRuleViolationRemove,
+            onRuleViolationCancel = onRuleViolationCancel,
+            onRuleViolationLock = onRuleViolationLock,
+            onGameStart = online,
+            onGameEnd = offline
+        })
+        consoleConnectionsInitialized = true
+    end
+
+    if not consolePanel and not setupConsolePanel() then
+        scheduleConsoleInitRetry()
+        return
+    end
+
     channels = {}
 
     consolePanel.onDragEnter = onDragEnter
@@ -347,6 +406,11 @@ end
 function terminate()
     -- save_channels_history()
     save()
+    if consoleInitEvent then
+        removeEvent(consoleInitEvent)
+        consoleInitEvent = nil
+    end
+
     disconnect(g_game, {
         onTalk = onTalk,
         onChannelList = onChannelList,
@@ -362,6 +426,7 @@ function terminate()
         onGameEnd = offline,
         onChannelEvent = onChannelEvent
     })
+    consoleConnectionsInitialized = false
 
 
     local gameRootPanel = modules.game_interface.getRootPanel()
@@ -382,7 +447,9 @@ function terminate()
     consoleToggleChat = nil
     consoleTextEdit = nil
 
-    consolePanel:destroy()
+    if consolePanel then
+        consolePanel:destroy()
+    end
     consolePanel = nil
     ownPrivateName = nil
 
@@ -2153,7 +2220,7 @@ function online()
         end, 250)
     end
     
-    scheduleEvent(function() consoleTabBar:selectTab(defaultTab) end, 300)
+    scheduleEvent(function() if defaultTab and consoleTabBar then consoleTabBar:selectTab(defaultTab) end end, 300)
 
     consolePanel:getChildById('closeChannelButton'):setVisible(false)
     consolePanel.sayModeButton:setVisible(true)

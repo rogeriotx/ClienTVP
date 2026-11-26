@@ -69,7 +69,7 @@ function UIResizeBorder:onMouseMove(mousePos, mouseMoved)
 				for i = index + 1, MiniWindowContainer:getChildCount() do
 					local child = MiniWindowContainer:getChildByIndex(i)
 					if child then
-						if child:isVisible() and child:isResizeable() then
+						if child:isVisible() and child.isResizeable and child:isResizeable() then
 							local nextResizer = child.bottomResizeBorder
 							if nextResizer then
 								table.insert(resizeableWindows, {child, index})

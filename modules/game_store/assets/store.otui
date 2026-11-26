@@ -126,6 +126,7 @@ RowStore < StoreLightFlatPanelWidget
     UIItem
       id: item
       virtual: true
+      &noRarityFrame: true
       size: 64 64
       padding: 8
       anchors.centerIn: parent
@@ -251,6 +252,7 @@ StoreWindowWidget
     @onClick: modules.game_store.transferPoints()
   
   HorizontalSeparator
+    id: bottomSeparator
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.bottom: btnClose.top
@@ -258,17 +260,27 @@ StoreWindowWidget
     margin-left: -5
     margin-right: -5
 
+  TextEdit
+    id: searchStore
+    width: 190
+    height: 20
+    anchors.left: parent.left
+    anchors.bottom: bottomSeparator.top
+    margin-bottom: 8
+    placeholder: Search...
+    @onTextChange: modules.game_store.onSearchChange(self:getText())
+
   UIScrollArea
     id: listCategory
     size: 190 450
     anchors.top: parent.top
     anchors.left: parent.left
-    anchors.bottom: prev.top
+    anchors.bottom: searchStore.top
     image-source: panel
     image-border: 3
     auto-focus: none
     layout: verticalBox
-    margin-bottom: 8
+    margin-bottom: 5
     padding: 5
 
   StoreLightFlatPanelWidget
@@ -277,7 +289,8 @@ StoreWindowWidget
     anchors.left: prev.right
     anchors.right: parent.right
     margin-right: -4
-    anchors.bottom: prev.bottom
+    anchors.bottom: bottomSeparator.top
+    margin-bottom: 8
     margin-left: 8
     padding: 6
 
@@ -335,6 +348,7 @@ StoreWindowWidget
       UIItem
         id: item
         virtual: true
+        &noRarityFrame: true
         phantom: true
         size: 64 64
         padding: 8

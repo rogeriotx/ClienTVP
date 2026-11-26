@@ -40,7 +40,7 @@ end
 -- parsing protocols
 local function parseMarketEnter(protocol, msg)
   local items
-  if g_game.getClientVersion() < 944 then
+  if g_game.getClientVersion() < 740 then -- pbOT: sendMarketEnter nao envia lista de itens
     items = {}
     local itemsCount = msg:getU16()
     for i = 1, itemsCount do

@@ -1,0 +1,109 @@
+AutolootItem < UIWidget
+  height: 36
+  background-color: alpha
+  focusable: false
+  $hover:
+    background-color: #ffffff11
+
+  Item
+    id: item
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 2
+    virtual: true
+
+  Label
+    id: name
+    anchors.left: prev.right
+    anchors.right: next.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 8
+    text-align: left
+    color: #afafaf
+
+  Button
+    id: removeButton
+    !text: tr('X')
+    size: 20 20
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-right: 4
+    @onClick: modules.game_interface.removeFromAutolootList(self:getParent())
+
+MainWindow
+  id: autolootWindow
+  !text: tr('Auto Loot')
+  size: 300 380
+  @onEscape: modules.game_interface.closeAutolootWindow()
+  @onEnter: modules.game_interface.addToAutolootList()
+
+  Label
+    id: addLabel
+    !text: tr('Item name or client id:')
+    anchors.top: parent.top
+    anchors.left: parent.left
+    color: #afafaf
+
+  TextEdit
+    id: textEdit
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: next.left
+    margin-top: 3
+    margin-right: 6
+    @onTextChange: modules.game_interface.updateAutolootTextEdit(self)
+
+  Button
+    id: addButton
+    !text: tr('Add')
+    width: 50
+    enabled: false
+    anchors.right: parent.right
+    anchors.top: addLabel.bottom
+    margin-top: 2
+    @onClick: modules.game_interface.addToAutolootList()
+
+  TextEdit
+    id: textSearch
+    anchors.top: textEdit.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 8
+    placeholder: Search...
+    @onTextChange: modules.game_interface.updateAutolootSearch(self)
+
+  ScrollableFlatPanel
+    id: itemsList
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: separator.top
+    margin-top: 8
+    margin-right: 14
+    margin-bottom: 8
+    padding: 2
+    vertical-scrollbar: autolootScroll
+    layout:
+      type: verticalBox
+
+  VerticalScrollBar
+    id: autolootScroll
+    anchors.top: prev.top
+    anchors.bottom: prev.bottom
+    anchors.left: prev.right
+    step: 36
+    pixels-scroll: true
+
+  HorizontalSeparator
+    id: separator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 8
+
+  Button
+    !text: tr('Close')
+    width: 60
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    @onClick: modules.game_interface.closeAutolootWindow()

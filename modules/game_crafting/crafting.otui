@@ -1,0 +1,479 @@
+CategoryButton < UIButton
+  font: verdana-11px-antialised
+  color: #c0c0c0
+  size: 116 34
+  image-source: /images/ui/button
+  image-color: #9a9a9a
+  image-clip: 0 0 22 23
+  image-border: 3
+
+  $hover !disabled:
+    image-color: #d0d0d0
+    color: #ffffff
+
+  $pressed:
+    image-clip: 0 46 22 23
+
+  $on:
+    image-clip: 0 46 22 23
+    image-color: #ffffff
+    color: #f4d35e
+
+  $disabled:
+    color: #c0c0c088
+    opacity: 0.8
+
+CategoryItem < UIItem
+  anchors.verticalCenter: parent.verticalCenter
+  anchors.left: parent.left
+  margin-left: 2
+  size: 32 32
+  virtual: true
+  phantom: true
+
+CategoryLabel < Label
+  anchors.verticalCenter: parent.verticalCenter
+  anchors.left: prev.right
+  anchors.right: parent.right
+  margin-left: 4
+  text-align: left
+  color: #d0d0d0
+  phantom: true
+
+CraftItem < Item
+  virtual: true
+
+  UIWidget
+    id: rarityId
+    anchors.fill: parent
+    image-source: /images/ui/rarity_frames
+    phantom: true
+    visible: false
+
+  UIWidget
+    id: tierIcon
+    anchors.top: parent.top
+    anchors.right: parent.right
+    margin-top: 1
+    margin-right: 1
+    size: 12 12
+    phantom: true
+    visible: false
+
+ItemListItem < UIWidget
+  height: 40
+  focusable: true
+  phantom: false
+  image-source: /images/ui/button
+  image-color: #7a7a7a
+  image-clip: 0 0 22 23
+  image-border: 3
+  margin-bottom: 2
+  @onClick: modules.game_crafting.selectItem(self:getId())
+
+  $hover !focus:
+    image-color: #a8a8a8
+
+  $focus:
+    image-clip: 0 46 22 23
+    image-color: #ffffff
+
+  CraftItem
+    id: item
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    margin-left: 3
+    size: 34 34
+    padding: 1
+
+  Label
+    id: name
+    anchors.top: item.top
+    anchors.left: item.right
+    anchors.right: parent.right
+    margin-top: 2
+    margin-left: 6
+    text-align: left
+    color: #e0e0e0
+    phantom: true
+
+  Label
+    id: level
+    anchors.bottom: item.bottom
+    anchors.left: item.right
+    anchors.right: parent.right
+    margin-bottom: 2
+    margin-left: 6
+    text-align: left
+    color: #8f8f8f
+    phantom: true
+
+CountLabel < Label
+  anchors.top: prev.top
+  anchors.bottom: prev.bottom
+  font: verdana-11px-rounded
+  text-auto-resize: true
+  margin-top: 2
+
+SectionTitle < Label
+  font: verdana-11px-antialised
+  color: #c0bcbc
+  text-align: left
+
+MoneyBox < FlatPanel
+  size: 120 18
+
+MainWindow
+  id: craftingWindow
+  !text: tr('Crafting System')
+  size: 690 480
+  @onEscape: modules.game_crafting.hide()
+
+  Panel
+    id: categories
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 34
+    layout:
+      type: horizontalBox
+      spacing: 8
+
+    CategoryButton
+      id: herbalistCat
+      @onClick: modules.game_crafting.selectCategory("herbalist")
+      CategoryItem
+        item-id: 2874
+      CategoryLabel
+        !text: tr('Supply')
+
+    CategoryButton
+      id: generalcraftingCat
+      @onClick: modules.game_crafting.selectCategory("generalcrafting")
+      CategoryItem
+        item-id: 3458
+      CategoryLabel
+        !text: tr('Crafting')
+
+    CategoryButton
+      id: forcearcherCat
+      @onClick: modules.game_crafting.selectCategory("forcearcher")
+      CategoryItem
+        item-id: 3368
+      CategoryLabel
+        !text: tr('Equip')
+
+    CategoryButton
+      id: weaponsmithCat
+      @onClick: modules.game_crafting.selectCategory("weaponsmith")
+      CategoryItem
+        item-id: 3278
+      CategoryLabel
+        !text: tr('Armas')
+
+    CategoryButton
+      id: jewelsmithCat
+      @onClick: modules.game_crafting.selectCategory("jewelsmith")
+      CategoryItem
+        item-id: 3021
+      CategoryLabel
+        !text: tr('Joias')
+
+  HorizontalSeparator
+    id: topSeparator
+    anchors.top: categories.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 8
+
+  SectionTitle
+    id: listTitle
+    anchors.top: topSeparator.bottom
+    anchors.left: parent.left
+    margin-top: 8
+    !text: tr('Craftable Items')
+
+  TextEdit
+    id: searchInput
+    anchors.top: listTitle.bottom
+    anchors.left: parent.left
+    width: 236
+    margin-top: 4
+    placeholder: Search...
+    @onKeyPress: modules.game_crafting.onSearch()
+
+  ScrollableFlatPanel
+    id: itemsList
+    anchors.top: searchInput.bottom
+    anchors.left: parent.left
+    anchors.bottom: bottomSeparator.top
+    width: 222
+    margin-top: 6
+    margin-bottom: 8
+    padding: 3
+    vertical-scrollbar: itemsListScrollbar
+    auto-focus: none
+    layout:
+      type: verticalBox
+
+  VerticalScrollBar
+    id: itemsListScrollbar
+    anchors.top: itemsList.top
+    anchors.bottom: itemsList.bottom
+    anchors.left: itemsList.right
+    step: 42
+    pixels-scroll: true
+
+  SectionTitle
+    id: processTitle
+    anchors.top: topSeparator.bottom
+    anchors.left: itemsListScrollbar.right
+    margin-top: 8
+    margin-left: 12
+    !text: tr('Crafting Process')
+
+  FlatPanel
+    id: craftPanel
+    anchors.top: searchInput.top
+    anchors.left: itemsListScrollbar.right
+    anchors.right: parent.right
+    anchors.bottom: bottomSeparator.top
+    margin-left: 12
+    margin-bottom: 8
+
+    CraftItem
+      id: craftOutcome
+      anchors.horizontalCenter: parent.horizontalCenter
+      anchors.top: parent.top
+      margin-top: 112
+      size: 34 34
+      padding: 1
+
+    Panel
+      id: craftLine1
+      anchors.top: craftOutcome.top
+      anchors.right: craftOutcome.left
+      margin-top: -31
+      margin-right: 5
+      image-source: /images/crafting/craft_line1
+
+    CraftItem
+      id: material1
+      anchors.bottom: prev.bottom
+      anchors.left: parent.left
+      margin-left: 8
+      margin-bottom: 16
+
+    CountLabel
+      id: count1
+      anchors.left: prev.right
+      text-align: left
+      margin-left: 5
+
+    Panel
+      id: craftLine2
+      anchors.top: craftOutcome.top
+      anchors.right: craftOutcome.left
+      margin-top: 16
+      margin-right: 5
+      image-source: /images/crafting/craft_line5
+
+    CraftItem
+      id: material2
+      anchors.bottom: prev.bottom
+      anchors.left: parent.left
+      margin-left: 8
+      margin-bottom: -15
+
+    CountLabel
+      id: count2
+      anchors.left: prev.right
+      text-align: left
+      margin-left: 5
+
+    Panel
+      id: craftLine3
+      anchors.top: craftOutcome.top
+      anchors.right: craftOutcome.left
+      margin-top: 32
+      margin-right: 5
+      image-source: /images/crafting/craft_line3
+
+    CraftItem
+      id: material3
+      anchors.bottom: prev.bottom
+      anchors.left: parent.left
+      margin-left: 8
+      margin-bottom: -15
+
+    CountLabel
+      id: count3
+      anchors.left: prev.right
+      text-align: left
+      margin-left: 5
+
+    Panel
+      id: craftLine4
+      anchors.top: craftOutcome.top
+      anchors.left: craftOutcome.right
+      margin-top: -31
+      margin-left: 5
+      image-source: /images/crafting/craft_line4
+
+    CraftItem
+      id: material4
+      anchors.bottom: prev.bottom
+      anchors.right: parent.right
+      margin-right: 8
+      margin-bottom: 16
+
+    CountLabel
+      id: count4
+      anchors.right: prev.left
+      text-align: right
+      margin-right: 5
+
+    Panel
+      id: craftLine5
+      anchors.top: craftOutcome.top
+      anchors.left: craftOutcome.right
+      margin-top: 16
+      margin-left: 5
+      image-source: /images/crafting/craft_line5
+
+    CraftItem
+      id: material5
+      anchors.bottom: prev.bottom
+      anchors.right: parent.right
+      margin-right: 8
+      margin-bottom: -15
+
+    CountLabel
+      id: count5
+      anchors.right: prev.left
+      text-align: right
+      margin-right: 5
+
+    Panel
+      id: craftLine6
+      anchors.top: craftOutcome.top
+      anchors.left: craftOutcome.right
+      margin-top: 32
+      margin-left: 5
+      image-source: /images/crafting/craft_line6
+
+    CraftItem
+      id: material6
+      anchors.bottom: prev.bottom
+      anchors.right: parent.right
+      margin-right: 8
+      margin-bottom: -15
+
+    CountLabel
+      id: count6
+      anchors.right: prev.left
+      text-align: right
+      margin-right: 5
+
+    HorizontalSeparator
+      id: footerSeparator
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin-left: 6
+      margin-right: 6
+      margin-bottom: 52
+
+    CategoryButton
+      id: craftButton
+      anchors.left: parent.left
+      anchors.bottom: parent.bottom
+      margin-left: 8
+      margin-bottom: 9
+      size: 110 34
+      @onClick: modules.game_crafting.craftItem()
+      CategoryItem
+        item-id: 3460
+      CategoryLabel
+        !text: tr('Craft')
+
+    MoneyBox
+      id: costBox
+      anchors.right: parent.right
+      anchors.top: footerSeparator.bottom
+      margin-right: 8
+      margin-top: 6
+
+      UIItem
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: -6
+        size: 32 32
+        item-id: 3031
+        virtual: true
+        phantom: true
+
+      Label
+        id: totalCost
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        margin-right: 5
+        text-align: right
+        color: #f4d35e
+
+    Label
+      anchors.right: costBox.left
+      anchors.verticalCenter: costBox.verticalCenter
+      margin-right: 8
+      !text: tr('Total Cost:')
+      color: #afafaf
+      text-auto-resize: true
+
+    MoneyBox
+      id: moneyBox
+      anchors.right: parent.right
+      anchors.top: costBox.bottom
+      margin-right: 8
+      margin-top: 4
+
+      UIItem
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        margin-left: -6
+        size: 32 32
+        item-id: 3031
+        virtual: true
+        phantom: true
+
+      Label
+        id: playerMoney
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        margin-right: 5
+        text-align: right
+        color: #ffffff
+
+    Label
+      anchors.right: moneyBox.left
+      anchors.verticalCenter: moneyBox.verticalCenter
+      margin-right: 8
+      !text: tr('Backpack Money:')
+      color: #afafaf
+      text-auto-resize: true
+
+  HorizontalSeparator
+    id: bottomSeparator
+    anchors.bottom: closeButton.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-bottom: 8
+
+  Button
+    id: closeButton
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    !text: tr('Close')
+    width: 60
+    @onClick: modules.game_crafting.hide()

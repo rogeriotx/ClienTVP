@@ -1,0 +1,73 @@
+LootCategory < UIWidget
+  text-offset: 26 4
+  text-align: left
+  height: 22
+  color: #afafaf
+  focusable: false
+  $!checked:
+    background-color: alpha
+  $hover !checked:
+    background-color: #ffffff22
+  $checked:
+    background-color: #00376c
+    color: #ffffff
+
+  UIWidget
+    id: categoryIcon
+    image-source: /images/game/lootcategory_icons
+    size: 19 19
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 2
+    phantom: true
+
+MainWindow
+  id: lootCategoryWindow
+  !text: tr('Loot Category')
+  size: 400 300
+  @onEscape: modules.game_containers.destroyLoot()
+  @onEnter: modules.game_containers.addLootCategory()
+
+  FlatPanel
+    id: categoriesList
+    anchors.top: parent.top
+    anchors.left: parent.left
+    width: 170
+    height: 210
+    padding: 2
+    layout:
+      type: verticalBox
+
+  Label
+    anchors.top: prev.top
+    anchors.bottom: prev.bottom
+    anchors.left: prev.right
+    anchors.right: parent.right
+    margin-left: 10
+    text-wrap: true
+    text-align: topLeft
+    color: #afafaf
+    !text: tr("Selecione as categorias deste container. Itens pegos pelo auto-loot ou comprados no NPC vao para o container da categoria correspondente.\n\nItens sem container da categoria vao para a mochila principal.")
+
+  HorizontalSeparator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: next.top
+    margin-bottom: 8
+
+  Button
+    id: button
+    !text: tr('Accept')
+    width: 60
+    enabled: false
+    anchors.right: next.left
+    anchors.bottom: parent.bottom
+    margin-right: 8
+    @onClick: modules.game_containers.addLootCategory()
+
+  Button
+    !text: tr('Cancel')
+    width: 60
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    @onClick: modules.game_containers.destroyLoot()

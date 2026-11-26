@@ -5,6 +5,7 @@ function UIRadioGroup.create()
   local radiogroup = UIRadioGroup.internalCreate()
   radiogroup.widgets = {}
   radiogroup.selectedWidget = nil
+  radiogroup.enabled = true
   return radiogroup
 end
 
@@ -29,6 +30,7 @@ function UIRadioGroup:removeWidget(widget)
 end
 
 function UIRadioGroup:selectWidget(selectedWidget, dontSignal)
+  if not self.enabled then return end
   if selectedWidget == self.selectedWidget then return end
 
   local previousSelectedWidget = self.selectedWidget
@@ -48,6 +50,7 @@ function UIRadioGroup:selectWidget(selectedWidget, dontSignal)
 end
 
 function UIRadioGroup:clearSelected()
+  if not self.enabled then return end
   if not self.selectedWidget then return end
 
   local previousSelectedWidget = self.selectedWidget
@@ -63,4 +66,16 @@ end
 
 function UIRadioGroup:getFirstWidget()
   return self.widgets[1]
+end
+
+function UIRadioGroup:setEnabled(value)
+  self.enabled = value
+end
+
+function UIRadioGroup:enable()
+  self.enabled = true
+end
+
+function UIRadioGroup:disable()
+  self.enabled = false
 end

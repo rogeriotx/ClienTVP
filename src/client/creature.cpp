@@ -161,27 +161,27 @@ void Creature::drawInformation(const Point& point, bool useGray, const Rect& par
                                            (int)(g_clock.millis() - m_footLastStep), (int)footDelay, (int)footAnimPhases, (int)m_walkAnimationPhase, (int)stdext::millis()));
     }
 
-	if (drawFlags & Otc::DrawNames) {
-		if (m_text) {
-			auto extraTextSize = m_text->getCachedText().getTextSize();
+	// if (drawFlags & Otc::DrawNames) {
+	// 	if (m_text) {
+	// 		auto extraTextSize = m_text->getCachedText().getTextSize();
 
-			if (!m_marketTexture) {
-				m_marketTexture = g_textures.getTexture("/images/game/market.png");
-			}
+	// 		if (!m_marketTexture) {
+	// 			m_marketTexture = g_textures.getTexture("/images/game/market.png");
+	// 		}
 
-			if (m_marketTexture) {
-				Rect marketRect = Rect((point.x + m_informationOffset.x - extraTextSize.width() / 2.0)-5, (point.y + m_informationOffset.y - 45)-5, extraTextSize.width()+10, (extraTextSize.height() < 25 ? extraTextSize.height() : 25)+10);
-				g_drawQueue->addTexturedRect(marketRect, m_marketTexture, Rect(0, 0, m_marketTexture->getSize()));
-			}
+	// 		if (m_marketTexture) {
+	// 			Rect marketRect = Rect((point.x + m_informationOffset.x - extraTextSize.width() / 2.0)-5, (point.y + m_informationOffset.y - 45)-5, extraTextSize.width()+10, (extraTextSize.height() < 25 ? extraTextSize.height() : 25)+10);
+	// 			g_drawQueue->addTexturedRect(marketRect, m_marketTexture, Rect(0, 0, m_marketTexture->getSize()));
+	// 		}
 
-			Rect extraTextRect = Rect(point.x + m_informationOffset.x - extraTextSize.width() / 2.0, point.y + m_informationOffset.y - 45, extraTextSize);
-			m_text->drawText(extraTextRect.center(), extraTextRect);
-		}
-	}
+	// 		Rect extraTextRect = Rect(point.x + m_informationOffset.x - extraTextSize.width() / 2.0, point.y + m_informationOffset.y - 45, extraTextSize);
+	// 		m_text->drawText(extraTextRect.center(), extraTextRect);
+	// 	}
+	// }
 
-	if (m_text) {
-		fillColor = Color(0xBF, 0x0A, 0x0A);
-	}
+	// if (m_text) {
+	// 	fillColor = Color(0xBF, 0x0A, 0x0A);
+	// }
 
     Size nameSize = m_nameCache.getTextSize();
     Rect textRect = Rect(point.x + m_informationOffset.x - nameSize.width() / 2.0, point.y + m_informationOffset.y - 12, nameSize);
@@ -293,6 +293,11 @@ void Creature::drawInformation(const Point& point, bool useGray, const Rect& par
             textRect.moveBottomCenter(textCenter);
             m_titleCache.draw(textRect, m_titleColor);
         }
+    if (m_text) {
+            auto extraTextSize = m_text->getCachedText().getTextSize();
+            Rect extraTextRect = Rect(point.x + m_informationOffset.x - extraTextSize.width() / 2.0, point.y + m_informationOffset.y + 15, extraTextSize);
+            m_text->drawText(extraTextRect.center(), extraTextRect);
+     }
     }
 
     if (!(drawFlags & Otc::DrawIcons))
@@ -524,9 +529,10 @@ void Creature::onDeath()
 
 int Creature::getWalkAnimationPhases()
 {
-    if (!getAnimator())
-        return getAnimationPhases();
-    return getAnimator()->getAnimationPhases() + (g_game.getFeature(Otc::GameIdleAnimations) ? 1 : 0);
+    // parado + passos; ThingType::getMovingAnimationPhases trata frame groups
+    // (so conta o frame parado separado quando existe grupo Idle, senao a criatura pisca andando)
+    ThingType* type = rawGetThingType();
+    return type ? type->getMovingAnimationPhases() + 1 : getAnimationPhases();
 }
 
 void Creature::updateWalkAnimation(uint8 totalPixelsWalked)
@@ -536,21 +542,28 @@ void Creature::updateWalkAnimation(uint8 totalPixelsWalked)
         return;
 
     int footAnimPhases = getWalkAnimationPhases() - 1;
-    // TODO, should be /2 for <= 810
-    uint16 footDelay = getStepDuration(true) / 2;
+
+    // Montado, quem anda e a montaria: o ciclo segue os passos dela (8 nas montarias 10.x).
+    // Antes usava o menor entre outfit e montaria; com outfit 8.0 (2 passos) a montaria so
+    // alternava os frames 1 e 2 e ficava tremula. Outfit.cpp ajusta o personagem a esse ciclo.
+    if (m_outfit.getMount() != 0) {
+        ThingType* mountType = g_things.rawGetThingType(m_outfit.getMount(), m_outfit.getCategory());
+        if (mountType && mountType->getMovingAnimationPhases() > 0)
+            footAnimPhases = mountType->getMovingAnimationPhases();
+    }
+
+    // pernas no ritmo do passo real (diagonal inclusa).
+    // GameFasterAnimations (dois ciclos por tile) so para animacoes curtas, como os 2 passos
+    // dos outfits 8.0; com 4+ frames seria 16 frames por tile e o limite de 20 ms acelerava tudo.
+    bool fasterCycle = g_game.getFeature(Otc::GameFasterAnimations) && footAnimPhases <= 2;
+    uint16 footDelay = getStepDuration() / 2;
     if (footAnimPhases > 0) {
-        footDelay = ((getStepDuration(true) + 20) / (g_game.getFeature(Otc::GameFasterAnimations) ? footAnimPhases * 2 : footAnimPhases));
+        footDelay = ((getStepDuration() + 20) / (fasterCycle ? footAnimPhases * 2 : footAnimPhases));
     }
     if (!g_game.getFeature(Otc::GameFasterAnimations))
         footDelay += 10;
     if (footDelay < 20)
         footDelay = 20;
-
-    // Since mount is a different outfit we need to get the mount animation phases
-    if (m_outfit.getMount() != 0) {
-        ThingType* type = g_things.rawGetThingType(m_outfit.getMount(), m_outfit.getCategory());
-        footAnimPhases = std::min<int>(footAnimPhases, type->getAnimationPhases() - 1);
-    }
 
     if (footAnimPhases == 0) {
         m_walkAnimationPhase = 0;
@@ -639,13 +652,15 @@ void Creature::nextWalkUpdate()
         self->m_walkUpdateEvent = nullptr;
         self->nextWalkUpdate();
     }, g_game.getFeature(Otc::GameNewUpdateWalk) ? 
-        std::max(getStepDuration(true) / std::max(g_app.getFps(), 1), 1) : (float)getStepDuration() / g_sprites.spriteSize()
+        std::max(getStepDuration() / std::max(g_app.getFps(), 1), 1) : (float)getStepDuration() / g_sprites.spriteSize()
     );
 }
 
 void Creature::updateWalk()
 {
-    float walkTicksPerPixel = ((float)(getStepDuration(true) + (g_game.getFeature(Otc::GameNewUpdateWalk) ? 0 : 10))) / (float)g_sprites.spriteSize();
+    // usa a duracao real do passo (diagonal inclusa): com getStepDuration(true) a diagonal atravessava o tile
+    // no tempo do passo reto e ficava parada o resto do passo (personagem/tela "tremendo")
+    float walkTicksPerPixel = ((float)(getStepDuration() + (g_game.getFeature(Otc::GameNewUpdateWalk) ? 0 : 10))) / (float)g_sprites.spriteSize();
     uint8 totalPixelsWalked = std::min<uint8>(m_walkTimer.ticksElapsed() / walkTicksPerPixel, g_sprites.spriteSize());
     uint8 totalPixelsWalkedInNextFrame = std::min<uint8>((m_walkTimer.ticksElapsed() + (g_game.getFeature(Otc::GameNewUpdateWalk) ? std::max(1000.f / g_app.getFps(), 1.0f) : 15)) / walkTicksPerPixel, g_sprites.spriteSize());
 
@@ -993,6 +1008,11 @@ Point Creature::getDrawOffset()
     return drawOffset;
 }
 
+// custo do passo em milesimos (1000 = passo reto). Deve bater com Creature::STEP_COST_* do servidor (creature.h).
+static constexpr int STEP_COST_STRAIGHT = 1000;
+static constexpr int STEP_COST_DIAGONAL_PLAYER = 1500;
+static constexpr int STEP_COST_DIAGONAL_MONSTER = 3000;
+
 uint16 Creature::getStepDuration(bool ignoreDiagonal, Otc::Direction dir)
 {
     uint16 speed = m_speed;
@@ -1020,6 +1040,12 @@ uint16 Creature::getStepDuration(bool ignoreDiagonal, Otc::Direction dir)
             groundSpeed = 150;
     }
 
+    // diagonal: STEP_COST_DIAGONAL_PLAYER / STEP_COST_DIAGONAL_MONSTER, igual ao servidor
+    int cost = STEP_COST_STRAIGHT;
+    if (!ignoreDiagonal && (m_lastStepDirection == Otc::NorthWest || m_lastStepDirection == Otc::NorthEast ||
+                            m_lastStepDirection == Otc::SouthWest || m_lastStepDirection == Otc::SouthEast))
+        cost = isPlayer() ? STEP_COST_DIAGONAL_PLAYER : STEP_COST_DIAGONAL_MONSTER;
+
     int interval = 1000;
     if (groundSpeed > 0 && speed > 0)
         interval = 1000 * groundSpeed;
@@ -1037,23 +1063,22 @@ uint16 Creature::getStepDuration(bool ignoreDiagonal, Otc::Direction dir)
     if (g_game.getClientVersion() >= 900 && !g_game.getFeature(Otc::GameNewWalking))
         interval = std::ceil((float)interval / (float)g_game.getServerBeat()) * g_game.getServerBeat();
 
-    float factor = 3;
-
+    // mesmo arredondamento do servidor: passo reto para cima em multiplos de 50ms (minimo 50ms),
+    // depois o custo da diagonal (STEP_COST_*). Bate com m_stepDuration * cost do 0x6D.
+    interval = std::max<int>(50, ((interval + 49) / 50) * 50);
     interval = std::max<int>(interval, g_game.getServerBeat());
-
-    if (!ignoreDiagonal && (m_lastStepDirection == Otc::NorthWest || m_lastStepDirection == Otc::NorthEast ||
-                            m_lastStepDirection == Otc::SouthWest || m_lastStepDirection == Otc::SouthEast))
-        groundSpeed *= factor;
+    interval = interval * cost / STEP_COST_STRAIGHT;
 
     if (!isServerWalking() && g_game.getFeature(Otc::GameSlowerManualWalking)) {
         interval += 25;
     }
     if (isServerWalking() && g_game.getFeature(Otc::GameNewWalking) && m_stepDuration > 0) // just use server value
     {
-        interval = m_stepDuration;
+        // o servidor envia a duracao do passo reto (getStepDuration()); a diagonal custa 3x
+        interval = (int)m_stepDuration * cost / STEP_COST_STRAIGHT;
     }
 
-    return std::max<int32>(g_game.getServerBeat(), 50 * ((50 + 1000 * groundSpeed / speed - 1) / 50)) - 20;;
+    return std::min<int>(interval, 0xFFFF);
 }
 
 Point Creature::getDisplacement()

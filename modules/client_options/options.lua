@@ -9,6 +9,7 @@ local defaultOptions = {
   cacheMap = g_app.isMobile(),
   classicControl = false,
   smartWalk = false,
+  recordCam = false, -- grava cada login em records/ (CAM)
   dash = false,
   raritySelect = 3,
   autoChaseOverride = true,
@@ -314,6 +315,8 @@ function setOption(key, value, force, canRevert)
       gameMapPanel:setCrosshair("/images/crosshair/full.png")    
     end
   elseif key == 'ambientLight' then
+    local lbl = graphicsPanel and graphicsPanel:recursiveGetChildById('ambientLightLabel')
+    if lbl then lbl:setText(tr('Ambient Light: %s%%', value)) end
     gameMapPanel:setMinimumAmbientLight(value/100)
     gameMapPanel:setDrawLights(options['enableLights'] and value < 100)
   elseif key == 'optimizationLevel' then

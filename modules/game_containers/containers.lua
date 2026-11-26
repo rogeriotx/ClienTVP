@@ -17,6 +17,7 @@ function init()
 end
 
 function terminate()
+	destroyLoot()
 	disconnect(Container, {
 		onOpen = onContainerOpen,
 		onClose = onContainerClose,
@@ -50,7 +51,9 @@ function destroy(container)
 	modules.game_interface.updatePanels()
 
 	if container.window then
-		container.window:destroy()
+		if not container.window:isDestroyed() then -- painel pai pode ja ter destruido a janela (reload)
+			container.window:destroy()
+		end
 		container.window = nil
 		container.itemsPanel = nil
 	end
@@ -428,4 +431,78 @@ function onContainerUpdateItem(container, slot, item, oldItem)
 	if not container.window then return end
 	local itemWidget = container.itemsPanel:getChildById('item' .. slot)
 	itemWidget:setItem(item)
+end
+
+-- ===== pbOT: loot category (portado do old_pbOT_Client) =====
+local lootCategories = {
+  [LOOT_CATEGORY_GOLD] = {'Coins', 15},
+  [LOOT_CATEGORY_VALUABLES] = {'Valuables', 16},
+  [LOOT_CATEGORY_EQUIPMENT] = {'Equipment', 5},
+  [LOOT_CATEGORY_POTIONS] = {'Potions', 27},
+  [LOOT_CATEGORY_AMMUNITION] = {'Ammunition', 11},
+  [LOOT_CATEGORY_CREATURE_PRODUCTS] = {'Creature Products', 7},
+  [LOOT_CATEGORY_FOOD] = {'Food', 23},
+  [LOOT_CATEGORY_SPECIAL] = {'Special', 59},
+  [LOOT_CATEGORY_MISC] = {'Misc', 35},
+}
+local lootWindow, lootAcceptButton, lootSelected = nil, nil, 0
+
+local function hasFlag(flags, bit)
+  local v = 2 ^ bit
+  return flags % (v * 2) >= v
+end
+
+local function lootIconClip(id)
+  return ((id - 1) % 8) * 19 .. ' ' .. (math.ceil(id / 8) - 1) * 19 .. ' 19 19'
+end
+
+local function selectLootCategory(widget)
+  if not lootWindow then return false end
+  local bit = tonumber(widget:getId())
+  if hasFlag(lootSelected, bit) then
+    lootSelected = lootSelected - 2 ^ bit
+    widget:setChecked(false)
+  else
+    lootSelected = lootSelected + 2 ^ bit
+    widget:setChecked(true)
+  end
+  lootAcceptButton:setEnabled(lootSelected ~= 0)
+  return true
+end
+
+function onLootCategory(item)
+  if lootWindow then return end
+  lootWindow = g_ui.displayUI('container_loot_category')
+  lootWindow.item = item
+  lootAcceptButton = lootWindow:getChildById('button')
+  lootSelected = 0
+  local list = lootWindow:getChildById('categoriesList')
+  local flags = item:getLootCategory()
+  for i = LOOT_CATEGORY_FIRST, LOOT_CATEGORY_LAST do
+    local widget = g_ui.createWidget('LootCategory', list)
+    widget:setId(i)
+    widget:setText(lootCategories[i][1])
+    widget:getChildById('categoryIcon'):setImageClip(lootIconClip(lootCategories[i][2]))
+    widget.onMouseRelease = function(self) return selectLootCategory(self) end
+    if hasFlag(flags, i) then selectLootCategory(widget) end
+  end
+end
+
+function destroyLoot()
+  if lootWindow then
+    lootWindow:destroy()
+    lootWindow = nil
+    lootAcceptButton = nil
+    lootSelected = 0
+  end
+end
+
+function addLootCategory()
+  if not lootWindow or lootSelected == 0 then return false end
+  g_game.addLootCategory(lootWindow.item, lootSelected)
+  destroyLoot()
+end
+
+function onRemoveLootCategory(item)
+  g_game.removeLootCategory(item)
 end
