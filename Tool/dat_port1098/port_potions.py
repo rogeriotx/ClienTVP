@@ -38,11 +38,11 @@ def otb_escape(b):
     return bytes(out)
 
 
-def otb_node(sid, cid, flags):
+def otb_node(sid, cid, flags, group=0):
     props = struct.pack('<I', flags)
     props += struct.pack('<BHH', 0x10, 2, sid) + struct.pack('<BHH', 0x11, 2, cid)
     props += struct.pack('<BH', 0x20, 16) + b'\x00' * 16
-    return b'\xfe\x00' + otb_escape(props) + b'\xff'
+    return b'\xfe' + bytes([group]) + otb_escape(props) + b'\xff'
 
 
 def main(apply):
